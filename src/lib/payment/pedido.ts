@@ -1,4 +1,4 @@
-import { CL, porId } from "../catalog";
+import { CL, estoqueDe, porId } from "../catalog";
 import { CFG } from "../config";
 import type { DadosCliente, FormaEntrega, FormaPagamento, ItemSacola, Pedido } from "../types";
 import { acharCupom, calcularTotais } from "./pricing";
@@ -21,8 +21,10 @@ export function montarPedido(dados: {
   for (const l of dados.bag) {
     const p = porId(Number(l.id));
     const q = Number(l.q);
-    if (!p || !Number.isInteger(q) || q < 1 || q > 99) return null;
-    if (!p.variantes.some((v) => v.cor === l.cor && v.tamanho === l.tam)) return null;
+    if (!p || p.emBreve || !Number.isInteger(q) || q < 1) return null;
+    // Não vende mais do que o estoque da variante (somando linhas repetidas da sacola).
+    const jaPedidas = linhas.filter((x) => x.p.id === p.id && x.cor === l.cor && x.tam === l.tam).reduce((a, x) => a + x.q, 0);
+    if (q + jaPedidas > estoqueDe(p, l.cor, l.tam)) return null;
     linhas.push({ p, cor: l.cor, tam: l.tam, q });
   }
   const cupom = acharCupom(CFG, dados.cupom)?.codigo;

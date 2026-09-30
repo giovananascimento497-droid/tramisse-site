@@ -20,6 +20,7 @@ export type Produto = {
   estilo: string;
   colecao: string;
   flags: { novo: boolean; curadoria: boolean; maisVendida: boolean };
+  emBreve?: boolean; // Coming soon: aparece só na vitrine Coming Soon, sem compra ("Avise-me")
   variantes: Variante[];
   imagens: string[];
 };

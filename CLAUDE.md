@@ -43,11 +43,14 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - `src/app/api/pagamento/mercadopago/`: cria o link (POST, recalcula o preço no servidor) e consulta o pagamento (GET `[id]`). Retorno em `/checkout/retorno`.
 - Imagens em `public/assets/` (servidas em `/assets/...`); fotos das peças em `public/assets/products/<slug>-<n>.jpg`. Peça sem foto mostra o degradê na cor da peça.
 - `fotos-nao-identificadas/`: fotos recebidas que não correspondem a peças do catálogo.
-- `scripts/converter-legacy.mjs`: conversão única dos dados antigos (não rodar de novo depois de editar os JSON).
+- **Catálogo = estoque real** (planilha de 30/09/2026, importada por `scripts/importar-estoque-2026-09.mjs`, que não roda de novo). Cada variante (cor + tamanho) tem o estoque real; o site não deixa comprar acima dele (página, sacola e servidor). Custo, lucro e fornecedora **nunca** vão para o site (o catálogo é público).
+- **Coming soon:** `emBreve: true` no produto. Aparece só em `/categoria/coming-soon` (e na seção da home), com etiqueta COMING SOON e botão "Avise-me quando chegar" (WhatsApp) no lugar da compra.
+- `fotos-fora-do-estoque/`: fotos de peças do catálogo antigo que não estão no estoque atual.
 
 ## Estado atual e pendências
 - Feito: home editorial, seção de vídeos em carrossel, categorias com filtros, produto com galeria/zoom, sacola com cupom (`TRAMISSE10`), checkout por etapas, conta/favoritos (localStorage), páginas institucionais.
 - Vídeos: preencher `src` em `CFG.videos` (ainda não há vídeos reais).
 - Acessórios e Sale estão vazios (catálogo só tem roupas, sem preço promocional).
+- 42 das 55 peças sem foto e sem descrição (as novas da planilha). Cor "Cor única" (`un`) onde a planilha não informa a cor.
 - Estoque real, fotos individuais por peça, textos de privacidade/termos, TikTok/Pinterest pendentes.
 - Migração para Next.js feita (rotas reais). Próximo passo: backend/plataforma de e-commerce (produtos, estoque, pedidos, clientes, cupons, pagamento Pix/cartão) e painel administrativo em `/admin`.

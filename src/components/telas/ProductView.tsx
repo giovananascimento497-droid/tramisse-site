@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type CSSProperties, type MouseEvent } from "react";
-import { CL, cores, porId, tamanhoUnico, tamanhos } from "@/lib/catalog";
+import { CL, cores, estoqueDe, porId, tamanhoUnico, tamanhos } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
@@ -12,7 +12,7 @@ export function ProductView({ id }: { id: number }) {
   const p = porId(id)!;
   const cs = cores(p);
   const tams = tamanhos(p);
-  const { setBag, abrir, setGuia } = useLoja();
+  const { bag, setBag, abrir, setGuia } = useLoja();
   const [cor, setCor] = useState(cs[0]);
   const [tam, setTam] = useState<string | null>(tamanhoUnico(p, cs[0]));
   const [q, setQ] = useState(1);
@@ -26,8 +26,13 @@ export function ProductView({ id }: { id: number }) {
     const r = e.currentTarget.getBoundingClientRect();
     setOrigem({ x: ((e.clientX - r.left) / r.width) * 100 + "%", y: ((e.clientY - r.top) / r.height) * 100 + "%" });
   };
+  // Estoque real: quanto ainda cabe na sacola desta cor/tamanho.
+  const naSacola = (t: string | null) => bag.filter((l) => l.id === p.id && l.cor === cor && l.tam === t).reduce((a, l) => a + l.q, 0);
+  const disponivel = tam ? estoqueDe(p, cor, tam) - naSacola(tam) : 0;
   const adicionar = () => {
     if (!tam) return setErro("Escolha um tamanho para continuar.");
+    if (q > disponivel)
+      return setErro(disponivel > 0 ? `Só temos ${disponivel} ${disponivel === 1 ? "peça" : "peças"} nesse tamanho.` : "Essa peça já está toda na sua sacola.");
     setErro("");
     setBag((b) => {
       const k = b.find((l) => l.id === p.id && l.tam === tam && l.cor === cor);
@@ -35,8 +40,14 @@ export function ProductView({ id }: { id: number }) {
     });
     abrir("g");
   };
+  // Coming soon: em vez de comprar, avisa a atendente pelo WhatsApp.
+  const aviseMe = () => {
+    const at = CFG.atendentes[0];
+    const texto = `Olá! Quero ser avisada quando a peça ${p.nome}${tam ? ` (${CL[cor].nome}, tam. ${tam})` : ""} chegar à Tramisse.`;
+    window.open(`https://wa.me/${at.whatsapp}?text=${encodeURIComponent(texto)}`, "_blank");
+  };
   const acordeao: [string, string][] = [
-    ["DESCRIÇÃO", p.descricao],
+    ["DESCRIÇÃO", p.descricao || "Descrição em breve. Fale com o nosso atendimento para mais detalhes da peça."],
     ["COMPOSIÇÃO", p.tecido ? `Tecido: ${p.tecido}.` : "Sob consulta no atendimento."],
     ["DETALHES", `Tamanhos da peça: ${tams.join(", ")}.`],
     ["CUIDADOS", "Siga as instruções da etiqueta da peça."],
@@ -101,22 +112,36 @@ export function ProductView({ id }: { id: number }) {
             <button
               key={t}
               aria-pressed={tam === t}
-              disabled={!p.variantes.some((v) => v.cor === cor && v.tamanho === t)}
-              onClick={() => setTam(t)}
+              disabled={!p.emBreve && estoqueDe(p, cor, t) < 1}
+              onClick={() => { setTam(t); setQ(1); setErro(""); }}
             >
               {t}
             </button>
           ))}
         </div>
-        <div className="er">{erro}</div>
-        <p className="lbl">QUANTIDADE</p>
-        <div className="qty" style={{ margin: "8px 0 20px" }}>
-          <button onClick={() => setQ(Math.max(1, q - 1))} aria-label="Diminuir">−</button>
-          <span>{q}</span>
-          <button onClick={() => setQ(q + 1)} aria-label="Aumentar">+</button>
+        <div className="er">
+          {erro || (!p.emBreve && tam && estoqueDe(p, cor, tam) === 1 ? <span style={{ color: "var(--mut)" }}>Última peça nesse tamanho.</span> : null)}
         </div>
+        {p.emBreve ? (
+          <p style={{ color: "var(--mut)", fontSize: 14, margin: "8px 0 20px" }}>
+            Esta peça ainda não chegou. Toque em &quot;Avise-me&quot; e a nossa atendente te avisa pelo WhatsApp quando estiver disponível.
+          </p>
+        ) : (
+          <>
+            <p className="lbl">QUANTIDADE</p>
+            <div className="qty" style={{ margin: "8px 0 20px" }}>
+              <button onClick={() => setQ(Math.max(1, q - 1))} aria-label="Diminuir">−</button>
+              <span>{q}</span>
+              <button onClick={() => setQ(Math.min(q + 1, Math.max(1, disponivel)))} aria-label="Aumentar">+</button>
+            </div>
+          </>
+        )}
         <div style={{ display: "flex", gap: 8 }}>
-          <button className="btn" style={{ flex: 1 }} onClick={adicionar}>ADICIONAR À SACOLA</button>
+          {p.emBreve ? (
+            <button className="btn" style={{ flex: 1 }} onClick={aviseMe}>AVISE-ME QUANDO CHEGAR</button>
+          ) : (
+            <button className="btn" style={{ flex: 1 }} onClick={adicionar}>ADICIONAR À SACOLA</button>
+          )}
           <FavButton id={p.id} style={{ position: "static", border: "1px solid var(--ln)", width: 52 }} />
         </div>
         <div style={{ marginTop: 32 }}>

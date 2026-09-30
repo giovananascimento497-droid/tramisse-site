@@ -14,12 +14,13 @@ const Carrossel = ({ l, id }: { l: Produto[]; id: string }) => (
 );
 
 export default function Home() {
-  const novos = PRODS.filter((p) => p.flags.novo);
-  const desejadas = PRODS.filter((p) => p.flags.maisVendida);
+  const novos = PRODS.filter((p) => p.flags.novo && !p.emBreve);
+  const desejadas = PRODS.filter((p) => p.flags.maisVendida && !p.emBreve);
+  const emBreve = PRODS.filter((p) => p.emBreve);
   const TP = CFG.fotosHome;
   return (
     <>
-      <HeroShop fotos={PRODS.filter((p) => p.imagens.length).map(({ slug, nome, imagens }) => ({ slug, nome, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
+      <HeroShop fotos={PRODS.filter((p) => p.imagens.length && !p.emBreve).map(({ slug, nome, imagens }) => ({ slug, nome, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
 
       <section className="sec">
         <div className="w">
@@ -87,6 +88,19 @@ export default function Home() {
           <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/todos">VER TODOS</Link></p>
         </div>
       </section>
+
+      {emBreve.length ? (
+        <section className="sec" style={{ paddingTop: 0 }}>
+          <div className="w">
+            <div className="sh">
+              <div><h2>Coming Soon</h2><p>Peças que chegam em breve. Peça para ser avisada.</p></div>
+              <CarouselButtons id="c4" />
+            </div>
+            <Carrossel l={emBreve} id="c4" />
+            <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/coming-soon">VER TODAS</Link></p>
+          </div>
+        </section>
+      ) : null}
 
       <Newsletter />
     </>

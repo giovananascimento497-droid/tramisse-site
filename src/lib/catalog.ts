@@ -27,7 +27,7 @@ export const ordenaTamanhos = (l: string[]) => [...new Set(l)].sort((a, b) => sk
 
 export const cores = (p: Produto) => [...new Set(p.variantes.map((v) => v.cor))];
 export const tamanhos = (p: Produto) => ordenaTamanhos(p.variantes.map((v) => v.tamanho));
-export const temEstoque = (p: Produto) => p.variantes.some((v) => v.estoque > 0);
+export const temEstoque = (p: Produto) => !p.emBreve && p.variantes.some((v) => v.estoque > 0);
 // Tamanho pré-selecionado quando a cor só tem um tamanho.
 export const tamanhoUnico = (p: Produto, cor: string) => {
   const t = p.variantes.filter((v) => v.cor === cor).map((v) => v.tamanho);
@@ -41,19 +41,26 @@ export const porId = (id: number) => PRODS.find((p) => p.id === id);
 export const porSlug = (s: string) => PRODS.find((p) => p.slug === s);
 
 // Lista de uma coleção/categoria (mesma regra do site original).
+// Peças "coming soon" (emBreve) só aparecem na coleção coming-soon.
 export function listar(k: string, sub?: string): Produto[] {
-  if (k === "new-in") return PRODS.filter((p) => p.flags.novo);
-  if (k === "curadoria") return PRODS.filter((p) => p.flags.curadoria);
-  if (k === "sale") return PRODS.filter((p) => p.precoDe);
-  if (k === "estilo") return PRODS.filter((p) => slug(p.estilo) === sub);
-  if (k === "todos") return PRODS;
-  return PRODS.filter((p) => p.categoria === k && (!sub || slug(p.subcategoria) === sub));
+  if (k === "coming-soon") return PRODS.filter((p) => p.emBreve);
+  const l = PRODS.filter((p) => !p.emBreve);
+  if (k === "new-in") return l.filter((p) => p.flags.novo);
+  if (k === "curadoria") return l.filter((p) => p.flags.curadoria);
+  if (k === "sale") return l.filter((p) => p.precoDe);
+  if (k === "estilo") return l.filter((p) => slug(p.estilo) === sub);
+  if (k === "todos") return l;
+  return l.filter((p) => p.categoria === k && (!sub || slug(p.subcategoria) === sub));
 }
+
+// Estoque de uma variante (cor + tamanho).
+export const estoqueDe = (p: Produto, cor: string, tamanho: string) =>
+  p.variantes.find((v) => v.cor === cor && v.tamanho === tamanho)?.estoque ?? 0;
 
 // Todas as rotas de categoria válidas (para o sitemap e geração estática).
 export function rotasCategorias(): string[][] {
   const r: string[][] = Object.keys(INFO).filter((k) => k !== "estilo").map((k) => [k]);
   for (const [k, c] of Object.entries(TREE)) for (const l of Object.values(c.grupos)) for (const s of l) r.push([k, slug(s)]);
-  for (const e of new Set(PRODS.map((p) => p.estilo))) r.push(["estilo", slug(e)]);
+  for (const e of new Set(PRODS.map((p) => p.estilo).filter(Boolean))) r.push(["estilo", slug(e)]);
   return r;
 }

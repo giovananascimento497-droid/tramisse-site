@@ -10,7 +10,9 @@ export function ProductCard({ p }: { p: Produto }) {
   const href = `/produto/${p.slug}`;
   return (
     <article className="card">
-      {p.precoDe ? (
+      {p.emBreve ? (
+        <span className="tag">COMING SOON</span>
+      ) : p.precoDe ? (
         <span className="tag">-{Math.round((1 - p.preco / p.precoDe) * 100)}%</span>
       ) : p.flags.novo ? (
         <span className="tag">NEW IN</span>

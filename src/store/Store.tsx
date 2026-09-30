@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { estoqueDe, porId } from "@/lib/catalog";
 import type { ItemSacola } from "@/lib/types";
 
 // Estado da loja no navegador. Usa as mesmas chaves de localStorage do site
@@ -53,7 +54,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const t = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
-    setBagS(ST.g("tb", []));
+    // Sacola salva: descarta peças que saíram do catálogo/estoque e limita ao estoque atual.
+    const salva = ST.g<ItemSacola[]>("tb", []);
+    const valida = salva.flatMap((l) => {
+      const p = porId(l.id);
+      const q = p && !p.emBreve ? Math.min(l.q, estoqueDe(p, l.cor, l.tam)) : 0;
+      return q > 0 ? [{ ...l, q }] : [];
+    });
+    if (valida.length !== salva.length || valida.some((l, i) => l.q !== salva[i].q)) ST.s("tb", valida);
+    setBagS(valida);
     setFav(ST.g("tf", []));
     setUserS(ST.g("tu", null));
     setPronto(true);

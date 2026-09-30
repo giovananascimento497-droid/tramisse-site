@@ -25,7 +25,8 @@ npm run typecheck
 | Regras de preço e finalização do pedido | `src/lib/payment/` |
 
 **Produto novo:** adicione um item em `produtos` no `data/products.json` (copie um existente e troque `id`, `slug`, nome, preço, variantes…) e coloque as fotos com o nome do slug.
-Variante = cor + tamanho + estoque. Flags: `novo` (New In), `curadoria`, `maisVendida`.
+Variante = cor + tamanho + **estoque real** (quantas peças existem; o site não vende acima disso). `preco` = preço sugerido da planilha (a vitrine soma 5%). Flags: `novo` (New In), `curadoria`, `maisVendida`.
+**Coming soon:** `"emBreve": true` (fica só na vitrine Coming Soon, com "Avise-me"). Quando a peça chegar: `"emBreve": false`, `flags.novo: true` e o estoque de cada variante.
 
 **Vídeos:** coloque os arquivos em `public/assets/videos/` e preencha `src` em `videos` no `data/config.json` (ex.: `"src": "/assets/videos/look-01.mp4"`). Use MP4 (H.264) vertical, curto e leve.
 
@@ -69,4 +70,4 @@ O projeto já tem o `netlify.toml`. A Netlify detecta o Next.js e instala o adap
 
 ## Pendências de conteúdo
 - **Fotos da marca** (fundo e capa, usadas em Sobre e no bloco Acessórios da home): enviar as fotos para `public/assets/brand/` e preencher `imagensMarca` no `data/config.json` (ex.: `"brand": "/assets/brand/fundo.jpg"`).
-- **Fotos das peças:** 20 peças ainda sem foto. 31 fotos recebidas não correspondem a nenhuma peça do catálogo (`fotos-nao-identificadas/`, com miniaturas numeradas em `indice.jpg`).
+- **Catálogo novo (estoque real):** 55 peças (41 em estoque, 14 Coming Soon). 42 sem foto e sem descrição. 31 fotos recebidas ainda sem peça (`fotos-nao-identificadas/`, miniaturas em `indice.jpg`); fotos de peças que saíram do estoque em `fotos-fora-do-estoque/`.

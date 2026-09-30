@@ -26,5 +26,9 @@
   "estilo": {
     "titulo": "Estilo",
     "texto": "Uma seleção pensada para cada momento."
+  },
+  "coming-soon": {
+    "titulo": "Coming Soon",
+    "texto": "Peças que chegam em breve à Tramisse. Peça para ser avisada."
   }
 }

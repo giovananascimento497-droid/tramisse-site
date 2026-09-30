@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { CL, porId } from "@/lib/catalog";
+import { CL, estoqueDe, porId } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { acharCupom, brl, calcularTotais } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
@@ -25,8 +25,17 @@ export function BagDrawer() {
     const c = codigo.trim().toUpperCase();
     if (acharCupom(CFG, c)) { setCupom(c); setErro(""); } else setErro("Código inválido. Confira e tente de novo.");
   };
+  // "+" respeita o estoque real da cor/tamanho.
   const qtd = (i: number, d: number) =>
-    setBag((b) => b.flatMap((l, k) => (k !== i ? [l] : l.q + d < 1 ? [] : [{ ...l, q: l.q + d }])));
+    setBag((b) =>
+      b.flatMap((l, k) => {
+        if (k !== i) return [l];
+        const p = porId(l.id);
+        const max = p ? estoqueDe(p, l.cor, l.tam) : 0;
+        const q = Math.min(l.q + d, max);
+        return q < 1 ? [] : [{ ...l, q }];
+      }),
+    );
 
   return (
     <aside className="dr" id="bag" aria-label="Sacola">

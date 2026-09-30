@@ -61,11 +61,7 @@
   ],
   "videos": [
     {
-      "produtoId": 24,
-      "src": ""
-    },
-    {
-      "produtoId": 23,
+      "produtoId": 29,
       "src": ""
     },
     {
@@ -73,15 +69,19 @@
       "src": ""
     },
     {
-      "produtoId": 31,
+      "produtoId": 11,
       "src": ""
     },
     {
-      "produtoId": 9,
+      "produtoId": 25,
       "src": ""
     },
     {
-      "produtoId": 7,
+      "produtoId": 19,
+      "src": ""
+    },
+    {
+      "produtoId": 36,
       "src": ""
     }
   ],
@@ -96,19 +96,19 @@
     "cover": ""
   },
   "fotosHome": {
-    "NEW IN": 28,
-    "CURADORIA ESPECIAL": 24,
-    "ROUPAS": 23,
+    "NEW IN": 9,
+    "CURADORIA ESPECIAL": 33,
+    "ROUPAS": 25,
     "ACESSÓRIOS": "cover",
-    "BLUSAS": 3,
+    "BLUSAS": 17,
     "CALÇAS": 22,
     "VESTIDOS": 9,
-    "CONJUNTOS": 31,
+    "CONJUNTOS": 11,
     "SAIAS": 36,
     "MACACÕES": 33,
-    "CASUAL": 25,
-    "OFFICE": 30,
-    "NIGHT": 7,
-    "WEEKEND": 35
+    "CASUAL": 10,
+    "OFFICE": 29,
+    "NIGHT": 9,
+    "WEEKEND": 16
   }
 }
