@@ -1,0 +1,10 @@
+# Configuração da hospedagem na Netlify (Next.js roda pelo adaptador oficial da Netlify,
+# instalado automaticamente no build). Variáveis secretas (token do Mercado Pago) ficam
+# no painel: Site configuration → Environment variables. Nunca aqui.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"

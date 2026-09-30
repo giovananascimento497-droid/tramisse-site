@@ -50,11 +50,15 @@ Links antigos com `#/...` (ex.: `/#/p/vestido-poa`) são redirecionados para a r
 
 **Para ativar o Pix:** preencha `pagamento.pix.chave` no `data/config.json` com o CNPJ (só números) e confira `nome` (até 25 letras, sem acento) e `cidade`.
 
-**Para ativar o Mercado Pago:** crie uma aplicação em mercadopago.com.br/developers (Suas integrações → Credenciais) e cadastre o *Access Token* na variável `MERCADOPAGO_ACCESS_TOKEN` (Vercel → Settings → Environment Variables; localmente, em `.env.local`, veja `.env.example`). Comece pelo token de teste (`TEST-...`) e depois troque pelo de produção (`APP_USR-...`). **Nunca** coloque o token no código.
+**Para ativar o Mercado Pago:** crie uma aplicação em mercadopago.com.br/developers (Suas integrações → Credenciais) e cadastre o *Access Token* na variável `MERCADOPAGO_ACCESS_TOKEN` (Netlify → Project configuration → Environment variables; localmente, em `.env.local`, veja `.env.example`). Comece pelo token de teste (`TEST-...`) e depois troque pelo de produção (`APP_USR-...`). **Nunca** coloque o token no código.
 No painel do Mercado Pago, deixe o parcelamento em 2x **sem juros para a compradora** (a taxa já está embutida na vitrine).
 
-## Publicar
-Vercel (recomendado) ou qualquer hospedagem Node. Defina `NEXT_PUBLIC_SITE_URL` com o domínio final (usado no sitemap).
+## Publicar (Netlify)
+O projeto já tem o `netlify.toml`. A Netlify detecta o Next.js e instala o adaptador sozinha (páginas + função de servidor para o checkout e o Mercado Pago).
+1. **app.netlify.com** → entrar com o GitHub → **Add new project → Import an existing project → GitHub** → escolher `tramisse-site`.
+2. Em **Branch to deploy**, escolher o branch com o site novo (hoje `claude/determined-lovelace-33qqkg`; depois do merge, `main`). Não mexer no resto (build `npm run build`, publish `.next`, já vêm do `netlify.toml`) → **Deploy**.
+3. **Variáveis** (Project configuration → Environment variables): `NEXT_PUBLIC_SITE_URL` = `https://tramisse.com.br` e, quando tiver, `MERCADOPAGO_ACCESS_TOKEN`. Depois de criar/alterar: **Deploys → Trigger deploy**.
+4. **Domínio** (Domain management → Add a domain): `tramisse.com.br`. A Netlify mostra os registros DNS (em geral um **A** para o domínio e um **CNAME** `www` para `<projeto>.netlify.app`); criar em registro.br → domínio → DNS → Editar zona. O https é criado sozinho.
 
 ## Status da migração
 - [x] Etapa 1: base Next.js, rotas reais, dados em `data/`, camada de pagamento e área `/admin`.

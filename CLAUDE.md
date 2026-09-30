@@ -23,6 +23,9 @@ Premium sem parecer inacessível. Não parecer marketplace nem home cheia de car
 - **Atendimento (WhatsApp):** Giovana (91) 99965-4699 · Victoria (91) 99963-1582. Instagram: @tramissebrasil.
 - Checkout: cartão → **Mercado Pago** (Checkout Pro, redireciona); Pix → **QR Code/copia e cola** gerado no site com a chave da loja; sempre dá para **enviar pelo WhatsApp**. Em todos os casos o resumo vai para a atendente pelo WhatsApp. Não coletar dados de cartão no site. A entrega por aplicativo não entra no valor pago online.
 
+## Hospedagem
+- **Netlify** (`netlify.toml`; adaptador oficial de Next.js). Domínio `tramisse.com.br` (DNS no registro.br). Segredos só nas variáveis de ambiente da Netlify. GitHub Pages foi descartado (estático e proibido para loja).
+
 ## Referência de navegação
 Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto, sacola, checkout). **Não copiar** design, textos, imagens, logo nem código.
 
