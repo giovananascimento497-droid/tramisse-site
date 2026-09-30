@@ -1,0 +1,35 @@
+[
+  {
+    "slug": "pagamento",
+    "titulo": "Formas de pagamento",
+    "paragrafos": [
+      "Pix sem acréscimo.",
+      "Cartão de débito com acréscimo de 5%.",
+      "Cartão de crédito em até 2x, com acréscimo de 5%."
+    ]
+  },
+  {
+    "slug": "entrega",
+    "titulo": "Entrega e retirada",
+    "paragrafos": [
+      "Entregas exclusivamente por aplicativo, mediante consulta. O valor é por conta da cliente e informado na compra.",
+      "Também é possível retirar o pedido. O endereço é enviado após a confirmação da compra."
+    ]
+  },
+  {
+    "slug": "trocas",
+    "titulo": "Trocas",
+    "paragrafos": [
+      "Trocas em até 7 dias, com a etiqueta fixada na peça e conforme disponibilidade de estoque.",
+      "As trocas são solicitadas pelo nosso atendimento."
+    ]
+  },
+  {
+    "slug": "atendimento",
+    "titulo": "Atendimento",
+    "paragrafos": [
+      "WhatsApp: Giovana (91) 99965-4699 · Victoria (91) 99963-1582.",
+      "Instagram: @tramissebrasil."
+    ]
+  }
+]

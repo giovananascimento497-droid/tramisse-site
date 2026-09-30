@@ -26,14 +26,15 @@ Premium sem parecer inacessível. Não parecer marketplace nem home cheia de car
 ## Referência de navegação
 Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto, sacola, checkout). **Não copiar** design, textos, imagens, logo nem código.
 
-## Estrutura do código
-- `index.html`: marcação e carregamento dos scripts.
-- `css/style.css`: design system (tokens em `:root`, suporte a modo escuro).
-- `js/images.js`: imagens da marca (fundo, capa).
-- `js/config.js`: `CFG` (barra superior, parcelas, acréscimo, WhatsApp, cupons, vídeos, redes).
-- `js/products.js`: árvore de categorias, cores (`CL`), produtos (`RAW` → `PRODS`). Fotos em `assets/products/<slug>.jpg`.
-- `js/app.js`: estado, sacola, telas (home, categoria, produto, favoritos, conta, checkout, páginas), rotas por hash (`#/...`) e eventos.
-- Variante de produto = `cor:tamanhos`; estoque provisório de 2 por variante.
+## Estrutura do código (Next.js, App Router, TypeScript)
+- `legacy/index.html`: marcação do site estático original (referência da migração).
+- `src/app/`: rotas reais (`/`, `/categoria/[...slug]`, `/produto/[slug]`, `/favoritos`, `/conta`, `/checkout`, `/institucional/[slug]`, `/admin`), sitemap e robots.
+- `src/components/`: header/footer (mesmas classes do CSS original), `body.sol` ao rolar, redirecionamento de links `#/`.
+- `src/styles/tramisse.css`: design system; deve receber o `css/style.css` original **sem alterações**.
+- `data/`: `config.json` (CFG), `products.json` (categorias, cores, produtos), `paginas.json`. Lidos só por `src/lib/config.ts`, `src/lib/catalog.ts` e `src/lib/paginas.ts` (trocar por banco/API ali).
+- `src/lib/payment/`: regras de preço (`pricing.ts`), contrato de provedor (`provider.ts`) e provedor atual via WhatsApp (`whatsapp.ts`).
+- Imagens em `public/assets/` (servidas em `/assets/...`); fotos das peças em `public/assets/products/<slug>.jpg`.
+- Variante de produto = cor + estoque por tamanho; estoque provisório de 2 por variante.
 
 ## Estado atual e pendências
 - Feito: home editorial, seção de vídeos em carrossel, categorias com filtros, produto com galeria/zoom, sacola com cupom (`TRAMISSE10`), checkout por etapas, conta/favoritos (localStorage), páginas institucionais.
