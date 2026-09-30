@@ -1,0 +1,5 @@
+{
+  "name": "tramisse-site",
+  "private": true,
+  "scripts": { "start": "npx serve ." }
+}
