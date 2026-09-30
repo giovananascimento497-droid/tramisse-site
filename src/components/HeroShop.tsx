@@ -72,6 +72,17 @@ export function HeroShop({ fotos, banner }: { fotos: Pick<Produto, "slug" | "nom
           ))}
         </div>
       ))}
+      {total > 1 ? (
+        <>
+          <button className="hs-seta hs-ant" aria-label="Anterior" onClick={() => setPag((x) => (x - 1 + total) % total)}>‹</button>
+          <button className="hs-seta hs-prox" aria-label="Próxima" onClick={() => setPag((x) => (x + 1) % total)}>›</button>
+          <div className="hs-dots">
+            {Array.from({ length: total }, (_, k) => (
+              <button key={k} aria-label={`Ir para a imagem ${k + 1}`} aria-current={k === pag} onClick={() => setPag(k)} />
+            ))}
+          </div>
+        </>
+      ) : null}
     </section>
   );
 }

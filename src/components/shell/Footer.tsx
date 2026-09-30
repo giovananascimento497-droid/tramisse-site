@@ -29,7 +29,14 @@ export function Footer() {
             )}
           </div>
         </div>
-        <p style={{ color: "var(--mut)", fontSize: 13, marginTop: 40 }}>© 2026 Tramisse. Todos os direitos reservados.</p>
+        <div className="ft-pag">
+          <span>PAGAMENTO</span>
+          <em>Pix ({Math.round(CFG.pagamento.descontoPix * 100)}% off)</em>
+          <em>Crédito em até {CFG.pagamento.maxParcelas}x sem juros</em>
+          <em>Débito</em>
+          <em>Mercado Pago</em>
+        </div>
+        <p style={{ color: "var(--mut)", fontSize: 13, marginTop: 24 }}>© 2026 Tramisse. Todos os direitos reservados.</p>
       </div>
     </footer>
   );

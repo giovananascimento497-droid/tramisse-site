@@ -13,6 +13,7 @@ import "@/styles/tramisse.css";
 import "@/styles/logo.css";
 import "@/styles/topbar.css";
 import "@/styles/hero.css";
+import "@/styles/loja.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
@@ -39,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* Mesmo carregamento de fontes do site estático, para o CSS original funcionar sem mudanças. */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
       </head>

@@ -1,0 +1,109 @@
+/*
+  Estética "loja" (inspirada em grandes lojas de moda, sem copiar nenhuma):
+  cabeçalho sólido com categorias visíveis, títulos em sans maiúsculo, banner com setas
+  e bolinhas, faixa de vantagens, vitrine mais comercial e rodapé em bloco.
+  MESMA PALETA da Tramisse: só usa os tokens de tramisse.css (--bg, --mar, --gr, --ink, --car, --mut, --ln).
+  Carregado por último. Para voltar à estética editorial anterior, basta remover o import em src/app/layout.tsx.
+*/
+
+:root{--hh:56px}
+@media(min-width:1000px){:root{--hh:78px}}
+
+/* ---------- Tipografia: títulos em sans, maiúsculo, espaçado ---------- */
+h1,h2,h3{font-family:var(--sans);font-weight:500;text-transform:uppercase;letter-spacing:.08em;line-height:1.2}
+.sh{align-items:center;margin-bottom:28px}
+.sh h2{font-size:clamp(20px,2.2vw,28px)}
+.sh p{font-size:14px;margin-top:6px}
+.pg h1{font-size:clamp(26px,3.4vw,40px)}
+.pg p{color:var(--ink)}
+.w>h1,.w h1[style]{font-size:clamp(26px,3.2vw,36px)!important;margin-top:8px}
+.about h1{font-size:clamp(40px,8vw,110px)}
+.about h2{font:400 14px var(--sans);letter-spacing:.3em;text-transform:uppercase}
+.dh h2{font-size:18px}
+.ph span{font:500 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(30,29,27,.5)}
+.btn{font-weight:500;letter-spacing:.14em;padding:15px 30px}
+
+/* ---------- Cabeçalho sempre sólido ---------- */
+header,body.home:not(.sol) header{background:var(--bg);border-bottom:1px solid var(--ln);color:var(--hc)}
+body.sol header{background:var(--bg);backdrop-filter:none}
+body #app,body.home #app,body:not(.home) #app{padding-top:var(--hh)}
+.hero.hs::before{display:none}
+.hd{height:var(--hh)}
+@media(max-width:999px){header nav.pri{display:none}}
+@media(min-width:1000px){
+  .hd{grid-template-columns:auto 1fr auto;gap:32px}
+  .hd>div:first-child{display:none}
+  header .logo{width:220px}
+  header nav.pri{display:flex;justify-content:center;gap:clamp(18px,2.2vw,34px);border:0;font:500 12px var(--sans);letter-spacing:.14em}
+  nav.pri>div>a{display:block;padding:30px 0 28px;position:relative}
+  nav.pri>div>a::after{content:"";position:absolute;left:0;right:0;bottom:22px;height:1px;background:currentColor;transform:scaleX(0);transition:transform .25s}
+  nav.pri>div>a:hover::after,nav.pri>.dd:hover>a::after{transform:scaleX(1)}
+  nav.pri>.dd{position:static}
+  nav.pri .sub{left:0;right:0;top:100%;min-width:0;justify-content:center;gap:clamp(32px,4vw,72px);padding:34px 24px 44px;border:0;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln);box-shadow:0 18px 30px rgba(30,29,27,.06);color:var(--ink)}
+  nav.pri .sub>div{display:flex;flex-direction:column;gap:2px}
+  nav.pri .sub b{font:600 11px var(--sans);letter-spacing:.16em;margin-bottom:10px;color:var(--ink)}
+  nav.pri .sub a{padding:5px 0;font:400 14px var(--sans);letter-spacing:.02em;color:var(--mut)}
+  nav.pri .sub a:hover{color:var(--ink)}
+}
+
+/* ---------- Banner principal: setas e bolinhas ---------- */
+.hero.hs{height:min(78vh,760px);min-height:480px}
+@media(max-width:700px){.hero.hs{height:calc(100svh - var(--hh) - 35px);max-height:720px}}
+.hs-seta{position:absolute;top:50%;z-index:3;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:50%;background:color-mix(in srgb,var(--bg) 82%,transparent);color:var(--ink);font-size:24px;line-height:1;display:grid;place-items:center;opacity:0;transition:opacity .3s}
+.hero.hs:hover .hs-seta{opacity:1}
+.hs-ant{left:20px}.hs-prox{right:20px}
+.hs-dots{position:absolute;left:0;right:0;bottom:18px;z-index:3;display:flex;justify-content:center;gap:8px}
+.hs-dots button{width:8px;height:8px;padding:0;border-radius:50%;border:1px solid var(--bg);background:transparent;opacity:.9}
+.hs-dots button[aria-current=true]{background:var(--bg);width:22px;border-radius:4px}
+.hs-it span{font:500 13px var(--sans);letter-spacing:.24em;bottom:56px}
+@media(max-width:700px){.hs-seta{display:none}.hs-dots{gap:5px;bottom:14px}.hs-dots button{width:5px;height:5px;opacity:.7}.hs-dots button[aria-current=true]{width:14px;opacity:1}}
+
+/* ---------- Faixa de vantagens ---------- */
+.bnf{border-bottom:1px solid var(--ln);background:var(--bg)}
+.bnf-g{display:grid;grid-template-columns:repeat(4,1fr)}
+.bnf-i{display:flex;align-items:center;gap:14px;padding:22px 12px;justify-content:center}
+.bnf-i+.bnf-i{border-left:1px solid var(--ln)}
+.bnf-i svg{width:26px;height:26px;flex:none;stroke:var(--car);fill:none;stroke-width:1.2;stroke-linejoin:round;stroke-linecap:round}
+.bnf-i b{display:block;font:600 11px var(--sans);letter-spacing:.14em}
+.bnf-i small{display:block;color:var(--mut);font-size:12px;line-height:1.4}
+@media(max-width:900px){.bnf-g{grid-template-columns:1fr 1fr}.bnf-i:nth-child(3){border-left:0}.bnf-i:nth-child(n+3){border-top:1px solid var(--ln)}}
+@media(max-width:700px){.bnf-i{justify-content:flex-start;padding:16px 4px;gap:10px}.bnf-i small{font-size:11px}}
+
+/* ---------- Seções da home ---------- */
+.sec{padding:64px 0}
+@media(max-width:700px){.sec{padding:44px 0}}
+.tile em{left:0;right:0;bottom:22px;text-align:center;font:600 13px var(--sans);letter-spacing:.18em}
+.tile::after{background:linear-gradient(transparent 50%,rgba(30,29,27,.55))}
+.tile .ph img{transition:transform .6s ease}.tile:hover .ph img{transform:scale(1.04)}
+.tiles.six{gap:12px}
+.cur{padding:88px 24px}
+.cur h2{font-style:normal;font-size:clamp(26px,3.4vw,44px)}
+.cur p{font:400 16px/1.6 var(--sans);max-width:46ch}
+.nl h2{font-size:24px}
+.cb button{border-radius:50%;background:var(--bg)}
+
+/* ---------- Vitrine de produtos ---------- */
+.grid{gap:36px 16px}
+.card{font-size:13px}
+.card .im{background:var(--mar)}
+.tag{background:var(--ink);color:var(--bg);font:600 10px var(--sans);letter-spacing:.14em;padding:4px 9px;top:10px;left:10px}
+.card .n{margin-top:2px;letter-spacing:.02em;font-size:14px}
+.card b{font-size:15px;font-weight:600;margin-top:2px}
+.card small{font-size:12px}
+.bar select{font-size:13px;letter-spacing:.04em}
+.sn a{font-weight:500}
+
+/* ---------- Página do produto ---------- */
+.info h1{text-transform:none;letter-spacing:.02em;font-size:clamp(24px,2.4vw,30px);font-weight:500}
+.info .pr{font-size:24px;font-weight:600}
+@media(min-width:1001px){.pdp .info{position:sticky;top:calc(var(--hh) + 24px);align-self:start}}
+.lbl{font-weight:600}
+details summary{font-weight:500}
+
+/* ---------- Rodapé em bloco ---------- */
+footer{background:var(--mar);border-top:0;padding-top:56px}
+.fc h3{font:600 12px var(--sans);letter-spacing:.16em}
+.fc a{font-size:14px}
+.ft-pag{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:40px;padding-top:24px;border-top:1px solid var(--ln);font-size:12px;color:var(--car)}
+.ft-pag span{font-weight:600;letter-spacing:.16em;margin-right:4px}
+.ft-pag em{font-style:normal;border:1px solid var(--ln);background:var(--bg);padding:5px 10px}

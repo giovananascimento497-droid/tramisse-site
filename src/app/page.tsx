@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Beneficios } from "@/components/Beneficios";
 import { CarouselButtons } from "@/components/Carousel";
 import { HeroShop } from "@/components/HeroShop";
 import { Newsletter } from "@/components/Newsletter";
@@ -22,12 +23,15 @@ export default function Home() {
     <>
       <HeroShop fotos={PRODS.filter((p) => p.imagens.length && !p.emBreve).map(({ slug, nome, imagens }) => ({ slug, nome, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
 
+      <Beneficios />
+
       <section className="sec">
         <div className="w">
-          <div className="tiles">
-            {[["NEW IN", "/categoria/new-in"], ["CURADORIA ESPECIAL", "/categoria/curadoria"], ["ROUPAS", "/categoria/roupas"], ["ACESSÓRIOS", "/categoria/acessorios"]].map(
-              ([t, h]) => <Tile key={t} t={t} href={h} foto={TP[t]} />,
-            )}
+          <div className="sh"><h2>Compre por categoria</h2></div>
+          <div className="tiles six">
+            {["Blusas", "Calças", "Vestidos", "Conjuntos", "Saias", "Macacões"].map((t) => (
+              <Tile key={t} t={t.toUpperCase()} href={`/categoria/roupas/${slug(t)}`} foto={TP[t.toUpperCase()]} />
+            ))}
           </div>
         </div>
       </section>
@@ -59,16 +63,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="sec" style={{ paddingTop: 0 }}>
-        <div className="w">
-          <div className="sh"><h2>Compre por categoria</h2></div>
-          <div className="tiles six">
-            {["Blusas", "Calças", "Vestidos", "Conjuntos", "Saias", "Macacões"].map((t) => (
-              <Tile key={t} t={t.toUpperCase()} href={`/categoria/roupas/${slug(t)}`} foto={TP[t.toUpperCase()]} />
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       <section className="sec" style={{ paddingTop: 0 }}>
         <div className="w">
