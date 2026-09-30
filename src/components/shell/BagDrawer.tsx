@@ -8,8 +8,9 @@ import { acharCupom, brl, calcularTotais } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
 import { Ph } from "../Ph";
 
-export function subtotalSacola(bag: { id: number; q: number }[]) {
-  return bag.reduce((a, l) => a + l.q * (porId(l.id)?.preco ?? 0), 0);
+// Linhas da sacola com o preço de vitrine de cada peça (para calcularTotais).
+export function linhasSacola(bag: { id: number; q: number }[]) {
+  return bag.map((l) => ({ preco: porId(l.id)?.preco ?? 0, q: l.q }));
 }
 
 export function BagDrawer() {
@@ -17,7 +18,7 @@ export function BagDrawer() {
   const [codigo, setCodigo] = useState("");
   const [erro, setErro] = useState("");
   const fechar = () => abrir(null);
-  const t = calcularTotais(CFG, subtotalSacola(bag), null, cupom);
+  const t = calcularTotais(CFG, linhasSacola(bag), null, cupom);
   const n = bag.reduce((a, l) => a + l.q, 0);
 
   const aplicar = () => {

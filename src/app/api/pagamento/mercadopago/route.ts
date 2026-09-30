@@ -10,12 +10,14 @@ export async function POST(req: Request) {
   const dados = await req.json().catch(() => null);
   const pedido = dados && montarPedido(dados);
   if (!pedido) return NextResponse.json({ erro: "Pedido inválido. Confira a sacola." }, { status: 400 });
+  // Pix é pago direto na chave da loja (com desconto), não pelo Mercado Pago.
+  if (pedido.pagamento === "pix") return NextResponse.json({ erro: "Pix é pago pela chave da loja." }, { status: 400 });
   if (!/^\S+@\S+\.\S+$/.test(pedido.cliente.e || "")) return NextResponse.json({ erro: "E-mail inválido." }, { status: 400 });
 
   const referencia = `T${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
   const origem = process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin;
   try {
-    const { url } = await criarPreferencia(pedido, { referencia, origem, maxParcelas: CFG.pagamento.credito.maxParcelas });
+    const { url } = await criarPreferencia(pedido, { referencia, origem, maxParcelas: CFG.pagamento.maxParcelas });
     return NextResponse.json({ url, referencia, pedido });
   } catch (e) {
     console.error(e);

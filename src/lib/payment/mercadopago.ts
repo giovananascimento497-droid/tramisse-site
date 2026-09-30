@@ -7,16 +7,16 @@ const token = () => process.env.MERCADOPAGO_ACCESS_TOKEN || "";
 
 export const mercadoPagoAtivo = () => Boolean(token());
 
-// A forma de pagamento é escolhida no site (por causa do acréscimo de 5% no cartão),
-// então o Mercado Pago só oferece a forma escolhida.
+// A forma de pagamento é escolhida no site, então o Mercado Pago só oferece a escolhida
+// (crédito em até 2x sem juros ou débito). Pix é pago direto na chave da loja.
 const TIPOS = ["credit_card", "debit_card", "bank_transfer", "ticket", "atm", "prepaid_card", "account_money"];
 const PERMITIDOS: Record<FormaPagamento, string[]> = {
-  pix: ["bank_transfer"], // Pix
+  pix: ["bank_transfer"],
   debito: ["debit_card"],
   credito: ["credit_card"],
 };
 
-const centavos = (v: number) => Math.round(v * 100) / 100;
+const slugCurto = (s: string) => s.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g, "");
 
 async function mp(caminho: string, init?: RequestInit) {
   const r = await fetch(API + caminho, {
@@ -31,21 +31,17 @@ async function mp(caminho: string, init?: RequestInit) {
 
 export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: string; origem: string; maxParcelas: number }) {
   const c = pedido.cliente;
-  const pecas = pedido.itens.reduce((a, i) => a + i.q, 0);
   const https = opcoes.origem.startsWith("https://");
   const retorno = `${opcoes.origem}/checkout/retorno`;
   const corpo = {
-    // Um item com o total já calculado (desconto do cupom e acréscimo do cartão incluídos).
-    items: [
-      {
-        id: opcoes.referencia,
-        title: `Pedido Tramisse (${pecas} ${pecas === 1 ? "peça" : "peças"})`,
-        description: pedido.itens.map((i) => `${i.q}x ${i.nome} ${i.cor} ${i.tam}`).join("; ").slice(0, 250),
-        quantity: 1,
-        currency_id: "BRL",
-        unit_price: centavos(pedido.total),
-      },
-    ],
+    // Cada peça com o seu valor exato (preço de vitrine, já com a taxa do cartão e o cupom, se houver).
+    items: pedido.itens.map((i) => ({
+      id: `${i.slug}-${slugCurto(i.cor)}-${i.tam}`,
+      title: `${i.nome} — ${i.cor}, tam. ${i.tam}`,
+      quantity: i.q,
+      currency_id: "BRL",
+      unit_price: i.precoFinal,
+    })),
     payer: { name: c.n, surname: c.sn, email: c.e },
     external_reference: opcoes.referencia,
     statement_descriptor: "TRAMISSE",
@@ -56,7 +52,7 @@ export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: str
       excluded_payment_types: TIPOS.filter((t) => !PERMITIDOS[pedido.pagamento].includes(t)).map((id) => ({ id })),
       installments: pedido.pagamento === "credito" ? opcoes.maxParcelas : 1,
     },
-    metadata: { pagamento: pedido.pagamento, entrega: pedido.entrega, cupom: pedido.cupom ?? null },
+    metadata: { pagamento: pedido.pagamento, entrega: pedido.entrega, cupom: pedido.cupom ?? null, total: pedido.total },
   };
   const r = await mp("/checkout/preferences", { method: "POST", body: JSON.stringify(corpo) });
   // Token de teste (TEST-...) usa o ambiente de testes do Mercado Pago.

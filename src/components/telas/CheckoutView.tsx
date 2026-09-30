@@ -5,24 +5,28 @@ import { useState } from "react";
 import { CL, porId } from "@/lib/catalog";
 import { montarPedido } from "@/lib/payment/pedido";
 import { CFG } from "@/lib/config";
+import { codigoPix } from "@/lib/payment/pix";
 import { brl, calcularTotais } from "@/lib/payment/pricing";
-import { provedorWhatsApp } from "@/lib/payment/whatsapp";
+import { provedorWhatsApp, resumoPedido } from "@/lib/payment/whatsapp";
 import type { DadosCliente, FormaEntrega, FormaPagamento } from "@/lib/types";
 import { useLoja } from "@/store/Store";
-import { subtotalSacola } from "../shell/BagDrawer";
+import { linhasSacola } from "../shell/BagDrawer";
 import { Ph } from "../Ph";
+import { PixView } from "./PixView";
 
 const ETAPAS = ["SACOLA", "IDENTIFICAÇÃO", "ENTREGA", "PAGAMENTO"];
 const OBRIG_ID = ["e", "n", "sn", "tel"];
 const OBRIG_END = ["cep", "end", "num", "bai", "cid", "uf", "dest"];
 const PAGAMENTOS: [FormaPagamento, string, string][] = [
-  ["pix", "Pix", "Sem acréscimo."],
-  ["debito", "Cartão de débito", "Acréscimo de 5%."],
-  ["credito", "Cartão de crédito", "Até 2x, com acréscimo de 5%."],
+  ["pix", "Pix", "5% de desconto."],
+  ["credito", "Cartão de crédito", "Em até 2x sem juros."],
+  ["debito", "Cartão de débito", "À vista."],
 ];
+const PIX_ATIVO = Boolean(CFG.pagamento.pix.chave);
+const novoId = () => `T${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 
-// Checkout por etapas. Não cobra: monta o pedido e abre o WhatsApp da atendente
-// (provedor em src/lib/payment). Nenhum dado de cartão é coletado.
+// Checkout por etapas. Cartão: Mercado Pago (quando configurado). Pix: QR Code na chave da loja
+// (quando configurada). Sempre é possível enviar o pedido pelo WhatsApp. Nenhum dado de cartão é coletado.
 export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
   const { bag, setBag, cupom, setCupom, pronto } = useLoja();
   const [step, setStep] = useState(0);
@@ -32,10 +36,12 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
   const [erro, setErro] = useState("");
   const [faltando, setFaltando] = useState<string[]>([]);
   const [enviado, setEnviado] = useState<{ at: string; wa: string } | null>(null);
+  const [pix, setPix] = useState<{ at: string; wa: string; codigo: string; total: number; id: string } | null>(null);
   const [gerando, setGerando] = useState(false);
 
-  const t = calcularTotais(CFG, subtotalSacola(bag), step >= 3 ? pay : null, cupom);
+  const t = calcularTotais(CFG, linhasSacola(bag), step >= 3 ? pay : null, cupom);
 
+  if (pix) return <PixView codigo={pix.codigo} total={pix.total} at={pix.at} wa={pix.wa} pedidoId={pix.id} />;
   if (enviado)
     return (
       <div className="pg">
@@ -99,6 +105,20 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
     window.open(r.url, "_blank");
   };
 
+  // Pix na chave da loja: gera o QR Code/copia e cola com o valor já com desconto.
+  const pagarPix = (at: string) => {
+    const atendente = CFG.atendentes.find((a) => a.nome === at) ?? CFG.atendentes[0];
+    const pedido = pedidoAtual();
+    if (!pedido) return setErro("Não foi possível montar o pedido. Confira a sacola.");
+    const id = novoId();
+    const codigo = codigoPix({ ...CFG.pagamento.pix, valor: pedido.total, txid: id });
+    const texto = resumoPedido({ ...pedido, pagamentoOnline: { provedor: "Pix", id, status: "aguardando comprovante" } });
+    setPix({ at: atendente.nome, wa: `https://wa.me/${atendente.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, id });
+    setBag(() => []);
+    setCupom(null);
+    scrollTo(0, 0);
+  };
+
   // Gera o link do Mercado Pago no servidor e leva a cliente para pagar lá.
   // O pedido fica guardado no navegador para a página de retorno (/checkout/retorno).
   const pagarMercadoPago = async (at: string) => {
@@ -135,8 +155,8 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
       })}
       <div className="tt"><span>Subtotal</span><span>{brl(t.subtotal)}</span></div>
       <div className="tt"><span>Entrega</span><span>{ship === "retirada" ? "Retirada" : "Por aplicativo"}</span></div>
-      {t.desconto ? <div className="tt"><span>Desconto</span><span>-{brl(t.desconto)}</span></div> : null}
-      {t.acrescimo ? <div className="tt"><span>Acréscimo do cartão (5%)</span><span>{brl(t.acrescimo)}</span></div> : null}
+      {t.desconto ? <div className="tt"><span>Desconto ({t.cupom?.codigo})</span><span>-{brl(t.desconto)}</span></div> : null}
+      {t.descontoPix ? <div className="tt"><span>Desconto Pix (5%)</span><span>-{brl(t.descontoPix)}</span></div> : null}
       <div className="tt big"><span>Total</span><span>{brl(t.total)}</span></div>
       <small style={{ color: "var(--mut)" }}>O valor da entrega por aplicativo é informado no atendimento.</small>
     </details>
@@ -202,7 +222,7 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
             e.preventDefault();
             const at = String(new FormData(e.currentTarget).get("at"));
             const via = (e.nativeEvent as SubmitEvent).submitter?.getAttribute("value");
-            if (via === "mp") pagarMercadoPago(at); else enviar(at);
+            if (via === "mp") pagarMercadoPago(at); else if (via === "pix") pagarPix(at); else enviar(at);
           }}>
           <div className="s">
             {PAGAMENTOS.map(([v, tt, sub]) => (
@@ -216,20 +236,27 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
             Quem vai te atender
             <select name="at">{CFG.atendentes.map((a) => <option key={a.nome}>{a.nome}</option>)}</select>
           </label>
-          {mercadoPago ? (
-            <p className="s" style={{ color: "var(--mut)", fontSize: 14 }}>
-              Pague agora pelo Mercado Pago (Pix ou cartão, conforme a opção escolhida) ou envie o pedido pelo WhatsApp para combinar com o atendimento. O valor da entrega por aplicativo é combinado no atendimento. Nenhum dado de cartão é coletado neste site.
-            </p>
-          ) : (
-            <p className="s" style={{ color: "var(--mut)", fontSize: 14 }}>
-              Você envia o pedido pelo WhatsApp e o atendimento confirma o pagamento e a entrega. Nenhum dado de cartão é coletado neste site.
-            </p>
-          )}
+          <p className="s" style={{ color: "var(--mut)", fontSize: 14 }}>
+            {pay === "pix"
+              ? PIX_ATIVO
+                ? "Você paga pelo QR Code ou pelo Pix copia e cola e envia o comprovante pelo WhatsApp."
+                : "Você envia o pedido pelo WhatsApp e a atendente passa a chave Pix com o valor já com desconto."
+              : mercadoPago
+                ? "Você paga no ambiente seguro do Mercado Pago, ou envia o pedido pelo WhatsApp para combinar com o atendimento."
+                : "Você envia o pedido pelo WhatsApp e o atendimento combina o pagamento no cartão."}{" "}
+            O valor da entrega por aplicativo é combinado no atendimento. Nenhum dado de cartão é coletado neste site.
+          </p>
           <div className="er s">{erro}</div>
-          {mercadoPago ? (
-            <button className="btn s" name="via" value="mp" disabled={gerando}>{gerando ? "GERANDO PAGAMENTO…" : "PAGAR COM MERCADO PAGO"}</button>
-          ) : null}
-          <button className={mercadoPago ? "btn o s" : "btn s"} name="via" value="wa" disabled={gerando}>ENVIAR PEDIDO PELO WHATSAPP</button>
+          {pay === "pix" && PIX_ATIVO ? (
+            <button className="btn s" name="via" value="pix">PAGAR COM PIX · {brl(t.total)}</button>
+          ) : pay !== "pix" && mercadoPago ? (
+            <>
+              <button className="btn s" name="via" value="mp" disabled={gerando}>{gerando ? "GERANDO PAGAMENTO…" : `PAGAR COM MERCADO PAGO · ${brl(t.total)}`}</button>
+              <button className="btn o s" name="via" value="wa" disabled={gerando}>ENVIAR PEDIDO PELO WHATSAPP</button>
+            </>
+          ) : (
+            <button className="btn s" name="via" value="wa">ENVIAR PEDIDO PELO WHATSAPP</button>
+          )}
         </form>
       </>
     );

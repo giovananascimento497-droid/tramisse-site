@@ -3,7 +3,7 @@
 import { useState, type CSSProperties, type MouseEvent } from "react";
 import { CL, cores, porId, tamanhoUnico, tamanhos } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
-import { brl, parcelado } from "@/lib/payment/pricing";
+import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
 import { FavButton } from "../FavButton";
 import { Ph } from "../Ph";
@@ -76,7 +76,7 @@ export function ProductView({ id }: { id: number }) {
           {p.precoDe ? <><s style={{ color: "var(--mut)", fontSize: 16 }}>{brl(p.precoDe)}</s> </> : null}
           {brl(p.preco)}
         </div>
-        <small style={{ color: "var(--mut)" }}>Pix sem acréscimo · {parcelado(CFG, p.preco)}</small>
+        <small style={{ color: "var(--mut)" }}>{brl(precoPix(CFG, p.preco))} no Pix (5% de desconto) · {parcelado(CFG, p.preco)}</small>
         <p className="lbl" style={{ marginTop: 24 }}>COR: {CL[cor].nome.toUpperCase()}</p>
         <div className="opt">
           {cs.map((c) => (

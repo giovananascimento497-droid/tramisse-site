@@ -17,16 +17,34 @@ export function montarPedido(dados: {
 }): Pedido | null {
   if (!PAGAMENTOS.includes(dados.pagamento) || !ENTREGAS.includes(dados.entrega)) return null;
   if (!Array.isArray(dados.bag) || !dados.bag.length) return null;
-  const itens: Pedido["itens"] = [];
+  const linhas = [];
   for (const l of dados.bag) {
     const p = porId(Number(l.id));
     const q = Number(l.q);
     if (!p || !Number.isInteger(q) || q < 1 || q > 99) return null;
     if (!p.variantes.some((v) => v.cor === l.cor && v.tamanho === l.tam)) return null;
-    itens.push({ nome: p.nome, cor: CL[l.cor]?.nome ?? l.cor, tam: l.tam, q, precoUnitario: p.preco });
+    linhas.push({ p, cor: l.cor, tam: l.tam, q });
   }
-  const subtotalBruto = itens.reduce((a, i) => a + i.precoUnitario * i.q, 0);
   const cupom = acharCupom(CFG, dados.cupom)?.codigo;
-  const { subtotal, desconto, acrescimo, total } = calcularTotais(CFG, subtotalBruto, dados.pagamento, cupom);
-  return { itens, cupom, pagamento: dados.pagamento, entrega: dados.entrega, cliente: dados.cliente ?? {}, subtotal, desconto, acrescimo, total };
+  const t = calcularTotais(CFG, linhas.map((l) => ({ preco: l.p.preco, q: l.q })), dados.pagamento, cupom);
+  return {
+    itens: linhas.map((l, i) => ({
+      id: l.p.id,
+      slug: l.p.slug,
+      nome: l.p.nome,
+      cor: CL[l.cor]?.nome ?? l.cor,
+      tam: l.tam,
+      q: l.q,
+      precoUnitario: l.p.preco,
+      precoFinal: t.unitarios[i],
+    })),
+    cupom,
+    pagamento: dados.pagamento,
+    entrega: dados.entrega,
+    cliente: dados.cliente ?? {},
+    subtotal: t.subtotal,
+    desconto: t.desconto,
+    descontoPix: t.descontoPix,
+    total: t.total,
+  };
 }

@@ -2,7 +2,7 @@ import type { Atendente, Pedido } from "../types";
 import { brl } from "./pricing";
 import type { ProvedorPagamento } from "./provider";
 
-const NOMES_PAGAMENTO = { pix: "Pix", debito: "Cartão de débito", credito: "Cartão de crédito (até 2x)" } as const;
+const NOMES_PAGAMENTO = { pix: "Pix (5% de desconto)", debito: "Cartão de débito", credito: "Cartão de crédito (até 2x sem juros)" } as const;
 
 // Mesmo texto do site original.
 export function resumoPedido(p: Pedido): string {
@@ -12,9 +12,12 @@ export function resumoPedido(p: Pedido): string {
     p.itens.map((i) => `• ${i.nome} — ${i.cor}, tam. ${i.tam}, ${i.q}x — ${brl(i.precoUnitario * i.q)}`).join("\n") +
     `\n\nSubtotal: ${brl(p.subtotal)}` +
     (p.desconto ? `\nDesconto (${p.cupom}): -${brl(p.desconto)}` : "") +
-    (p.acrescimo ? `\nAcréscimo do cartão (5%): ${brl(p.acrescimo)}` : "") +
+    (p.descontoPix ? `\nDesconto Pix (5%): -${brl(p.descontoPix)}` : "") +
     `\nTotal (sem entrega): ${brl(p.total)}\nPagamento: ${NOMES_PAGAMENTO[p.pagamento]}` +
-    (p.pagamentoOnline ? ` — pago pelo ${p.pagamentoOnline.provedor} (pagamento nº ${p.pagamentoOnline.id})` : "") +
+    (p.pagamentoOnline && p.pagamentoOnline.provedor !== "Pix"
+      ? ` — ${p.pagamentoOnline.status === "aprovado" ? "pago" : "em processamento"} pelo ${p.pagamentoOnline.provedor} (pagamento nº ${p.pagamentoOnline.id})`
+      : "") +
+    (p.pagamentoOnline?.provedor === "Pix" ? `\nPix na chave da loja (pedido nº ${p.pagamentoOnline.id}). Envio o comprovante em seguida.` : "") +
     "\n" +
     (p.entrega === "retirada"
       ? "Retirada"

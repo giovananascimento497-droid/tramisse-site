@@ -1,11 +1,19 @@
 import dados from "@data/products.json";
 import colecoes from "@data/colecoes.json";
+import { CFG } from "./config";
+import { precoVitrine } from "./payment/pricing";
 import type { Catalogo, Produto } from "./types";
 
 // Camada de acesso ao catálogo. Única parte do site que lê data/products.json:
 // para usar banco/API (painel administrativo), trocar só este arquivo.
-export const catalogo = dados as Catalogo;
-export const PRODS = catalogo.produtos;
+const bruto = dados as Catalogo;
+// Preço de vitrine = preço base + taxa do cartão (Mercado Pago), já embutida.
+export const PRODS: Produto[] = bruto.produtos.map((p) => ({
+  ...p,
+  preco: precoVitrine(CFG, p.preco),
+  precoDe: p.precoDe ? precoVitrine(CFG, p.precoDe) : 0,
+}));
+export const catalogo: Catalogo = { ...bruto, produtos: PRODS };
 export const CL = catalogo.cores;
 export const TREE = catalogo.categorias;
 export const INFO: Record<string, { titulo: string; texto: string }> = colecoes;

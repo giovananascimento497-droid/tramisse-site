@@ -13,6 +13,8 @@ export type Produto = {
   tecido: string;
   preco: number;
   precoDe: number; // preço "de" (promoção); 0 = sem promoção
+  // Em data/products.json, preco/precoDe são o valor base. Ao carregar o catálogo
+  // (src/lib/catalog.ts) viram o preço de vitrine, já com a taxa do cartão embutida.
   categoria: string; // "roupas" | "acessorios"
   subcategoria: string;
   estilo: string;
@@ -32,7 +34,7 @@ export type Catalogo = {
 };
 
 export type Atendente = { nome: string; whatsapp: string; exibicao: string };
-export type Cupom = { codigo: string; tipo: "percentual" | "fixo"; valor: number };
+export type Cupom = { codigo: string; tipo: "percentual"; valor: number };
 
 export type Config = {
   marca: string;
@@ -40,9 +42,11 @@ export type Config = {
   assinatura: string;
   barraSuperior: string[];
   pagamento: {
-    pix: { acrescimo: number };
-    debito: { acrescimo: number };
-    credito: { acrescimo: number; maxParcelas: number };
+    taxaCartao: number; // embutida no preço de vitrine (taxa do Mercado Pago)
+    descontoPix: number; // desconto sobre a vitrine no Pix
+    maxParcelas: number; // crédito sem juros
+    // Chave Pix da loja (CNPJ, só números). Vazia = Pix combinado pelo WhatsApp.
+    pix: { chave: string; nome: string; cidade: string };
   };
   entrega: { aplicativo: boolean; retirada: boolean };
   trocas: { prazoDias: number };
@@ -66,14 +70,15 @@ export type DadosCliente = {
 };
 
 export type Pedido = {
-  itens: { nome: string; cor: string; tam: string; q: number; precoUnitario: number }[];
+  // precoUnitario = vitrine; precoFinal = valor unitário cobrado (com cupom e desconto Pix).
+  itens: { id: number; slug: string; nome: string; cor: string; tam: string; q: number; precoUnitario: number; precoFinal: number }[];
   cupom?: string;
   pagamento: FormaPagamento;
   entrega: FormaEntrega;
   cliente: DadosCliente;
   subtotal: number;
-  desconto: number;
-  acrescimo: number;
+  desconto: number; // cupom
+  descontoPix: number;
   total: number;
   // Preenchido quando a cliente pagou pelo site (ex.: Mercado Pago).
   pagamentoOnline?: { provedor: string; id: string; status: string };
