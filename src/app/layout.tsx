@@ -7,6 +7,7 @@ import { Header } from "@/components/shell/Header";
 import { MenuDrawer } from "@/components/shell/MenuDrawer";
 import { Overlays } from "@/components/shell/Overlays";
 import { TopBar } from "@/components/shell/TopBar";
+import { CFG } from "@/lib/config";
 import { StoreProvider } from "@/store/Store";
 import "@/styles/tramisse.css";
 import "@/styles/logo.css";
@@ -21,6 +22,17 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
 
+// Dados estruturados da marca (Google): nome, site, logo e perfis oficiais (Instagram etc.).
+const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tramisse.com.br";
+const ORGANIZACAO = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: CFG.marca,
+  url: SITE,
+  logo: `${SITE}/assets/brand/logo.png`,
+  sameAs: CFG.redes.map((r) => r.url).filter(Boolean),
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
@@ -32,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZACAO) }} />
         <StoreProvider>
           <TopBar />
           <Header />
