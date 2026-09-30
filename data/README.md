@@ -29,7 +29,7 @@ Formato de um produto (`produtos[]`):
 }
 ```
 
-- `preco` / `precoDe` são o **valor base**. O site mostra base + `pagamento.taxaCartao` (5%): 214,90 → 225,65 na vitrine; no Pix, 5% de desconto sobre a vitrine.
+- `preco` / `precoDe` são o **valor base**. O site mostra base + `pagamento.taxaCartao` (5%), arredondado para cima até ,90 (`centavosVitrine`): 149,90 → 157,40 → 157,90 na vitrine; no Pix, 5% de desconto sobre a vitrine.
 - `precoDe` > 0 marca a peça como Sale (preço "de").
 - `cor` é a chave em `cores` (ex.: `"vi"` = Vinho; `"un"` = Cor única). `estoque` é o estoque real da variante.
 - `"emBreve": true` = Coming soon (sem compra, com "Avise-me").

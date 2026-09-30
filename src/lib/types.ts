@@ -44,6 +44,7 @@ export type Config = {
   barraSuperior: string[];
   pagamento: {
     taxaCartao: number; // embutida no preço de vitrine (taxa do Mercado Pago)
+    centavosVitrine: number | null; // vitrine arredondada para cima até terminar nesses centavos (ex.: 0.9 -> ,90)
     descontoPix: number; // desconto sobre a vitrine no Pix
     maxParcelas: number; // crédito sem juros
     // Chave Pix da loja (CNPJ, só números). Vazia = Pix combinado pelo WhatsApp.

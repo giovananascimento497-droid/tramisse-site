@@ -25,7 +25,7 @@ npm run typecheck
 | Regras de preço e finalização do pedido | `src/lib/payment/` |
 
 **Produto novo:** adicione um item em `produtos` no `data/products.json` (copie um existente e troque `id`, `slug`, nome, preço, variantes…) e coloque as fotos com o nome do slug.
-Variante = cor + tamanho + **estoque real** (quantas peças existem; o site não vende acima disso). `preco` = preço sugerido da planilha (a vitrine soma 5%). Flags: `novo` (New In), `curadoria`, `maisVendida`.
+Variante = cor + tamanho + **estoque real** (quantas peças existem; o site não vende acima disso). `preco` = preço sugerido da planilha (a vitrine soma 5% e arredonda para ,90). Flags: `novo` (New In), `curadoria`, `maisVendida`.
 **Coming soon:** `"emBreve": true` (fica só na vitrine Coming Soon, com "Avise-me"). Quando a peça chegar: `"emBreve": false`, `flags.novo: true` e o estoque de cada variante.
 
 **Vídeos:** coloque os arquivos em `public/assets/videos/` e preencha `src` em `videos` no `data/config.json` (ex.: `"src": "/assets/videos/look-01.mp4"`). Use MP4 (H.264) vertical, curto e leve.
@@ -43,9 +43,9 @@ Variante = cor + tamanho + **estoque real** (quantas peças existem; o site não
 Links antigos com `#/...` (ex.: `/#/p/vestido-poa`) são redirecionados para a rota nova.
 
 ## Preços e pagamento
-- **Vitrine:** `preco` em `data/products.json` é o valor base; o site mostra base + 5% (taxa do Mercado Pago embutida). Ex.: R$ 100,00 → **R$ 105,00**, ou 2x de R$ 52,50 sem juros. Percentuais em `pagamento` no `data/config.json` (`taxaCartao`, `descontoPix`, `maxParcelas`).
+- **Vitrine:** `preco` em `data/products.json` é o valor base (preço sugerido da planilha); o site mostra base + 5% (taxa do Mercado Pago embutida), **arredondado para cima até terminar em ,90**. Ex.: R$ 149,90 → 157,40 → **R$ 157,90** (2x de R$ 78,95 sem juros). Ajustes em `pagamento` no `data/config.json` (`taxaCartao`, `centavosVitrine`, `descontoPix`, `maxParcelas`).
 - **Cartão (crédito até 2x sem juros ou débito):** pago no **Mercado Pago** (Checkout Pro). Cada peça vai com o seu valor exato (com cupom, se houver); a soma é o total do site. Só a forma escolhida é liberada no Mercado Pago.
-- **Pix: 5% de desconto** sobre a vitrine (R$ 105,00 → R$ 99,75), pago direto na **chave CNPJ da loja**. O site gera o QR Code e o Pix copia e cola com o valor e o nº do pedido; a cliente envia o comprovante pelo WhatsApp.
+- **Pix: 5% de desconto** sobre a vitrine (R$ 157,90 → R$ 150,01), pago direto na **chave CNPJ da loja**. O site gera o QR Code e o Pix copia e cola com o valor e o nº do pedido; a cliente envia o comprovante pelo WhatsApp.
 - A entrega por aplicativo não entra no valor pago online: é combinada no atendimento.
 - Sem token do Mercado Pago ou sem chave Pix, a opção correspondente vira "enviar pelo WhatsApp".
 

@@ -3,8 +3,14 @@ import type { Config, Cupom, FormaPagamento } from "../types";
 export const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 export const r2 = (v: number) => Math.round((v + Number.EPSILON) * 100) / 100;
 
-// Preço mostrado no site: base + taxa do cartão (ex.: R$ 100,00 -> R$ 105,00).
-export const precoVitrine = (cfg: Config, base: number) => r2(base * (1 + cfg.pagamento.taxaCartao));
+// Preço mostrado no site: base + taxa do cartão, arredondado PARA CIMA até terminar
+// em ,90 (centavosVitrine). Ex.: R$ 100,00 -> 105,00 -> R$ 105,90; R$ 102,51 -> 107,64 -> R$ 107,90.
+// Para cima: a vitrine nunca fica abaixo do valor com a taxa.
+export const precoVitrine = (cfg: Config, base: number) => {
+  const v = r2(base * (1 + cfg.pagamento.taxaCartao));
+  const c = cfg.pagamento.centavosVitrine;
+  return c == null ? v : r2(Math.ceil(r2(v - c) - 1e-9) + c);
+};
 
 export function acharCupom(cfg: Config, codigo?: string | null): Cupom | undefined {
   if (!codigo) return undefined;

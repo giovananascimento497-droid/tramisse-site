@@ -17,7 +17,7 @@ Premium sem parecer inacessível. Não parecer marketplace nem home cheia de car
 - **Qualidade:** imagens nítidas (ultra HD). Hoje as fotos vêm de um PDF comprimido (~1400 px); pedir as fotos originais.
 
 ## Regras de negócio (vieram do catálogo da cliente)
-- **Pagamento (regra atual):** o preço de vitrine já embute 5% (taxa do Mercado Pago): vitrine = preço base do catálogo × 1,05. Cartão de crédito em até **2x sem juros** ou débito, pelo Mercado Pago, pagam a vitrine. **Pix: 5% de desconto** sobre a vitrine, pago na chave CNPJ da loja (`pagamento.pix.chave` em `data/config.json`; ainda pendente). Cupom vale sobre a vitrine; cálculo por peça (cada peça vai ao Mercado Pago com seu valor exato).
+- **Pagamento (regra atual):** o preço de vitrine já embute 5% (taxa do Mercado Pago): vitrine = preço base (preço sugerido da planilha) × 1,05, **arredondado para cima até terminar em ,90** (`pagamento.centavosVitrine`). Cartão de crédito em até **2x sem juros** ou débito, pelo Mercado Pago, pagam a vitrine. **Pix: 5% de desconto** sobre a vitrine, pago na chave CNPJ da loja (`pagamento.pix.chave` em `data/config.json`; ainda pendente). Cupom vale sobre a vitrine; cálculo por peça (cada peça vai ao Mercado Pago com seu valor exato).
 - **Entrega:** exclusivamente por aplicativo, mediante consulta; valor por conta da cliente, informado na compra. **Retirada** possível (endereço enviado após confirmar a compra).
 - **Trocas:** até 7 dias, com etiqueta fixada na peça, conforme estoque, solicitadas pelo atendimento.
 - **Atendimento (WhatsApp):** Giovana (91) 99965-4699 · Victoria (91) 99963-1582. Instagram: @tramissebrasil.
