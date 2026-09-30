@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { CSSProperties } from "react";
 import { CarouselButtons } from "@/components/Carousel";
+import { HeroShop } from "@/components/HeroShop";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reels } from "@/components/Reels";
@@ -16,26 +16,10 @@ const Carrossel = ({ l, id }: { l: Produto[]; id: string }) => (
 export default function Home() {
   const novos = PRODS.filter((p) => p.flags.novo);
   const desejadas = PRODS.filter((p) => p.flags.maisVendida);
-  const H = CFG.hero;
   const TP = CFG.fotosHome;
   return (
     <>
-      <section className="hero" aria-label="Campanha">
-        <div className="ph" style={{ "--a": "#B9AE9E", "--z": "#6E665B", "--d": "160deg" } as CSSProperties}>
-          {H.desktop ? (
-            <picture>
-              <source media="(max-width:700px)" srcSet={H.mobile || H.desktop} />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={H.desktop} alt="Campanha Tramisse" />
-            </picture>
-          ) : null}
-        </div>
-        <div className="in">
-          <h1 className="logo big">TRAMISSE</h1>
-          <p>ESSENCIAL. ATEMPORAL.</p>
-          <Link className="btn" href="/categoria/new-in">COMPRAR AGORA</Link>
-        </div>
-      </section>
+      <HeroShop fotos={PRODS.filter((p) => p.imagens.length).map(({ slug, nome, imagens }) => ({ slug, nome, imagens: imagens.slice(0, 1) }))} />
 
       <section className="sec">
         <div className="w">

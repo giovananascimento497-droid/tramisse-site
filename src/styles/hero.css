@@ -1,0 +1,16 @@
+/* Primeira imagem da home: fotos das peças em rotação com "SHOP NOW" (src/components/HeroShop.tsx).
+   Carregado depois de tramisse.css; mantém a altura e o fundo greige do hero original. */
+.hero.hs{display:block;background:#D6CDBF}
+.hs-pg{position:absolute;inset:0;display:grid;gap:2px;opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+.hs-pg.on{opacity:1;pointer-events:auto}
+.hs-it{position:relative;overflow:hidden;display:block;color:#F7F5F1}
+.hs-it img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%;transition:transform 6s ease}
+.hs-pg.on .hs-it img{transform:scale(1.04)}
+.hs-it::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 58%,rgba(30,29,27,.5))}
+.hs-it span{position:absolute;left:0;right:0;bottom:48px;z-index:1;text-align:center;font:400 14px var(--sans);letter-spacing:.3em}
+.hs-it span::after{content:"";display:block;width:56px;height:1px;background:currentColor;margin:10px auto 0;transition:width .35s}
+.hs-it:hover span::after{width:96px}
+@media(max-width:700px){.hs-pg{grid-template-columns:1fr!important}.hs-pg .hs-it:nth-child(n+2){display:none}.hs-it span{bottom:40px}}
+/* Véu greige no topo, só atrás do cabeçalho, para o logo e os ícones ficarem legíveis sobre qualquer foto. */
+.hero.hs::before{content:"";display:block;position:absolute;left:0;right:0;top:0;height:190px;z-index:1;pointer-events:none;background:linear-gradient(rgba(214,205,191,.92),rgba(214,205,191,.55) 50%,rgba(214,205,191,0))}
+@media(max-width:700px){.hero.hs::before{height:140px}}

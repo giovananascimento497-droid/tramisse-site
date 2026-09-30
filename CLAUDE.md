@@ -13,7 +13,7 @@ Premium sem parecer inacessível. Não parecer marketplace nem home cheia de car
 - **Tipografia:** serifada sofisticada (Bodoni Moda) em títulos; sans limpa (Jost) em textos e menus.
 - **Logo:** vetor definitivo em `public/assets/brand/logo.svg` (letras espaçadas "T R A M I S S E", "MISS" em itálico, exportado do Canva; original em `referencias/logo-canva.svg`), usado como máscara CSS (`--logo`) na cor da interface. `logo.png` é a mesma arte em 3000 px. Tamanhos em `src/styles/logo.css`. NUNCA pôr linhas ou elementos decorativos acima do "T"; não adicionar gráficos ao logo nem mudar o espaçamento das letras.
 - **Header:** transparente sobre o banner e sólido ao rolar (classe `body.sol`); uma linha só: ícone de menu à esquerda, logo ao centro, ícones finos à direita (busca, conta, favoritos, sacola). Tudo na **mesma cor** (variável `--hc`).
-- **Hero:** fundo liso greige (`#D6CDBF`), sem imagem. A cliente não gostou da foto de fundo anterior.
+- **Hero (primeira imagem da home):** fotos das peças se revezando, cada uma com "SHOP NOW" e link para a peça (3 lado a lado no computador, 1 no celular; troca a cada 5 s). Usa a 1ª foto de cada peça que tem foto. Fundo greige `#D6CDBF` por trás e véu greige no topo para o cabeçalho ficar legível. (Antes era greige liso sem imagem; mudou a pedido em 30/09/2026.) Código: `src/components/HeroShop.tsx` e `src/styles/hero.css`.
 - **Qualidade:** imagens nítidas (ultra HD). Hoje as fotos vêm de um PDF comprimido (~1400 px); pedir as fotos originais.
 
 ## Regras de negócio (vieram do catálogo da cliente)
