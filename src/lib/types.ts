@@ -75,4 +75,6 @@ export type Pedido = {
   desconto: number;
   acrescimo: number;
   total: number;
+  // Preenchido quando a cliente pagou pelo site (ex.: Mercado Pago).
+  pagamentoOnline?: { provedor: string; id: string; status: string };
 };

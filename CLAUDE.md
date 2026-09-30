@@ -21,7 +21,7 @@ Premium sem parecer inacessível. Não parecer marketplace nem home cheia de car
 - **Entrega:** exclusivamente por aplicativo, mediante consulta; valor por conta da cliente, informado na compra. **Retirada** possível (endereço enviado após confirmar a compra).
 - **Trocas:** até 7 dias, com etiqueta fixada na peça, conforme estoque, solicitadas pelo atendimento.
 - **Atendimento (WhatsApp):** Giovana (91) 99965-4699 · Victoria (91) 99963-1582. Instagram: @tramissebrasil.
-- O checkout atual **não cobra**: monta o resumo e abre o WhatsApp da atendente. Não coletar dados de cartão no site.
+- Checkout: a cliente escolhe **pagar pelo Mercado Pago** (Checkout Pro, redireciona para o Mercado Pago) ou **enviar pelo WhatsApp** (não cobra). Nos dois casos o resumo vai para a atendente pelo WhatsApp. Não coletar dados de cartão no site. A entrega por aplicativo não entra no valor pago online.
 
 ## Referência de navegação
 Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto, sacola, checkout). **Não copiar** design, textos, imagens, logo nem código.
@@ -34,7 +34,8 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - `src/store/Store.tsx`: estado no navegador (sacola, favoritos, usuário) com as chaves de localStorage do site original (`tb`, `tf`, `tu`).
 - `src/styles/tramisse.css`: cópia fiel de `legacy/css/style.css`; única mudança é o caminho do logo. Manter as mesmas classes na marcação.
 - `data/`: `config.json`, `products.json`, `colecoes.json`, `paginas.json`. Lidos só por `src/lib/config.ts`, `src/lib/catalog.ts` e `src/lib/paginas.ts` (trocar por banco/API ali).
-- `src/lib/payment/`: regras de preço (`pricing.ts`), contrato de provedor (`provider.ts`) e provedor atual via WhatsApp (`whatsapp.ts`, mesma mensagem do site original).
+- `src/lib/payment/`: regras de preço (`pricing.ts`), montagem do pedido a partir do catálogo (`pedido.ts`), contrato de provedor (`provider.ts`), WhatsApp (`whatsapp.ts`, mesma mensagem do site original) e Mercado Pago (`mercadopago.ts`, só servidor; token em `MERCADOPAGO_ACCESS_TOKEN`).
+- `src/app/api/pagamento/mercadopago/`: cria o link (POST, recalcula o preço no servidor) e consulta o pagamento (GET `[id]`). Retorno em `/checkout/retorno`.
 - Imagens em `public/assets/` (servidas em `/assets/...`); fotos das peças em `public/assets/products/<slug>-<n>.jpg`. Peça sem foto mostra o degradê na cor da peça.
 - Logo atual é **provisório** (recortado de `referencias/marca-header-mockup.jpeg`); trocar pelo arquivo original quando a cliente enviar.
 - `fotos-nao-identificadas/`: fotos recebidas que não correspondem a peças do catálogo.

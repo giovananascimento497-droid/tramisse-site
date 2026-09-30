@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import { CL, porId } from "@/lib/catalog";
+import { montarPedido } from "@/lib/payment/pedido";
 import { CFG } from "@/lib/config";
 import { brl, calcularTotais } from "@/lib/payment/pricing";
 import { provedorWhatsApp } from "@/lib/payment/whatsapp";
-import type { DadosCliente, FormaEntrega, FormaPagamento, Pedido } from "@/lib/types";
+import type { DadosCliente, FormaEntrega, FormaPagamento } from "@/lib/types";
 import { useLoja } from "@/store/Store";
 import { subtotalSacola } from "../shell/BagDrawer";
 import { Ph } from "../Ph";
@@ -22,7 +23,7 @@ const PAGAMENTOS: [FormaPagamento, string, string][] = [
 
 // Checkout por etapas. Não cobra: monta o pedido e abre o WhatsApp da atendente
 // (provedor em src/lib/payment). Nenhum dado de cartão é coletado.
-export function CheckoutView() {
+export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
   const { bag, setBag, cupom, setCupom, pronto } = useLoja();
   const [step, setStep] = useState(0);
   const [ck, setCk] = useState<DadosCliente>({});
@@ -31,6 +32,7 @@ export function CheckoutView() {
   const [erro, setErro] = useState("");
   const [faltando, setFaltando] = useState<string[]>([]);
   const [enviado, setEnviado] = useState<{ at: string; wa: string } | null>(null);
+  const [gerando, setGerando] = useState(false);
 
   const t = calcularTotais(CFG, subtotalSacola(bag), step >= 3 ? pay : null, cupom);
 
@@ -83,26 +85,39 @@ export function CheckoutView() {
   };
   const ir = (s: number) => { setErro(""); setFaltando([]); setStep(s); };
 
+  const pedidoAtual = () => montarPedido({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck });
+
   const enviar = async (at: string) => {
     const atendente = CFG.atendentes.find((a) => a.nome === at) ?? CFG.atendentes[0];
-    const { subtotal, desconto, acrescimo, total } = calcularTotais(CFG, t.subtotal, pay, cupom);
-    const pedido: Pedido = {
-      itens: bag.flatMap((l) => {
-        const p = porId(l.id);
-        return p ? [{ nome: p.nome, cor: CL[l.cor]?.nome ?? l.cor, tam: l.tam, q: l.q, precoUnitario: p.preco }] : [];
-      }),
-      cupom: cupom ?? undefined,
-      pagamento: pay,
-      entrega: ship,
-      cliente: ck,
-      subtotal, desconto, acrescimo, total,
-    };
+    const pedido = pedidoAtual();
+    if (!pedido) return setErro("Não foi possível montar o pedido. Confira a sacola.");
     const r = await provedorWhatsApp(atendente).finalizar(pedido);
     if (r.tipo !== "redirecionar") return;
     setEnviado({ at: atendente.nome, wa: r.url });
     setBag(() => []);
     setCupom(null);
     window.open(r.url, "_blank");
+  };
+
+  // Gera o link do Mercado Pago no servidor e leva a cliente para pagar lá.
+  // O pedido fica guardado no navegador para a página de retorno (/checkout/retorno).
+  const pagarMercadoPago = async (at: string) => {
+    setErro("");
+    setGerando(true);
+    try {
+      const r = await fetch("/api/pagamento/mercadopago", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck }),
+      });
+      const d = await r.json();
+      if (!r.ok || !d.url) throw new Error(d.erro || "Não foi possível gerar o pagamento.");
+      try { localStorage.setItem("tp", JSON.stringify({ referencia: d.referencia, pedido: d.pedido, atendente: at })); } catch {}
+      location.href = d.url;
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "Não foi possível gerar o pagamento.");
+      setGerando(false);
+    }
   };
 
   const resumo = (
@@ -183,7 +198,12 @@ export function CheckoutView() {
     f = (
       <>
         <h2>Pagamento</h2>
-        <form className="fg" style={{ marginTop: 16 }} onSubmit={(e) => { e.preventDefault(); enviar(String(new FormData(e.currentTarget).get("at"))); }}>
+        <form className="fg" style={{ marginTop: 16 }} onSubmit={(e) => {
+            e.preventDefault();
+            const at = String(new FormData(e.currentTarget).get("at"));
+            const via = (e.nativeEvent as SubmitEvent).submitter?.getAttribute("value");
+            if (via === "mp") pagarMercadoPago(at); else enviar(at);
+          }}>
           <div className="s">
             {PAGAMENTOS.map(([v, tt, sub]) => (
               <label className="opc" key={v}>
@@ -196,11 +216,20 @@ export function CheckoutView() {
             Quem vai te atender
             <select name="at">{CFG.atendentes.map((a) => <option key={a.nome}>{a.nome}</option>)}</select>
           </label>
-          <p className="s" style={{ color: "var(--mut)", fontSize: 14 }}>
-            Você envia o pedido pelo WhatsApp e o atendimento confirma o pagamento e a entrega. Nenhum dado de cartão é coletado neste site.
-          </p>
+          {mercadoPago ? (
+            <p className="s" style={{ color: "var(--mut)", fontSize: 14 }}>
+              Pague agora pelo Mercado Pago (Pix ou cartão, conforme a opção escolhida) ou envie o pedido pelo WhatsApp para combinar com o atendimento. O valor da entrega por aplicativo é combinado no atendimento. Nenhum dado de cartão é coletado neste site.
+            </p>
+          ) : (
+            <p className="s" style={{ color: "var(--mut)", fontSize: 14 }}>
+              Você envia o pedido pelo WhatsApp e o atendimento confirma o pagamento e a entrega. Nenhum dado de cartão é coletado neste site.
+            </p>
+          )}
           <div className="er s">{erro}</div>
-          <button className="btn s">ENVIAR PEDIDO PELO WHATSAPP</button>
+          {mercadoPago ? (
+            <button className="btn s" name="via" value="mp" disabled={gerando}>{gerando ? "GERANDO PAGAMENTO…" : "PAGAR COM MERCADO PAGO"}</button>
+          ) : null}
+          <button className={mercadoPago ? "btn o s" : "btn s"} name="via" value="wa" disabled={gerando}>ENVIAR PEDIDO PELO WHATSAPP</button>
         </form>
       </>
     );

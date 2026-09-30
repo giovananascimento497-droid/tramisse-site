@@ -13,7 +13,9 @@ export function resumoPedido(p: Pedido): string {
     `\n\nSubtotal: ${brl(p.subtotal)}` +
     (p.desconto ? `\nDesconto (${p.cupom}): -${brl(p.desconto)}` : "") +
     (p.acrescimo ? `\nAcréscimo do cartão (5%): ${brl(p.acrescimo)}` : "") +
-    `\nTotal (sem entrega): ${brl(p.total)}\nPagamento: ${NOMES_PAGAMENTO[p.pagamento]}\n` +
+    `\nTotal (sem entrega): ${brl(p.total)}\nPagamento: ${NOMES_PAGAMENTO[p.pagamento]}` +
+    (p.pagamentoOnline ? ` — pago pelo ${p.pagamentoOnline.provedor} (pagamento nº ${p.pagamentoOnline.id})` : "") +
+    "\n" +
     (p.entrega === "retirada"
       ? "Retirada"
       : `Entrega por aplicativo: ${[c.end, c.num, c.cmp, c.bai, c.cid, c.uf, c.cep].filter(Boolean).join(", ")} (destinatário: ${c.dest})`) +
