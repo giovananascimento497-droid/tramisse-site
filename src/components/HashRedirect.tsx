@@ -3,13 +3,17 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-// Links antigos no formato "/#/produto/x" continuam funcionando:
-// são redirecionados para a rota real "/produto/x".
+// Links antigos do site estático ("/#/p/vestido-poa", "/#/c/roupas/blusas"...)
+// continuam funcionando: são levados para a rota real equivalente.
+const MAPA: Record<string, string> = { c: "categoria", p: "produto" };
+
 export function HashRedirect() {
   const router = useRouter();
   useEffect(() => {
-    const h = window.location.hash;
-    if (h.startsWith("#/")) router.replace(h.slice(1) || "/");
+    const h = location.hash;
+    if (!h.startsWith("#/")) return;
+    const [a, ...resto] = h.slice(2).split("/");
+    router.replace("/" + [MAPA[a] ?? a, ...resto].filter(Boolean).join("/"));
   }, [router]);
   return null;
 }

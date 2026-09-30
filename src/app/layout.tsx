@@ -1,8 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { ScrollState } from "@/components/ScrollState";
 import { HashRedirect } from "@/components/HashRedirect";
+import { BagDrawer } from "@/components/shell/BagDrawer";
+import { Chrome } from "@/components/shell/Chrome";
+import { Footer } from "@/components/shell/Footer";
+import { Header } from "@/components/shell/Header";
+import { MenuDrawer } from "@/components/shell/MenuDrawer";
+import { Overlays } from "@/components/shell/Overlays";
+import { TopBar } from "@/components/shell/TopBar";
+import { StoreProvider } from "@/store/Store";
 import "@/styles/tramisse.css";
 
 export const metadata: Metadata = {
@@ -11,11 +16,7 @@ export const metadata: Metadata = {
   description: "Tramisse, moda feminina brasileira contemporânea. Essencial. Atemporal.",
 };
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  viewportFit: "cover",
-};
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -28,17 +29,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <div className="top" id="top"></div>
-        <Header />
-        <main id="app">{children}</main>
-        <Footer />
-        <div className="ov" data-a="close"></div>
-        <aside className="dr" id="menu" aria-label="Menu"></aside>
-        <aside className="dr" id="bag" aria-label="Sacola"></aside>
-        <div className="mod" id="mod" role="dialog" aria-modal="true"><div id="modc"></div></div>
-        <div id="toast" role="status"></div>
-        <ScrollState />
-        <HashRedirect />
+        <StoreProvider>
+          <TopBar />
+          <Header />
+          <main id="app">{children}</main>
+          <Footer />
+          <MenuDrawer />
+          <BagDrawer />
+          <Overlays />
+          <Chrome />
+          <HashRedirect />
+        </StoreProvider>
       </body>
     </html>
   );

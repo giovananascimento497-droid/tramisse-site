@@ -1,4 +1,110 @@
-// Home editorial. O conteúdo (hero greige, vídeos, destaques) vem na migração do app.js.
+import Link from "next/link";
+import type { CSSProperties } from "react";
+import { CarouselButtons } from "@/components/Carousel";
+import { Newsletter } from "@/components/Newsletter";
+import { ProductCard } from "@/components/ProductCard";
+import { Reels } from "@/components/Reels";
+import { Tile } from "@/components/Tile";
+import { PRODS, slug } from "@/lib/catalog";
+import { CFG } from "@/lib/config";
+import type { Produto } from "@/lib/types";
+
+const Carrossel = ({ l, id }: { l: Produto[]; id: string }) => (
+  <div className="car" id={id}>{l.map((p) => <ProductCard key={p.id} p={p} />)}</div>
+);
+
 export default function Home() {
-  return <section className="hero" aria-label="Tramisse"></section>;
+  const novos = PRODS.filter((p) => p.flags.novo);
+  const desejadas = PRODS.filter((p) => p.flags.maisVendida);
+  const H = CFG.hero;
+  const TP = CFG.fotosHome;
+  return (
+    <>
+      <section className="hero" aria-label="Campanha">
+        <div className="ph" style={{ "--a": "#B9AE9E", "--z": "#6E665B", "--d": "160deg" } as CSSProperties}>
+          {H.desktop ? (
+            <picture>
+              <source media="(max-width:700px)" srcSet={H.mobile || H.desktop} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={H.desktop} alt="Campanha Tramisse" />
+            </picture>
+          ) : null}
+        </div>
+        <div className="in">
+          <h1 className="logo big">TRAMISSE</h1>
+          <p>ESSENCIAL. ATEMPORAL.</p>
+          <Link className="btn" href="/categoria/new-in">COMPRAR AGORA</Link>
+        </div>
+      </section>
+
+      <section className="sec">
+        <div className="w">
+          <div className="tiles">
+            {[["NEW IN", "/categoria/new-in"], ["CURADORIA ESPECIAL", "/categoria/curadoria"], ["ROUPAS", "/categoria/roupas"], ["ACESSÓRIOS", "/categoria/acessorios"]].map(
+              ([t, h]) => <Tile key={t} t={t} href={h} foto={TP[t]} />,
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="sec" style={{ paddingTop: 0 }}>
+        <div className="w">
+          <div className="sh">
+            <div><h2>NEW IN</h2><p>Novidades que chegam para fazer parte da sua história.</p></div>
+            <CarouselButtons id="c1" />
+          </div>
+          <Carrossel l={novos} id="c1" />
+          <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/new-in">VER TODAS</Link></p>
+        </div>
+      </section>
+
+      <section className="cur">
+        <h2>Curadoria Especial</h2>
+        <p>Uma seleção especial de peças escolhidas para traduzir a essência da Tramisse.</p>
+        <Link className="btn" href="/categoria/curadoria">EXPLORAR CURADORIA</Link>
+      </section>
+
+      <section className="sec">
+        <div className="w">
+          <div className="sh">
+            <div><h2>Em movimento</h2><p>Os looks da Tramisse ganhando vida.</p></div>
+            <CarouselButtons id="c3" />
+          </div>
+          <Reels id="c3" />
+        </div>
+      </section>
+
+      <section className="sec" style={{ paddingTop: 0 }}>
+        <div className="w">
+          <div className="sh"><h2>Compre por categoria</h2></div>
+          <div className="tiles six">
+            {["Blusas", "Calças", "Vestidos", "Conjuntos", "Saias", "Macacões"].map((t) => (
+              <Tile key={t} t={t.toUpperCase()} href={`/categoria/roupas/${slug(t)}`} foto={TP[t.toUpperCase()]} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="sec" style={{ paddingTop: 0 }}>
+        <div className="w">
+          <div className="sh"><h2>Compre por estilo</h2></div>
+          <div className="tiles st">
+            {["Casual", "Office", "Night", "Weekend"].map((t) => (
+              <Tile key={t} t={t.toUpperCase()} href={`/categoria/estilo/${slug(t)}`} foto={TP[t.toUpperCase()]} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="sec" style={{ paddingTop: 0 }}>
+        <div className="w">
+          <div className="sh"><h2>As mais desejadas</h2><CarouselButtons id="c2" /></div>
+          <Carrossel l={desejadas} id="c2" />
+          <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/todos">VER TODOS</Link></p>
+        </div>
+      </section>
+
+      <Newsletter />
+    </>
+  );
 }

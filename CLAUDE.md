@@ -27,18 +27,22 @@ Premium sem parecer inacessível. Não parecer marketplace nem home cheia de car
 Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto, sacola, checkout). **Não copiar** design, textos, imagens, logo nem código.
 
 ## Estrutura do código (Next.js, App Router, TypeScript)
-- `legacy/index.html`: marcação do site estático original (referência da migração).
-- `src/app/`: rotas reais (`/`, `/categoria/[...slug]`, `/produto/[slug]`, `/favoritos`, `/conta`, `/checkout`, `/institucional/[slug]`, `/admin`), sitemap e robots.
-- `src/components/`: header/footer (mesmas classes do CSS original), `body.sol` ao rolar, redirecionamento de links `#/`.
-- `src/styles/tramisse.css`: design system; deve receber o `css/style.css` original **sem alterações**.
-- `data/`: `config.json` (CFG), `products.json` (categorias, cores, produtos), `paginas.json`. Lidos só por `src/lib/config.ts`, `src/lib/catalog.ts` e `src/lib/paginas.ts` (trocar por banco/API ali).
-- `src/lib/payment/`: regras de preço (`pricing.ts`), contrato de provedor (`provider.ts`) e provedor atual via WhatsApp (`whatsapp.ts`).
-- Imagens em `public/assets/` (servidas em `/assets/...`); fotos das peças em `public/assets/products/<slug>.jpg`.
-- Variante de produto = cor + estoque por tamanho; estoque provisório de 2 por variante.
+- `legacy/`: site estático original (`index.html`, `css/style.css`, `js/*.js`), só como referência.
+- `src/app/`: rotas reais: `/`, `/categoria/[...slug]` (ex.: `roupas/blusas`, `new-in`, `estilo/office`), `/produto/[slug]`, `/favoritos`, `/conta`, `/checkout`, `/busca`, `/sobre`, `/pagina/[slug]`, `/admin`, sitemap e robots.
+- `src/components/shell/`: header, menu, sacola, rodapé, guia de tamanhos/toast e `Chrome` (classes `body.home`, `body.sol`, `body.m`/`body.g`, variável `--ty`).
+- `src/components/telas/`: telas interativas (categoria com filtros, produto, checkout, conta, favoritos, busca).
+- `src/store/Store.tsx`: estado no navegador (sacola, favoritos, usuário) com as chaves de localStorage do site original (`tb`, `tf`, `tu`).
+- `src/styles/tramisse.css`: cópia fiel de `legacy/css/style.css`; única mudança é o caminho do logo. Manter as mesmas classes na marcação.
+- `data/`: `config.json`, `products.json`, `colecoes.json`, `paginas.json`. Lidos só por `src/lib/config.ts`, `src/lib/catalog.ts` e `src/lib/paginas.ts` (trocar por banco/API ali).
+- `src/lib/payment/`: regras de preço (`pricing.ts`), contrato de provedor (`provider.ts`) e provedor atual via WhatsApp (`whatsapp.ts`, mesma mensagem do site original).
+- Imagens em `public/assets/` (servidas em `/assets/...`); fotos das peças em `public/assets/products/<slug>-<n>.jpg`. Peça sem foto mostra o degradê na cor da peça.
+- Logo atual é **provisório** (recortado de `referencias/marca-header-mockup.jpeg`); trocar pelo arquivo original quando a cliente enviar.
+- `fotos-nao-identificadas/`: fotos recebidas que não correspondem a peças do catálogo.
+- `scripts/converter-legacy.mjs`: conversão única dos dados antigos (não rodar de novo depois de editar os JSON).
 
 ## Estado atual e pendências
 - Feito: home editorial, seção de vídeos em carrossel, categorias com filtros, produto com galeria/zoom, sacola com cupom (`TRAMISSE10`), checkout por etapas, conta/favoritos (localStorage), páginas institucionais.
 - Vídeos: preencher `src` em `CFG.videos` (ainda não há vídeos reais).
 - Acessórios e Sale estão vazios (catálogo só tem roupas, sem preço promocional).
 - Estoque real, fotos individuais por peça, textos de privacidade/termos, TikTok/Pinterest pendentes.
-- Próximo passo de arquitetura: migrar para framework com rotas reais (SEO) e backend/plataforma de e-commerce (produtos, estoque, pedidos, clientes, cupons, pagamento Pix/cartão) e painel administrativo.
+- Migração para Next.js feita (rotas reais). Próximo passo: backend/plataforma de e-commerce (produtos, estoque, pedidos, clientes, cupons, pagamento Pix/cartão) e painel administrativo em `/admin`.
