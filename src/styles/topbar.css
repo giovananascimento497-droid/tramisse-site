@@ -1,0 +1,6 @@
+/* Barra superior rotativa (uma mensagem por vez). Carregado depois de tramisse.css. */
+.top.gira{display:grid;align-items:center}
+.top.gira span{grid-area:1/1;display:block;opacity:0;transform:translateY(6px);transition:opacity .6s ease,transform .6s ease}
+.top.gira span.on{opacity:1;transform:none}
+.top.gira span+span::before{content:none}
+@media(max-width:700px){.top.gira span:nth-child(n+2){display:block}}

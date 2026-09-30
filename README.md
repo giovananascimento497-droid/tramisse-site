@@ -14,7 +14,7 @@ npm run typecheck
 ## Onde editar
 | O que | Arquivo |
 |---|---|
-| Barra superior, pagamento, WhatsApp, cupons, vídeos, redes, fotos da home | `data/config.json` |
+| Barra superior (mensagens que trocam sozinhas; tempo em `src/components/shell/TopBar.tsx`), pagamento, WhatsApp, cupons, vídeos, redes, fotos da home | `data/config.json` |
 | Produtos, cores, categorias | `data/products.json` |
 | Títulos e textos das coleções (New In, Curadoria…) | `data/colecoes.json` |
 | Páginas institucionais (como comprar, trocas, contato, privacidade, termos) | `data/paginas.json` |

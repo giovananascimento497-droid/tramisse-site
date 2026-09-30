@@ -33,6 +33,7 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - `src/components/telas/`: telas interativas (categoria com filtros, produto, checkout, conta, favoritos, busca).
 - `src/store/Store.tsx`: estado no navegador (sacola, favoritos, usuário) com as chaves de localStorage do site original (`tb`, `tf`, `tu`).
 - `src/styles/tramisse.css`: cópia fiel de `legacy/css/style.css`; única mudança é o caminho do logo. Manter as mesmas classes na marcação.
+- `src/styles/topbar.css` + `src/components/shell/TopBar.tsx`: barra superior rotativa (uma mensagem por vez, a cada 4 s, pausa com o mouse; altura fixa pela mensagem mais longa). Textos em `barraSuperior` no `data/config.json`.
 - `src/styles/logo.css`: carregado depois; troca o logo pelo vetor definitivo e ajusta as larguras (o logo novo é ~12,6:1).
 - `data/`: `config.json`, `products.json`, `colecoes.json`, `paginas.json`. Lidos só por `src/lib/config.ts`, `src/lib/catalog.ts` e `src/lib/paginas.ts` (trocar por banco/API ali).
 - `src/lib/payment/`: regras de preço (`pricing.ts`: vitrine, desconto Pix, parcelas), Pix copia e cola/QR (`pix.ts`, padrão BR Code), montagem do pedido a partir do catálogo (`pedido.ts`), contrato de provedor (`provider.ts`), WhatsApp (`whatsapp.ts`, mesma mensagem do site original) e Mercado Pago (`mercadopago.ts`, só servidor; token em `MERCADOPAGO_ACCESS_TOKEN`).

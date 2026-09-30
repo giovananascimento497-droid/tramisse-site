@@ -10,6 +10,7 @@ import { TopBar } from "@/components/shell/TopBar";
 import { StoreProvider } from "@/store/Store";
 import "@/styles/tramisse.css";
 import "@/styles/logo.css";
+import "@/styles/topbar.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
