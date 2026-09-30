@@ -19,7 +19,7 @@ export default function Home() {
   const TP = CFG.fotosHome;
   return (
     <>
-      <HeroShop fotos={PRODS.filter((p) => p.imagens.length).map(({ slug, nome, imagens }) => ({ slug, nome, imagens: imagens.slice(0, 1) }))} />
+      <HeroShop fotos={PRODS.filter((p) => p.imagens.length).map(({ slug, nome, imagens }) => ({ slug, nome, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
 
       <section className="sec">
         <div className="w">

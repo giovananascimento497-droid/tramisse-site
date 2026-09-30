@@ -53,7 +53,8 @@ export type Config = {
   atendentes: Atendente[];
   cupons: Cupom[];
   redes: { nome: string; url: string }[];
-  hero: { desktop: string; mobile: string };
+  // Primeira tela da home (imagem de início). imagem vazia = só as fotos das peças.
+  hero: { imagem: string; frase: string; textoFrase: string };
   videos: { produtoId: number; src: string }[];
   imagensMarca: { brand: string; cover: string };
   fotosHome: Record<string, number | "brand" | "cover">;

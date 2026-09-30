@@ -86,8 +86,10 @@
     }
   ],
   "hero": {
-    "desktop": "",
-    "mobile": ""
+    "_comentario": "Primeira tela da home: foto de fundo + logo + frase; depois as fotos das peças com SHOP NOW. Deixe 'imagem' vazio para mostrar só as peças.",
+    "imagem": "/assets/brand/inicio.jpg",
+    "frase": "/assets/brand/inicio-frase.svg",
+    "textoFrase": "essencial. atemporal. autêntica"
   },
   "imagensMarca": {
     "brand": "",

@@ -6,9 +6,12 @@ import type { Produto } from "@/lib/types";
 
 const INTERVALO = 5000; // ms entre uma troca e outra
 
-// Primeira imagem da home: fotos das peças se revezando, cada uma com "SHOP NOW"
-// e link para a peça. Computador: 3 fotos lado a lado; celular: 1 por vez.
-export function HeroShop({ fotos }: { fotos: Pick<Produto, "slug" | "nome" | "imagens">[] }) {
+type Banner = { imagem: string; frase: string; textoFrase: string };
+
+// Primeira imagem da home: a imagem de início (fundo + logo + frase) e, em seguida,
+// as fotos das peças se revezando, cada uma com "SHOP NOW" e link para a peça.
+// Computador: 3 fotos lado a lado; celular: 1 por vez.
+export function HeroShop({ fotos, banner }: { fotos: Pick<Produto, "slug" | "nome" | "imagens">[]; banner?: Banner }) {
   const [n, setN] = useState(3);
   const [pag, setPag] = useState(0);
   const pausa = useRef(false);
@@ -29,11 +32,14 @@ export function HeroShop({ fotos }: { fotos: Pick<Produto, "slug" | "nome" | "im
     paginas.push(p);
   }
 
+  const temBanner = Boolean(banner?.imagem);
+  const total = paginas.length + (temBanner ? 1 : 0);
+
   useEffect(() => {
-    if (paginas.length < 2 || matchMedia("(prefers-reduced-motion:reduce)").matches) return;
-    const t = setInterval(() => { if (!pausa.current) setPag((x) => (x + 1) % paginas.length); }, INTERVALO);
+    if (total < 2 || matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+    const t = setInterval(() => { if (!pausa.current) setPag((x) => (x + 1) % total); }, INTERVALO);
     return () => clearInterval(t);
-  }, [paginas.length]);
+  }, [total]);
 
   return (
     <section
@@ -42,7 +48,20 @@ export function HeroShop({ fotos }: { fotos: Pick<Produto, "slug" | "nome" | "im
       onMouseEnter={() => (pausa.current = true)}
       onMouseLeave={() => (pausa.current = false)}
     >
-      {paginas.map((p, k) => (
+      {temBanner ? (
+        <div className={`hs-pg hs-bn${pag === 0 ? " on" : ""}`} aria-hidden={pag !== 0}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="hs-bg" src={banner!.imagem} alt="" />
+          <div className="hs-bn-in">
+            <h1 className="logo big">TRAMISSE</h1>
+            {banner!.frase ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className="hs-frase" src={banner!.frase} alt={banner!.textoFrase} />
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+      {paginas.map((pg0, k0) => ({ p: pg0, k: k0 + (temBanner ? 1 : 0) })).map(({ p, k }) => (
         <div key={`${n}-${k}`} className={`hs-pg${k === pag ? " on" : ""}`} aria-hidden={k !== pag} style={{ gridTemplateColumns: `repeat(${n},1fr)` }}>
           {p.map((f, j) => (
             <Link key={j} className="hs-it" href={`/produto/${f.slug}`} tabIndex={k === pag ? 0 : -1}>

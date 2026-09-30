@@ -14,3 +14,10 @@
 /* Véu greige no topo, só atrás do cabeçalho, para o logo e os ícones ficarem legíveis sobre qualquer foto. */
 .hero.hs::before{content:"";display:block;position:absolute;left:0;right:0;top:0;height:190px;z-index:1;pointer-events:none;background:linear-gradient(rgba(214,205,191,.92),rgba(214,205,191,.55) 50%,rgba(214,205,191,0))}
 @media(max-width:700px){.hero.hs::before{height:140px}}
+/* Imagem de início (1ª tela): foto de fundo + logo + frase, centralizados. */
+.hs-bn{display:block}
+.hs-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.hs-bn-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+.hs-bn .logo.big{width:min(35vw,760px);margin:0;background:#776E67}
+.hs-frase{position:absolute;left:50%;bottom:10%;width:min(45vw,980px);transform:translateX(-50%)}
+@media(max-width:700px){.hs-bn .logo.big{width:78vw}.hs-frase{width:92vw;bottom:12%}}
