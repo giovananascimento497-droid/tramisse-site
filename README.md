@@ -19,7 +19,7 @@ npm run typecheck
 | Títulos e textos das coleções (New In, Curadoria…) | `data/colecoes.json` |
 | Páginas institucionais (como comprar, trocas, contato, privacidade, termos) | `data/paginas.json` |
 | Fotos das peças | `public/assets/products/<slug>-1.jpg`, `-2.jpg`… (1ª é a capa) |
-| Logo e fotos da marca | `public/assets/brand/` |
+| Logo e fotos da marca | `public/assets/brand/` (logo em `logo.svg`; tamanhos em `src/styles/logo.css`) |
 | Cores, tipografia, espaçamentos | `src/styles/tramisse.css` (tokens no início) |
 | Telas | `src/app/**/page.tsx` e `src/components/` |
 | Regras de preço e finalização do pedido | `src/lib/payment/` |
@@ -64,6 +64,5 @@ Vercel (recomendado) ou qualquer hospedagem Node. Defina `NEXT_PUBLIC_SITE_URL` 
 - [ ] Etapa 4: backend (banco, pedidos, estoque, confirmação automática de pagamento por webhook) e painel com login.
 
 ## Pendências de conteúdo
-- **Logo:** `public/assets/brand/logo.png` é provisório, recortado de `referencias/marca-header-mockup.jpeg`. Enviar o arquivo original (PNG com fundo transparente, SVG ou PDF).
 - **Fotos da marca** (fundo e capa, usadas em Sobre e no bloco Acessórios da home): enviar as fotos para `public/assets/brand/` e preencher `imagensMarca` no `data/config.json` (ex.: `"brand": "/assets/brand/fundo.jpg"`).
 - **Fotos das peças:** 20 peças ainda sem foto. 31 fotos recebidas não correspondem a nenhuma peça do catálogo (`fotos-nao-identificadas/`, com miniaturas numeradas em `indice.jpg`).
