@@ -2,40 +2,31 @@ import type { Atendente, Pedido } from "../types";
 import { brl } from "./pricing";
 import type { ProvedorPagamento } from "./provider";
 
-const NOMES_PAGAMENTO = { pix: "Pix", debito: "Débito", credito: "Crédito" } as const;
-const NOMES_ENTREGA = { aplicativo: "Entrega por aplicativo", retirada: "Retirada" } as const;
+const NOMES_PAGAMENTO = { pix: "Pix", debito: "Cartão de débito", credito: "Cartão de crédito (até 2x)" } as const;
 
+// Mesmo texto do site original.
 export function resumoPedido(p: Pedido): string {
-  const linhas = [
-    "Olá! Gostaria de finalizar meu pedido na Tramisse:",
-    "",
-    ...p.itens.map(
-      (i) => `• ${i.quantidade}x ${i.nome} (${i.cor}, ${i.tamanho}) ${brl(i.precoUnitario * i.quantidade)}`,
-    ),
-    "",
-    `Subtotal: ${brl(p.subtotal)}`,
-  ];
-  if (p.desconto) linhas.push(`Desconto${p.cupom ? ` (${p.cupom})` : ""}: -${brl(p.desconto)}`);
-  if (p.acrescimo) linhas.push(`Acréscimo: ${brl(p.acrescimo)}`);
-  linhas.push(
-    `Total: ${brl(p.total)}`,
-    `Pagamento: ${NOMES_PAGAMENTO[p.pagamento]}${p.parcelas > 1 ? ` em ${p.parcelas}x` : ""}`,
-    `Entrega: ${NOMES_ENTREGA[p.entrega]}`,
-    "",
-    `Nome: ${p.cliente.nome}`,
-    `Telefone: ${p.cliente.telefone}`,
+  const c = p.cliente;
+  return (
+    "Olá! Quero finalizar um pedido na Tramisse:\n\n" +
+    p.itens.map((i) => `• ${i.nome} — ${i.cor}, tam. ${i.tam}, ${i.q}x — ${brl(i.precoUnitario * i.q)}`).join("\n") +
+    `\n\nSubtotal: ${brl(p.subtotal)}` +
+    (p.desconto ? `\nDesconto (${p.cupom}): -${brl(p.desconto)}` : "") +
+    (p.acrescimo ? `\nAcréscimo do cartão (5%): ${brl(p.acrescimo)}` : "") +
+    `\nTotal (sem entrega): ${brl(p.total)}\nPagamento: ${NOMES_PAGAMENTO[p.pagamento]}\n` +
+    (p.entrega === "retirada"
+      ? "Retirada"
+      : `Entrega por aplicativo: ${[c.end, c.num, c.cmp, c.bai, c.cid, c.uf, c.cep].filter(Boolean).join(", ")} (destinatário: ${c.dest})`) +
+    `\n\nCliente: ${c.n} ${c.sn} · ${c.tel} · ${c.e}`
   );
-  if (p.cliente.endereco) linhas.push(`Endereço: ${p.cliente.endereco}`);
-  return linhas.join("\n");
 }
 
-// Comportamento atual: monta o resumo e abre o WhatsApp da atendente.
+// Comportamento atual: monta o resumo e abre o WhatsApp da atendente (não cobra no site).
 export function provedorWhatsApp(atendente: Atendente): ProvedorPagamento {
   return {
     id: "whatsapp",
     async finalizar(pedido) {
-      const texto = encodeURIComponent(resumoPedido(pedido));
-      return { tipo: "redirecionar", url: `https://wa.me/${atendente.whatsapp}?text=${texto}` };
+      return { tipo: "redirecionar", url: `https://wa.me/${atendente.whatsapp}?text=${encodeURIComponent(resumoPedido(pedido))}` };
     },
   };
 }

@@ -1,35 +1,27 @@
 [
   {
-    "slug": "pagamento",
-    "titulo": "Formas de pagamento",
-    "paragrafos": [
-      "Pix sem acréscimo.",
-      "Cartão de débito com acréscimo de 5%.",
-      "Cartão de crédito em até 2x, com acréscimo de 5%."
-    ]
-  },
-  {
-    "slug": "entrega",
-    "titulo": "Entrega e retirada",
-    "paragrafos": [
-      "Entregas exclusivamente por aplicativo, mediante consulta. O valor é por conta da cliente e informado na compra.",
-      "Também é possível retirar o pedido. O endereço é enviado após a confirmação da compra."
-    ]
+    "slug": "faq",
+    "titulo": "Como comprar",
+    "html": "<b>Pagamento</b><br>Pix. Cartão de débito com acréscimo de 5%. Cartão de crédito em até 2x, com acréscimo de 5%.<br><br><b>Entregas</b><br>Realizadas exclusivamente por aplicativo, mediante consulta. O valor da entrega é de responsabilidade da cliente e informado no momento da compra.<br><br><b>Retirada</b><br>Também é possível retirar. O endereço é disponibilizado após a confirmação da compra."
   },
   {
     "slug": "trocas",
-    "titulo": "Trocas",
-    "paragrafos": [
-      "Trocas em até 7 dias, com a etiqueta fixada na peça e conforme disponibilidade de estoque.",
-      "As trocas são solicitadas pelo nosso atendimento."
-    ]
+    "titulo": "Trocas e devoluções",
+    "html": "As trocas devem ser realizadas em até 7 dias, com etiqueta fixada na peça, mediante disponibilidade do estoque. A troca deve ser solicitada pelo nosso atendimento."
   },
   {
-    "slug": "atendimento",
-    "titulo": "Atendimento",
-    "paragrafos": [
-      "WhatsApp: Giovana (91) 99965-4699 · Victoria (91) 99963-1582.",
-      "Instagram: @tramissebrasil."
-    ]
+    "slug": "contato",
+    "titulo": "Contato",
+    "html": "Atendimento pelo WhatsApp:<br><a href='https://wa.me/5591999654699' style='text-decoration:underline'>(91) 99965-4699 — Giovana</a><br><a href='https://wa.me/5591999631582' style='text-decoration:underline'>(91) 99963-1582 — Victoria</a><br><br>Instagram: <a href='https://instagram.com/tramissebrasil' style='text-decoration:underline'>@tramissebrasil</a>"
+  },
+  {
+    "slug": "privacidade",
+    "titulo": "Política de privacidade",
+    "html": "Texto legal a ser fornecido. Descreva quais dados são coletados, por quê e como solicitar a exclusão (LGPD)."
+  },
+  {
+    "slug": "termos",
+    "titulo": "Termos de uso",
+    "html": "Texto legal a ser fornecido."
   }
 ]

@@ -1,0 +1,30 @@
+{
+  "new-in": {
+    "titulo": "New In",
+    "texto": "Novidades que chegam para fazer parte da sua história."
+  },
+  "curadoria": {
+    "titulo": "Curadoria Especial",
+    "texto": "Uma seleção especial de peças escolhidas para traduzir a essência da Tramisse."
+  },
+  "roupas": {
+    "titulo": "Roupas",
+    "texto": "Peças essenciais, de modelagem precisa e caimento atemporal."
+  },
+  "acessorios": {
+    "titulo": "Acessórios",
+    "texto": "Os detalhes que assinam o look."
+  },
+  "sale": {
+    "titulo": "Sale",
+    "texto": "Peças da Tramisse com condições especiais."
+  },
+  "todos": {
+    "titulo": "Ver tudo",
+    "texto": "Toda a coleção Tramisse."
+  },
+  "estilo": {
+    "titulo": "Estilo",
+    "texto": "Uma seleção pensada para cada momento."
+  }
+}

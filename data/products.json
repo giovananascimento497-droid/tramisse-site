@@ -1,5 +1,1275 @@
 {
-  "categorias": [],
-  "cores": {},
-  "produtos": []
+  "categorias": {
+    "roupas": {
+      "nome": "Roupas",
+      "grupos": {
+        "Partes de cima": [
+          "Blusas",
+          "Camisas",
+          "Regatas",
+          "Croppeds",
+          "T-shirts",
+          "Tops"
+        ],
+        "Partes de baixo": [
+          "Calças",
+          "Saias",
+          "Shorts"
+        ],
+        "Peças únicas": [
+          "Vestidos",
+          "Macacões"
+        ],
+        "Alfaiataria": [
+          "Blazers",
+          "Coletes",
+          "Conjuntos"
+        ],
+        "Outros": [
+          "Casacos",
+          "Kimonos"
+        ]
+      }
+    },
+    "acessorios": {
+      "nome": "Acessórios",
+      "grupos": {
+        "Acessórios": [
+          "Bolsas",
+          "Cintos",
+          "Calçados",
+          "Bijuterias",
+          "Outros acessórios"
+        ]
+      }
+    }
+  },
+  "cores": {
+    "ro": {
+      "nome": "Rosa",
+      "hex": "#E8C4BC"
+    },
+    "ve": {
+      "nome": "Verde",
+      "hex": "#CBD8BE"
+    },
+    "of": {
+      "nome": "Off-white",
+      "hex": "#F2EEE6"
+    },
+    "pr": {
+      "nome": "Preto",
+      "hex": "#1E1D1B"
+    },
+    "br": {
+      "nome": "Branco",
+      "hex": "#FBFAF7"
+    },
+    "ma": {
+      "nome": "Marrom",
+      "hex": "#4A2E22"
+    },
+    "mr": {
+      "nome": "Marsala",
+      "hex": "#7A2F2F"
+    },
+    "vi": {
+      "nome": "Vinho",
+      "hex": "#5A1F2E"
+    },
+    "am": {
+      "nome": "Amarelo manteiga",
+      "hex": "#F0E3A8"
+    },
+    "be": {
+      "nome": "Beringela",
+      "hex": "#4B2141"
+    },
+    "ac": {
+      "nome": "Açaí",
+      "hex": "#5C1F4A"
+    },
+    "vm": {
+      "nome": "Vermelho",
+      "hex": "#B3202B"
+    },
+    "je": {
+      "nome": "Jeans escuro",
+      "hex": "#1F2B4A"
+    },
+    "jm": {
+      "nome": "Jeans médio",
+      "hex": "#5B7396"
+    },
+    "jc": {
+      "nome": "Jeans claro",
+      "hex": "#9FB5C9"
+    },
+    "gf": {
+      "nome": "Grafite",
+      "hex": "#3B3936"
+    },
+    "li": {
+      "nome": "Listrado azul",
+      "hex": "#B9CBE0"
+    },
+    "xa": {
+      "nome": "Xadrez azul",
+      "hex": "#6F86A8"
+    },
+    "xn": {
+      "nome": "Xadrez marinho",
+      "hex": "#2C3350"
+    }
+  },
+  "produtos": [
+    {
+      "id": 1,
+      "slug": "blusa-gola-alta-poa",
+      "nome": "Blusa Gola Alta Poá",
+      "descricao": "Blusa de gola alta em tecido Rayon Sara, estampa poá.",
+      "tecido": "Rayon Sara",
+      "preco": 149.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ro",
+          "tamanho": "P",
+          "estoque": 2
+        },
+        {
+          "cor": "ro",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "ro",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 2,
+      "slug": "calca-pantalona-alfaiataria",
+      "nome": "Calça Pantalona Alfaiataria",
+      "descricao": "Calça pantalona em alfaiataria stretch Ciao Sella.",
+      "tecido": "Alfaiataria stretch Ciao Sella",
+      "preco": 249.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Calças",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "ve",
+          "tamanho": "P",
+          "estoque": 2
+        },
+        {
+          "cor": "ro",
+          "tamanho": "M",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 3,
+      "slug": "blusa-guipir-mirage",
+      "nome": "Blusa Guipir Mirage",
+      "descricao": "Blusa de manga longa em guipir Mirage.",
+      "tecido": "Guipir Mirage",
+      "preco": 199.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Night",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": true,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ve",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 4,
+      "slug": "blusa-alcas-finas-estampada",
+      "nome": "Blusa Alças Finas Estampada",
+      "descricao": "Blusa de alças finas em silky cristal estampado.",
+      "tecido": "Silky cristal",
+      "preco": 139.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ve",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 5,
+      "slug": "regata-guipir-mirage",
+      "nome": "Regata Guipir Mirage",
+      "descricao": "Regata em guipir Mirage.",
+      "tecido": "Guipir Mirage",
+      "preco": 149.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Regatas",
+      "estilo": "Night",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "ro",
+          "tamanho": "M",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 6,
+      "slug": "blusa-frente-unica-twill",
+      "nome": "Blusa Frente Única Twill",
+      "descricao": "Blusa frente única em tecido Twill Joy Life.",
+      "tecido": "Twill Joy Life",
+      "preco": 149.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "of",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 7,
+      "slug": "conjunto-renda-preto",
+      "nome": "Conjunto Renda Preto",
+      "descricao": "Conjunto moderno com detalhe em renda.",
+      "tecido": "",
+      "preco": 379.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Night",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": true,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "pr",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 8,
+      "slug": "blusa-degage",
+      "nome": "Blusa Degagê",
+      "descricao": "Blusa degagê com caimento moderno.",
+      "tecido": "",
+      "preco": 129.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "br",
+          "tamanho": "M",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 9,
+      "slug": "vestido-poa",
+      "nome": "Vestido Poá",
+      "descricao": "Vestido estampado poá.",
+      "tecido": "",
+      "preco": 214.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Vestidos",
+      "estilo": "Night",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "vi",
+          "tamanho": "M",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/vestido-poa-1.jpg",
+        "/assets/products/vestido-poa-2.jpg",
+        "/assets/products/vestido-poa-3.jpg"
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "camisa-cropped-listrada",
+      "nome": "Camisa Cropped Listrada",
+      "descricao": "Camisa em modelagem cropped, punho branco.",
+      "tecido": "",
+      "preco": 109.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Camisas",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ro",
+          "tamanho": "M",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/camisa-cropped-listrada-1.jpg"
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "conjunto-saia-xadrez",
+      "nome": "Conjunto Saia Xadrez",
+      "descricao": "Conjunto de saia e manga longa em estampa xadrez.",
+      "tecido": "",
+      "preco": 209.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "xa",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/conjunto-saia-xadrez-1.jpg"
+      ]
+    },
+    {
+      "id": 12,
+      "slug": "regata-amarracao-xadrez",
+      "nome": "Regata Amarração Xadrez",
+      "descricao": "Regata em modelagem com amarração no pescoço, estampa xadrez.",
+      "tecido": "",
+      "preco": 89.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Regatas",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "xn",
+          "tamanho": "M",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/regata-amarracao-xadrez-1.jpg"
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "camisa-tule-manga-longa",
+      "nome": "Camisa Tule Manga Longa",
+      "descricao": "Camisa em modelagem de manga longa em tule.",
+      "tecido": "Tule",
+      "preco": 120.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Camisas",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "P",
+          "estoque": 2
+        },
+        {
+          "cor": "ma",
+          "tamanho": "M",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 14,
+      "slug": "vestido-recorte-na-cintura",
+      "nome": "Vestido Recorte na Cintura",
+      "descricao": "Vestido com recorte na cintura e detalhe no busto.",
+      "tecido": "",
+      "preco": 164.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Vestidos",
+      "estilo": "Night",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "vm",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 15,
+      "slug": "conjunto-alfaiataria-renda",
+      "nome": "Conjunto Alfaiataria Renda",
+      "descricao": "Conjunto em alfaiataria com detalhe de renda no busto.",
+      "tecido": "Alfaiataria",
+      "preco": 249.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": true,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 16,
+      "slug": "short-jeans-azul-medio",
+      "nome": "Short Jeans Azul Médio",
+      "descricao": "Short com lavagem azul média sofisticada e barra desfiada.",
+      "tecido": "Jeans",
+      "preco": 109.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Shorts",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "jm",
+          "tamanho": "36",
+          "estoque": 2
+        },
+        {
+          "cor": "jm",
+          "tamanho": "42",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/short-jeans-azul-medio-1.jpg",
+        "/assets/products/short-jeans-azul-medio-2.jpg",
+        "/assets/products/short-jeans-azul-medio-3.jpg"
+      ]
+    },
+    {
+      "id": 17,
+      "slug": "blusa-sarja-botoes",
+      "nome": "Blusa Sarja Botões",
+      "descricao": "Blusa marrom em sarja com acabamento em botões.",
+      "tecido": "Sarja",
+      "preco": 104.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/blusa-sarja-botoes-1.jpg"
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "short-marrom-barra-desfiada",
+      "nome": "Short Marrom Barra Desfiada",
+      "descricao": "Short com lavagem marrom sofisticada e barra desfiada.",
+      "tecido": "Jeans",
+      "preco": 109.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Shorts",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "36",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/short-marrom-barra-desfiada-1.jpg",
+        "/assets/products/short-marrom-barra-desfiada-2.jpg"
+      ]
+    },
+    {
+      "id": 19,
+      "slug": "calca-pantalona-jeans-escura",
+      "nome": "Calça Pantalona Jeans Escura",
+      "descricao": "Calça pantalona em jeans, lavagem escura e recorte moderno.",
+      "tecido": "Jeans",
+      "preco": 176.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Calças",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "je",
+          "tamanho": "36",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/calca-pantalona-jeans-escura-1.jpg",
+        "/assets/products/calca-pantalona-jeans-escura-2.jpg",
+        "/assets/products/calca-pantalona-jeans-escura-3.jpg"
+      ]
+    },
+    {
+      "id": 20,
+      "slug": "calca-jeans-lavagem-media",
+      "nome": "Calça Jeans Lavagem Média",
+      "descricao": "Calça em jeans com lavagem média e recorte moderno.",
+      "tecido": "Jeans",
+      "preco": 179.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Calças",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "jm",
+          "tamanho": "40",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 21,
+      "slug": "calca-barrel-jeans-clara",
+      "nome": "Calça Barrel Jeans Clara",
+      "descricao": "Calça barrel em jeans com lavagem clara e recorte moderno.",
+      "tecido": "Jeans",
+      "preco": 159.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Calças",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "jc",
+          "tamanho": "44",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/calca-barrel-jeans-clara-1.jpg",
+        "/assets/products/calca-barrel-jeans-clara-2.jpg"
+      ]
+    },
+    {
+      "id": 22,
+      "slug": "calca-wide-leg-listrada",
+      "nome": "Calça Wide Leg Listrada",
+      "descricao": "Calça wide leg em jeans com estampa listrada.",
+      "tecido": "Jeans",
+      "preco": 159.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Calças",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "je",
+          "tamanho": "36",
+          "estoque": 2
+        },
+        {
+          "cor": "je",
+          "tamanho": "40",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/calca-wide-leg-listrada-1.jpg",
+        "/assets/products/calca-wide-leg-listrada-2.jpg",
+        "/assets/products/calca-wide-leg-listrada-3.jpg"
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "conjunto-two-way-marsala",
+      "nome": "Conjunto Two Way Marsala",
+      "descricao": "Conjunto em tecido Two Way.",
+      "tecido": "Two Way",
+      "preco": 219.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": true,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "mr",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/conjunto-two-way-marsala-1.jpg",
+        "/assets/products/conjunto-two-way-marsala-2.jpg",
+        "/assets/products/conjunto-two-way-marsala-3.jpg",
+        "/assets/products/conjunto-two-way-marsala-4.jpg"
+      ]
+    },
+    {
+      "id": 24,
+      "slug": "conjunto-risca-de-giz-vinho",
+      "nome": "Conjunto Risca de Giz Vinho",
+      "descricao": "Conjunto em alfaiataria risca de giz.",
+      "tecido": "Alfaiataria risca de giz",
+      "preco": 359.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": true,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "vi",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 25,
+      "slug": "camisa-oversized-algodao",
+      "nome": "Camisa Oversized Algodão",
+      "descricao": "Camisa em modelagem oversized, tecido 100% algodão.",
+      "tecido": "100% algodão",
+      "preco": 159.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Camisas",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "am",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "am",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/camisa-oversized-algodao-1.jpg",
+        "/assets/products/camisa-oversized-algodao-2.jpg"
+      ]
+    },
+    {
+      "id": 26,
+      "slug": "calca-alfaiataria-manteiga",
+      "nome": "Calça Alfaiataria Manteiga",
+      "descricao": "Calça em alfaiataria.",
+      "tecido": "Alfaiataria",
+      "preco": 161.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Calças",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "am",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "am",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 27,
+      "slug": "blusa-new-crepe",
+      "nome": "Blusa New Crepe",
+      "descricao": "Blusa de manga comprida em New Crepe.",
+      "tecido": "New Crepe",
+      "preco": 119.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 28,
+      "slug": "conjunto-saia-e-blusa-marsala",
+      "nome": "Conjunto Saia e Blusa Marsala",
+      "descricao": "Conjunto de saia e blusa em viscose.",
+      "tecido": "Viscose",
+      "preco": 239.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": true,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "mr",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "mr",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/conjunto-saia-e-blusa-marsala-1.jpg",
+        "/assets/products/conjunto-saia-e-blusa-marsala-2.jpg",
+        "/assets/products/conjunto-saia-e-blusa-marsala-3.jpg"
+      ]
+    },
+    {
+      "id": 29,
+      "slug": "conjunto-viscose-beringela",
+      "nome": "Conjunto Viscose Beringela",
+      "descricao": "Conjunto em viscose.",
+      "tecido": "Viscose",
+      "preco": 229.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "be",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "ma",
+          "tamanho": "GG",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/conjunto-viscose-beringela-1.jpg",
+        "/assets/products/conjunto-viscose-beringela-2.jpg",
+        "/assets/products/conjunto-viscose-beringela-3.jpg",
+        "/assets/products/conjunto-viscose-beringela-4.jpg"
+      ]
+    },
+    {
+      "id": 30,
+      "slug": "calca-risca-de-giz",
+      "nome": "Calça Risca de Giz",
+      "descricao": "Calça de alfaiataria, risca de giz.",
+      "tecido": "Alfaiataria",
+      "preco": 199.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Calças",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "gf",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/calca-risca-de-giz-1.jpg",
+        "/assets/products/calca-risca-de-giz-2.jpg"
+      ]
+    },
+    {
+      "id": 31,
+      "slug": "conjunto-capri-especial",
+      "nome": "Conjunto Capri Especial",
+      "descricao": "Conjunto em tecido Capri Especial.",
+      "tecido": "Capri Especial",
+      "preco": 389.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": true,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "li",
+          "tamanho": "M",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 32,
+      "slug": "conjunto-fluido-vinho",
+      "nome": "Conjunto Fluido Vinho",
+      "descricao": "Conjunto de calça e blusa, modelagem fluida.",
+      "tecido": "",
+      "preco": 249.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Night",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "vi",
+          "tamanho": "GG",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 33,
+      "slug": "macacao-alfaiatado",
+      "nome": "Macacão Alfaiatado",
+      "descricao": "Macacão alfaiatado.",
+      "tecido": "Alfaiataria",
+      "preco": 259.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Macacões",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": true,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/macacao-alfaiatado-1.jpg",
+        "/assets/products/macacao-alfaiatado-2.jpg"
+      ]
+    },
+    {
+      "id": 34,
+      "slug": "conjunto-viscose-acai",
+      "nome": "Conjunto Viscose Açaí",
+      "descricao": "Conjunto de calça e blusa em viscose.",
+      "tecido": "Viscose",
+      "preco": 219.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Conjuntos",
+      "estilo": "Office",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ac",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "ac",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/conjunto-viscose-acai-1.jpg",
+        "/assets/products/conjunto-viscose-acai-2.jpg",
+        "/assets/products/conjunto-viscose-acai-3.jpg"
+      ]
+    },
+    {
+      "id": 35,
+      "slug": "regata-poliamida-premium",
+      "nome": "Regata Poliamida Premium",
+      "descricao": "Regata em poliamida premium.",
+      "tecido": "Poliamida premium",
+      "preco": 109.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Regatas",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": true
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "P",
+          "estoque": 2
+        },
+        {
+          "cor": "ma",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "ma",
+          "tamanho": "G",
+          "estoque": 2
+        },
+        {
+          "cor": "pr",
+          "tamanho": "P",
+          "estoque": 2
+        },
+        {
+          "cor": "pr",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "pr",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 36,
+      "slug": "saia-amarracao-na-cintura",
+      "nome": "Saia Amarração na Cintura",
+      "descricao": "Saia com detalhe de amarração na cintura.",
+      "tecido": "",
+      "preco": 164.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Saias",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "P",
+          "estoque": 2
+        },
+        {
+          "cor": "ma",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "ma",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": [
+        "/assets/products/saia-amarracao-na-cintura-1.jpg",
+        "/assets/products/saia-amarracao-na-cintura-2.jpg"
+      ]
+    },
+    {
+      "id": 37,
+      "slug": "blusa-liocel",
+      "nome": "Blusa Liocel",
+      "descricao": "Blusa em liocel.",
+      "tecido": "Liocel",
+      "preco": 109.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Weekend",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "P",
+          "estoque": 2
+        },
+        {
+          "cor": "ma",
+          "tamanho": "M",
+          "estoque": 2
+        },
+        {
+          "cor": "ma",
+          "tamanho": "G",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    },
+    {
+      "id": 38,
+      "slug": "blusa-chiffon",
+      "nome": "Blusa Chiffon",
+      "descricao": "Blusa em chiffon.",
+      "tecido": "Chiffon",
+      "preco": 89.9,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Night",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "variantes": [
+        {
+          "cor": "am",
+          "tamanho": "P",
+          "estoque": 2
+        }
+      ],
+      "imagens": []
+    }
+  ]
 }
