@@ -15,7 +15,7 @@ const ITENS: [string, string, React.ReactNode][] = [
 
 export function Beneficios() {
   return (
-    <section className="bnf" aria-label="Vantagens">
+    <section className="bnf lj-only" aria-label="Vantagens">
       <div className="w bnf-g">
         {ITENS.map(([t, s, icone]) => (
           <div key={t} className="bnf-i">

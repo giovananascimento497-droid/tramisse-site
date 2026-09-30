@@ -29,7 +29,7 @@ export function Footer() {
             )}
           </div>
         </div>
-        <div className="ft-pag">
+        <div className="ft-pag lj-only">
           <span>PAGAMENTO</span>
           <em>Pix ({Math.round(CFG.pagamento.descontoPix * 100)}% off)</em>
           <em>Crédito em até {CFG.pagamento.maxParcelas}x sem juros</em>

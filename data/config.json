@@ -2,6 +2,8 @@
   "marca": "Tramisse",
   "tagline": "Threads of Identity",
   "assinatura": "Essencial. Atemporal. Tramisse.",
+  "_aparencia": "Visual do site: \"editorial\" (original) ou \"loja\" (cabeçalho com categorias, faixa de vantagens, títulos em maiúsculo). Prévia sem publicar: abra o site com ?visual=loja (e ?visual=editorial para voltar).",
+  "aparencia": "editorial",
   "barraSuperior": [
     "ENTREGA POR APLICATIVO",
     "ATÉ 2X SEM JUROS",

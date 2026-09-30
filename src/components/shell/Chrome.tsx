@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { CFG } from "@/lib/config";
 import { useLoja } from "@/store/Store";
 
 // Classes do <body> que o CSS original usa:
@@ -23,6 +24,17 @@ export function Chrome() {
     addEventListener("scroll", sc, { passive: true });
     addEventListener("resize", sc);
     return () => { removeEventListener("scroll", sc); removeEventListener("resize", sc); };
+  }, [home]);
+
+  // Prévia do visual sem publicar: ?visual=loja liga, ?visual=editorial volta (vale para a visita toda).
+  useEffect(() => {
+    let v: string | null = null;
+    try {
+      const q = new URLSearchParams(location.search).get("visual");
+      if (q === "loja" || q === "editorial") sessionStorage.setItem("tv", q);
+      v = sessionStorage.getItem("tv");
+    } catch {}
+    document.body.classList.toggle("loja", (v ?? CFG.aparencia) === "loja");
   }, [home]);
 
   useEffect(() => {

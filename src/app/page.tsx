@@ -14,6 +14,22 @@ const Carrossel = ({ l, id }: { l: Produto[]; id: string }) => (
   <div className="car" id={id}>{l.map((p) => <ProductCard key={p.id} p={p} />)}</div>
 );
 
+// "Compre por categoria": no visual loja vem logo após as vantagens; no editorial, mais abaixo.
+function CompreCategoria({ className, style, TP }: { className: string; style?: React.CSSProperties; TP: typeof CFG.fotosHome }) {
+  return (
+    <section className={className} style={style}>
+      <div className="w">
+        <div className="sh"><h2>Compre por categoria</h2></div>
+        <div className="tiles six">
+          {["Blusas", "Calças", "Vestidos", "Conjuntos", "Saias", "Macacões"].map((t) => (
+            <Tile key={t} t={t.toUpperCase()} href={`/categoria/roupas/${slug(t)}`} foto={TP[t.toUpperCase()]} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const novos = PRODS.filter((p) => p.flags.novo && !p.emBreve);
   const desejadas = PRODS.filter((p) => p.flags.maisVendida && !p.emBreve);
@@ -25,13 +41,15 @@ export default function Home() {
 
       <Beneficios />
 
-      <section className="sec">
+      <CompreCategoria className="sec lj-only" TP={TP} />
+
+      {/* Visual editorial: 4 atalhos logo depois do banner */}
+      <section className="sec ed-only">
         <div className="w">
-          <div className="sh"><h2>Compre por categoria</h2></div>
-          <div className="tiles six">
-            {["Blusas", "Calças", "Vestidos", "Conjuntos", "Saias", "Macacões"].map((t) => (
-              <Tile key={t} t={t.toUpperCase()} href={`/categoria/roupas/${slug(t)}`} foto={TP[t.toUpperCase()]} />
-            ))}
+          <div className="tiles">
+            {[["NEW IN", "/categoria/new-in"], ["CURADORIA ESPECIAL", "/categoria/curadoria"], ["ROUPAS", "/categoria/roupas"], ["ACESSÓRIOS", "/categoria/acessorios"]].map(
+              ([t, h]) => <Tile key={t} t={t} href={h} foto={TP[t]} />,
+            )}
           </div>
         </div>
       </section>
@@ -64,6 +82,8 @@ export default function Home() {
       </section>
 
 
+
+      <CompreCategoria className="sec ed-only" style={{ paddingTop: 0 }} TP={TP} />
 
       <section className="sec" style={{ paddingTop: 0 }}>
         <div className="w">

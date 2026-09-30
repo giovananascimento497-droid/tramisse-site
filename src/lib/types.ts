@@ -41,6 +41,7 @@ export type Config = {
   marca: string;
   tagline: string;
   assinatura: string;
+  aparencia: "editorial" | "loja"; // visual do site (src/styles/loja.css vale só com "loja")
   barraSuperior: string[];
   pagamento: {
     taxaCartao: number; // embutida no preço de vitrine (taxa do Mercado Pago)
