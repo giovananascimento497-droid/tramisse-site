@@ -37,7 +37,7 @@ export default function Home() {
   const TP = CFG.fotosHome;
   return (
     <>
-      <HeroShop fotos={PRODS.filter((p) => p.imagens.length && !p.emBreve).map(({ slug, nome, imagens }) => ({ slug, nome, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
+      <HeroShop fotos={PRODS.filter((p) => p.imagens.length && !p.emBreve).map(({ slug, nome, imagens, preco }) => ({ slug, nome, preco, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
 
       <Beneficios />
 

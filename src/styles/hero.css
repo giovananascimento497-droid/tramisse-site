@@ -21,3 +21,18 @@
 .hs-bn .logo.big{width:min(35vw,760px);margin:0;background:#776E67}
 .hs-frase{position:absolute;left:50%;bottom:10%;width:min(45vw,980px);transform:translateX(-50%)}
 @media(max-width:700px){.hs-bn .logo.big{width:78vw}.hs-frase{width:92vw;bottom:12%}}
+/* Uma peça por vez: no computador, foto inteira à direita e painel greige com nome, preço e SHOP NOW à esquerda. */
+.hs-txt small,.hs-txt b,.hs-txt em{display:none}
+@media(min-width:701px){
+  .hs-pg.hs-um{grid-template-rows:100%}
+  .hs-um .hs-it{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:100%;height:100%;min-height:0;background:#D6CDBF;color:#1E1D1B}
+  .hs-um .hs-it::after{display:none}
+  .hs-um .hs-it img{position:relative;inset:auto;grid-column:2;grid-row:1;width:100%;height:100%;object-fit:cover;object-position:center 20%;min-height:0}
+  .hs-um .hs-txt{grid-column:1;grid-row:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:14px;padding:0 clamp(32px,7vw,120px)}
+  .hs-um .hs-txt small{display:block;font:500 12px var(--sans);letter-spacing:.3em;color:#5B534B}
+  .hs-um .hs-txt b{display:block;font:400 clamp(30px,3.6vw,54px)/1.1 var(--serif);max-width:14ch}
+  .hs-um .hs-txt em{display:block;font:400 17px var(--sans);font-style:normal;letter-spacing:.04em;color:#3B3936}
+  .hs-um .hs-txt span{position:static;display:inline-block;margin-top:14px;padding:15px 34px;background:#1E1D1B;color:#F7F5F1;font:400 13px var(--sans);letter-spacing:.16em}
+  .hs-um .hs-txt span::after{display:none}
+  .hs-um .hs-it:hover .hs-txt span{background:#3B3936}
+}

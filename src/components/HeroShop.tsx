@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { brl } from "@/lib/payment/pricing";
 import type { Produto } from "@/lib/types";
 
 const INTERVALO = 5000; // ms entre uma troca e outra
@@ -9,28 +10,13 @@ const INTERVALO = 5000; // ms entre uma troca e outra
 type Banner = { imagem: string; frase: string; textoFrase: string };
 
 // Primeira imagem da home: a imagem de início (fundo + logo + frase) e, em seguida,
-// as fotos das peças se revezando, cada uma com "SHOP NOW" e link para a peça.
-// Computador: 3 fotos lado a lado; celular: 1 por vez.
-export function HeroShop({ fotos, banner }: { fotos: Pick<Produto, "slug" | "nome" | "imagens">[]; banner?: Banner }) {
-  const [n, setN] = useState(3);
+// as peças se revezando UMA POR VEZ, cada uma com nome, preço, "SHOP NOW" e link para a peça.
+// Computador: foto inteira de um lado e painel greige com o texto do outro; celular: foto na tela toda.
+type Foto = Pick<Produto, "slug" | "nome" | "imagens" | "preco">;
+export function HeroShop({ fotos, banner }: { fotos: Foto[]; banner?: Banner }) {
   const [pag, setPag] = useState(0);
   const pausa = useRef(false);
-
-  useEffect(() => {
-    const mq = matchMedia("(max-width:700px)");
-    const f = () => { setN(mq.matches ? 1 : 3); setPag(0); };
-    f();
-    mq.addEventListener("change", f);
-    return () => mq.removeEventListener("change", f);
-  }, []);
-
-  // Páginas de n fotos (a última é completada com as primeiras, para não ficar buraco).
-  const paginas: (typeof fotos)[] = [];
-  for (let i = 0; i < fotos.length; i += n) {
-    const p = fotos.slice(i, i + n);
-    while (p.length < n && fotos.length >= n) p.push(fotos[(i + p.length) % fotos.length]);
-    paginas.push(p);
-  }
+  const paginas = fotos;
 
   const temBanner = Boolean(banner?.imagem);
   const total = paginas.length + (temBanner ? 1 : 0);
@@ -61,17 +47,23 @@ export function HeroShop({ fotos, banner }: { fotos: Pick<Produto, "slug" | "nom
           </div>
         </div>
       ) : null}
-      {paginas.map((pg0, k0) => ({ p: pg0, k: k0 + (temBanner ? 1 : 0) })).map(({ p, k }) => (
-        <div key={`${n}-${k}`} className={`hs-pg${k === pag ? " on" : ""}`} aria-hidden={k !== pag} style={{ gridTemplateColumns: `repeat(${n},1fr)` }}>
-          {p.map((f, j) => (
-            <Link key={j} className="hs-it" href={`/produto/${f.slug}`} tabIndex={k === pag ? 0 : -1}>
+      {paginas.map((f, k0) => {
+        const k = k0 + (temBanner ? 1 : 0);
+        return (
+          <div key={f.slug} className={`hs-pg hs-um${k === pag ? " on" : ""}`} aria-hidden={k !== pag}>
+            <Link className="hs-it" href={`/produto/${f.slug}`} tabIndex={k === pag ? 0 : -1}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={f.imagens[0]} alt={f.nome} loading={k < 2 ? "eager" : "lazy"} decoding="async" />
-              <span>SHOP NOW</span>
+              <div className="hs-txt">
+                <small>NEW IN</small>
+                <b>{f.nome}</b>
+                <em>{brl(f.preco)}</em>
+                <span>SHOP NOW</span>
+              </div>
             </Link>
-          ))}
-        </div>
-      ))}
+          </div>
+        );
+      })}
       {total > 1 ? (
         <>
           <button className="hs-seta hs-ant lj-only" aria-label="Anterior" onClick={() => setPag((x) => (x - 1 + total) % total)}>‹</button>
