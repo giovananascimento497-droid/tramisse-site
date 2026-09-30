@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { CL, porId } from "@/lib/catalog";
+import { avisarPedido } from "@/lib/avisoPedido";
 import { montarPedido } from "@/lib/payment/pedido";
 import { CFG } from "@/lib/config";
 import { codigoPix } from "@/lib/payment/pix";
@@ -99,6 +100,7 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
     if (!pedido) return setErro("Não foi possível montar o pedido. Confira a sacola.");
     const r = await provedorWhatsApp(atendente).finalizar(pedido);
     if (r.tipo !== "redirecionar") return;
+    avisarPedido(pedido, { id: novoId(), canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: atendente.nome });
     setEnviado({ at: atendente.nome, wa: r.url });
     setBag(() => []);
     setCupom(null);
@@ -113,6 +115,7 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
     const id = novoId();
     const codigo = codigoPix({ ...CFG.pagamento.pix, valor: pedido.total, txid: id });
     const texto = resumoPedido({ ...pedido, pagamentoOnline: { provedor: "Pix", id, status: "aguardando comprovante" } });
+    avisarPedido(pedido, { id, canal: "Site (Pix)", situacao: "Aguardando Pix (conferir comprovante)", atendente: atendente.nome });
     setPix({ at: atendente.nome, wa: `https://wa.me/${atendente.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, id });
     setBag(() => []);
     setCupom(null);

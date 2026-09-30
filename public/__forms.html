@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Formulários (Netlify Forms)</title><meta name="robots" content="noindex"></head>
+<body>
+<!--
+  Arquivo técnico: a Netlify lê este formulário no deploy para aceitar o registro dos pedidos
+  (src/lib/avisoPedido.ts envia os dados para cá). Os pedidos aparecem em Netlify → Forms → "pedidos",
+  e a Netlify manda um e-mail a cada pedido para o endereço configurado nas notificações do formulário.
+-->
+<form name="pedidos" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input name="bot-field">
+  <input name="pedido">
+  <input name="canal">
+  <input name="situacao">
+  <input name="atendente">
+  <input name="cliente">
+  <input name="email">
+  <input name="telefone">
+  <input name="entrega">
+  <input name="endereco">
+  <input name="pagamento">
+  <input name="total">
+  <textarea name="itens"></textarea>
+  <textarea name="resumo"></textarea>
+</form>
+</body>
+</html>

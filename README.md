@@ -54,6 +54,12 @@ Links antigos com `#/...` (ex.: `/#/p/vestido-poa`) são redirecionados para a r
 **Para ativar o Mercado Pago:** crie uma aplicação em mercadopago.com.br/developers (Suas integrações → Credenciais) e cadastre o *Access Token* na variável `MERCADOPAGO_ACCESS_TOKEN` (Netlify → Project configuration → Environment variables; localmente, em `.env.local`, veja `.env.example`). Comece pelo token de teste (`TEST-...`) e depois troque pelo de produção (`APP_USR-...`). **Nunca** coloque o token no código.
 No painel do Mercado Pago, deixe o parcelamento em 2x **sem juros para a compradora** (a taxa já está embutida na vitrine).
 
+## Pedidos por e-mail (Netlify Forms)
+Cada pedido finalizado no site (WhatsApp, Pix ou Mercado Pago aprovado/em processamento) é registrado no formulário **"pedidos"** da Netlify (`public/__forms.html`, enviado por `src/lib/avisoPedido.ts`). A Netlify guarda a lista em **Forms** e manda um e-mail por pedido.
+- Ativar (uma vez): Netlify → projeto → **Forms** → **Enable form detection** → novo deploy.
+- E-mail: **Forms → pedidos → Form notifications → Add notification → Email notification** → e-mail que recebe os pedidos. O e-mail fica só no painel da Netlify (não vai para o código).
+- O plano gratuito da Netlify tem limite de envios de formulário por mês; se passar, dá para trocar por um serviço de e-mail (ex.: Resend).
+
 ## Publicar (Netlify)
 O projeto já tem o `netlify.toml`. A Netlify detecta o Next.js e instala o adaptador sozinha (páginas + função de servidor para o checkout e o Mercado Pago).
 1. **app.netlify.com** → entrar com o GitHub → **Add new project → Import an existing project → GitHub** → escolher `tramisse-site`.

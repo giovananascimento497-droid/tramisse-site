@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { avisarPedido } from "@/lib/avisoPedido";
 import { CFG } from "@/lib/config";
 import { resumoPedido } from "@/lib/payment/whatsapp";
 import type { Pedido } from "@/lib/types";
 import { useLoja } from "@/store/Store";
 
-type Pendente = { referencia: string; pedido: Pedido; atendente: string };
+type Pendente = { referencia: string; pedido: Pedido; atendente: string; avisado?: string };
 type Estado = "carregando" | "aprovado" | "processando" | "recusado" | "sem-pedido";
 
 // Volta do Mercado Pago. A situação é confirmada na API (não só pelos parâmetros da URL)
@@ -32,6 +33,17 @@ export function RetornoView() {
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((r: { status: string; referencia: string }) => {
         if (r.referencia !== p!.referencia) return setEstado("recusado");
+        // Registra o pedido pago (uma vez por situação, mesmo se a página for recarregada).
+        const sit = r.status === "approved" ? "aprovado" : ["pending", "in_process", "authorized"].includes(r.status) ? "em processamento" : "";
+        if (sit && p!.avisado !== sit) {
+          avisarPedido({ ...p!.pedido, pagamentoOnline: { provedor: "Mercado Pago", id, status: sit } }, {
+            id: p!.referencia,
+            canal: "Site (Mercado Pago)",
+            situacao: `Pagamento ${sit} no Mercado Pago (nº ${id})`,
+            atendente: p!.atendente,
+          });
+          try { localStorage.setItem("tp", JSON.stringify({ ...p!, avisado: sit })); } catch {}
+        }
         if (r.status === "approved") {
           setEstado("aprovado");
           setBag(() => []);

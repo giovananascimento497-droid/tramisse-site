@@ -40,6 +40,7 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - `src/styles/logo.css`: carregado depois; troca o logo pelo vetor definitivo e ajusta as larguras (o logo novo é ~12,6:1).
 - `data/`: `config.json`, `products.json`, `colecoes.json`, `paginas.json`. Lidos só por `src/lib/config.ts`, `src/lib/catalog.ts` e `src/lib/paginas.ts` (trocar por banco/API ali).
 - `src/lib/payment/`: regras de preço (`pricing.ts`: vitrine, desconto Pix, parcelas), Pix copia e cola/QR (`pix.ts`, padrão BR Code), montagem do pedido a partir do catálogo (`pedido.ts`), contrato de provedor (`provider.ts`), WhatsApp (`whatsapp.ts`, mesma mensagem do site original) e Mercado Pago (`mercadopago.ts`, só servidor; token em `MERCADOPAGO_ACCESS_TOKEN`).
+- **Pedidos por e-mail:** `src/lib/avisoPedido.ts` registra cada pedido finalizado no Netlify Forms (formulário `pedidos` em `public/__forms.html`); a Netlify envia e-mail pelas notificações configuradas no painel. Nunca colocar e-mails de destino no código.
 - `src/app/api/pagamento/mercadopago/`: cria o link (POST, recalcula o preço no servidor) e consulta o pagamento (GET `[id]`). Retorno em `/checkout/retorno`.
 - Imagens em `public/assets/` (servidas em `/assets/...`); fotos das peças em `public/assets/products/<slug>-<n>.jpg`. Peça sem foto mostra o degradê na cor da peça.
 - `fotos-nao-identificadas/`: fotos recebidas que não correspondem a peças do catálogo.
