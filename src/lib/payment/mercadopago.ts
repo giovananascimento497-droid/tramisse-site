@@ -10,7 +10,8 @@ export const mercadoPagoAtivo = () => Boolean(token());
 
 // A forma de pagamento é escolhida no site, então o Mercado Pago só oferece a escolhida
 // (crédito em até 2x sem juros ou débito). Pix é pago direto na chave da loja.
-const TIPOS = ["credit_card", "debit_card", "bank_transfer", "ticket", "atm", "prepaid_card", "account_money"];
+// "account_money" (saldo na conta Mercado Pago) não pode ser excluído: o Mercado Pago recusa a preferência.
+const TIPOS = ["credit_card", "debit_card", "bank_transfer", "ticket", "atm", "prepaid_card"];
 const PERMITIDOS: Record<FormaPagamento, string[]> = {
   pix: ["bank_transfer"],
   debito: ["debit_card"],
@@ -75,4 +76,25 @@ export async function consultarPagamento(id: string) {
     referencia: (r.external_reference as string) || "",
     valor: Number(r.transaction_amount) || 0,
   };
+}
+
+// Diagnóstico: confere se o token está configurado e se o Mercado Pago o aceita (sem expor o token).
+export async function verificarToken() {
+  const t = token();
+  if (!t) return { configurado: false, mensagem: "MERCADOPAGO_ACCESS_TOKEN não está configurado no servidor (ou o deploy foi feito antes de criar a variável)." };
+  const tipo = t.startsWith("TEST-") ? "teste" : t.startsWith("APP_USR-") ? "produção" : "formato desconhecido";
+  const tamanho = t.length;
+  try {
+    const r = await mp("/users/me");
+    return { configurado: true, tipo, tamanho, aceito: true, conta: r.nickname || r.id, mensagem: "Token aceito pelo Mercado Pago." };
+  } catch (e) {
+    return {
+      configurado: true,
+      tipo,
+      tamanho,
+      aceito: false,
+      mensagem: e instanceof Error ? e.message : "erro",
+      dica: tamanho < 60 ? "Token curto demais: parece a Public Key. Copie o Access Token." : "Confira se copiou o Access Token inteiro e se as credenciais de produção estão ativadas.",
+    };
+  }
 }
