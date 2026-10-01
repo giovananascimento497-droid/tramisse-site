@@ -5,7 +5,7 @@ import type { OpcaoFrete, Produto } from "../types";
 import { r2 } from "../payment/pricing";
 import { aplicarFreteGratis, limparCep, pacote } from "./regras";
 
-const token = () => process.env.MELHORENVIO_TOKEN || "";
+const token = () => (process.env.MELHORENVIO_TOKEN || "").trim();
 // MELHORENVIO_AMBIENTE=sandbox usa o ambiente de testes do Melhor Envio (token criado em sandbox.melhorenvio.com.br).
 const API = () =>
   process.env.MELHORENVIO_API_URL ||

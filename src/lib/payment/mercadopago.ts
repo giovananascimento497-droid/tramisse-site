@@ -3,7 +3,8 @@
 import type { FormaPagamento, Pedido } from "../types";
 
 const API = process.env.MERCADOPAGO_API_URL || "https://api.mercadopago.com";
-const token = () => process.env.MERCADOPAGO_ACCESS_TOKEN || "";
+// trim: um espaço ou quebra de linha colado junto com o token faz o Mercado Pago recusar.
+const token = () => (process.env.MERCADOPAGO_ACCESS_TOKEN || "").trim();
 
 export const mercadoPagoAtivo = () => Boolean(token());
 
@@ -25,7 +26,7 @@ async function mp(caminho: string, init?: RequestInit) {
     cache: "no-store",
   });
   const corpo = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(`Mercado Pago ${r.status}: ${corpo.message || "erro"}`);
+  if (!r.ok) throw new Error(`Mercado Pago ${r.status}: ${corpo.message || corpo.error || "erro"}${corpo.cause?.[0]?.description ? ` (${corpo.cause[0].description})` : ""}`);
   return corpo;
 }
 
