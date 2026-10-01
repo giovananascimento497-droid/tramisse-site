@@ -2,9 +2,21 @@ import type { Atendente, Pedido } from "../types";
 import { brl } from "./pricing";
 import type { ProvedorPagamento } from "./provider";
 
+import { textoPrazo } from "../frete/regras";
+
 const NOMES_PAGAMENTO = { pix: "Pix (5% de desconto)", debito: "Cartão de débito", credito: "Cartão de crédito (até 2x sem juros)" } as const;
 
-// Mesmo texto do site original.
+// Forma de entrega com o endereço (usada no WhatsApp e no e-mail do pedido).
+export function textoEntrega(p: Pedido): string {
+  const c = p.cliente;
+  if (p.entrega === "retirada") return "Retirada";
+  const endereco = `${[c.end, c.num, c.cmp, c.bai, c.cid, c.uf, c.cep].filter(Boolean).join(", ")} (destinatário: ${c.dest})`;
+  if (p.entrega === "correios" && p.frete)
+    return `Correios ${p.frete.nome} (${textoPrazo(p.frete.prazo)}): ${endereco}`;
+  return `Entrega por aplicativo: ${endereco}`;
+}
+
+// Mesmo texto do site original (com o frete, quando é pelos Correios).
 export function resumoPedido(p: Pedido): string {
   const c = p.cliente;
   return (
@@ -13,15 +25,14 @@ export function resumoPedido(p: Pedido): string {
     `\n\nSubtotal: ${brl(p.subtotal)}` +
     (p.desconto ? `\nDesconto (${p.cupom}): -${brl(p.desconto)}` : "") +
     (p.descontoPix ? `\nDesconto Pix (5%): -${brl(p.descontoPix)}` : "") +
-    `\nTotal (sem entrega): ${brl(p.total)}\nPagamento: ${NOMES_PAGAMENTO[p.pagamento]}` +
+    (p.frete ? `\nFrete Correios ${p.frete.nome}: ${p.frete.gratis ? "grátis" : brl(p.frete.valor)}` : "") +
+    `\n${p.entrega === "aplicativo" ? "Total (sem entrega)" : "Total"}: ${brl(p.total)}\nPagamento: ${NOMES_PAGAMENTO[p.pagamento]}` +
     (p.pagamentoOnline && p.pagamentoOnline.provedor !== "Pix"
       ? ` — ${p.pagamentoOnline.status === "aprovado" ? "pago" : "em processamento"} pelo ${p.pagamentoOnline.provedor} (pagamento nº ${p.pagamentoOnline.id})`
       : "") +
     (p.pagamentoOnline?.provedor === "Pix" ? `\nPix na chave da loja (pedido nº ${p.pagamentoOnline.id}). Envio o comprovante em seguida.` : "") +
     "\n" +
-    (p.entrega === "retirada"
-      ? "Retirada"
-      : `Entrega por aplicativo: ${[c.end, c.num, c.cmp, c.bai, c.cid, c.uf, c.cep].filter(Boolean).join(", ")} (destinatário: ${c.dest})`) +
+    textoEntrega(p) +
     `\n\nCliente: ${c.n} ${c.sn} · ${c.tel} · ${c.e}`
   );
 }

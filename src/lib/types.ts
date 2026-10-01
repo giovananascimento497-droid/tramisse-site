@@ -51,7 +51,19 @@ export type Config = {
     // Chave Pix da loja (CNPJ, só números). Vazia = Pix combinado pelo WhatsApp.
     pix: { chave: string; nome: string; cidade: string };
   };
-  entrega: { aplicativo: boolean; retirada: boolean };
+  entrega: {
+    aplicativo: boolean;
+    retirada: boolean;
+    // Envio pelos Correios com frete calculado pelo Melhor Envio (src/lib/frete/).
+    correios: {
+      cepOrigem: string;
+      servicos: number[]; // ids do Melhor Envio (1 = PAC, 2 = SEDEX)
+      freteGratisAcima: number; // valor das peças (vitrine com cupom); 0 = sem frete grátis
+      diasPreparo: number; // somados ao prazo da transportadora
+      embalagem: { nome: string; largura: number; comprimento: number; alturaPorPeca: number; alturaMinima: number; peso: number };
+      pesoPorPeca: Record<string, number>; // kg por subcategoria; "padrao" para as demais
+    };
+  };
   trocas: { prazoDias: number };
   atendentes: Atendente[];
   cupons: Cupom[];
@@ -66,7 +78,10 @@ export type Config = {
 export type ItemSacola = { id: number; cor: string; tam: string; q: number };
 
 export type FormaPagamento = "pix" | "debito" | "credito";
-export type FormaEntrega = "aplicativo" | "retirada";
+export type FormaEntrega = "aplicativo" | "retirada" | "correios";
+
+// Opção de frete (Correios) já com a regra de frete grátis aplicada.
+export type OpcaoFrete = { servico: number; nome: string; valor: number; valorOriginal: number; prazo: number; gratis: boolean };
 
 export type DadosCliente = {
   e?: string; n?: string; sn?: string; tel?: string; cpf?: string;
@@ -83,6 +98,7 @@ export type Pedido = {
   subtotal: number;
   desconto: number; // cupom
   descontoPix: number;
+  frete?: OpcaoFrete; // só na entrega pelos Correios (somado ao total; o desconto Pix não vale sobre o frete)
   total: number;
   // Preenchido quando a cliente pagou pelo site (ex.: Mercado Pago).
   pagamentoOnline?: { provedor: string; id: string; status: string };

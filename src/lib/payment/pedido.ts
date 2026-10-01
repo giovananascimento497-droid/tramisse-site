@@ -1,10 +1,10 @@
 import { CL, estoqueDe, porId } from "../catalog";
 import { CFG } from "../config";
-import type { DadosCliente, FormaEntrega, FormaPagamento, ItemSacola, Pedido } from "../types";
-import { acharCupom, calcularTotais } from "./pricing";
+import type { DadosCliente, FormaEntrega, FormaPagamento, ItemSacola, OpcaoFrete, Pedido } from "../types";
+import { acharCupom, calcularTotais, r2 } from "./pricing";
 
 const PAGAMENTOS: FormaPagamento[] = ["pix", "debito", "credito"];
-const ENTREGAS: FormaEntrega[] = ["aplicativo", "retirada"];
+const ENTREGAS: FormaEntrega[] = ["aplicativo", "retirada", "correios"];
 
 // Monta o pedido a partir do catálogo (preços oficiais), nunca de valores vindos do navegador.
 // Usado no checkout e na API de pagamento. Retorna null se algo for inválido.
@@ -14,8 +14,12 @@ export function montarPedido(dados: {
   pagamento: FormaPagamento;
   entrega: FormaEntrega;
   cliente: DadosCliente;
+  // Correios: opção de frete escolhida. No servidor (Mercado Pago) vem da cotação refeita lá, nunca do navegador.
+  frete?: OpcaoFrete | null;
 }): Pedido | null {
   if (!PAGAMENTOS.includes(dados.pagamento) || !ENTREGAS.includes(dados.entrega)) return null;
+  const frete = dados.entrega === "correios" ? dados.frete : undefined;
+  if (dados.entrega === "correios" && !(frete && frete.valor >= 0)) return null;
   if (!Array.isArray(dados.bag) || !dados.bag.length) return null;
   const linhas = [];
   for (const l of dados.bag) {
@@ -47,6 +51,8 @@ export function montarPedido(dados: {
     subtotal: t.subtotal,
     desconto: t.desconto,
     descontoPix: t.descontoPix,
-    total: t.total,
+    ...(frete ? { frete } : {}),
+    // O desconto Pix vale só sobre as peças; o frete entra cheio.
+    total: r2(t.total + (frete?.valor ?? 0)),
   };
 }

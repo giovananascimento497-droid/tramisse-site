@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CL, porId } from "@/lib/catalog";
 import { avisarPedido } from "@/lib/avisoPedido";
 import { montarPedido } from "@/lib/payment/pedido";
 import { CFG } from "@/lib/config";
+import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
 import { codigoPix } from "@/lib/payment/pix";
 import { brl, calcularTotais } from "@/lib/payment/pricing";
 import { provedorWhatsApp, resumoPedido } from "@/lib/payment/whatsapp";
-import type { DadosCliente, FormaEntrega, FormaPagamento } from "@/lib/types";
+import type { DadosCliente, FormaEntrega, FormaPagamento, OpcaoFrete } from "@/lib/types";
 import { useLoja } from "@/store/Store";
 import { linhasSacola } from "../shell/BagDrawer";
 import { Ph } from "../Ph";
@@ -24,15 +25,26 @@ const PAGAMENTOS: [FormaPagamento, string, string][] = [
   ["debito", "Cartão de débito", "À vista."],
 ];
 const PIX_ATIVO = Boolean(CFG.pagamento.pix.chave);
+const GRATIS_ACIMA = CFG.entrega.correios.freteGratisAcima;
+const ENTREGAS: [FormaEntrega, string, string][] = [
+  ["correios", "Correios (PAC ou SEDEX)",
+    `Para todo o Brasil. Frete calculado pelo CEP${GRATIS_ACIMA ? `; grátis acima de ${brl(GRATIS_ACIMA)} em peças` : ""}.`],
+  ["aplicativo", "Entrega por aplicativo (Belém)", "Valor informado no momento da compra, por conta da cliente."],
+  ["retirada", "Retirada", "O endereço é enviado após a confirmação da compra."],
+];
 const novoId = () => `T${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 
 // Checkout por etapas. Cartão: Mercado Pago (quando configurado). Pix: QR Code na chave da loja
 // (quando configurada). Sempre é possível enviar o pedido pelo WhatsApp. Nenhum dado de cartão é coletado.
-export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
+// Correios: frete calculado pelo CEP (Melhor Envio), quando configurado.
+export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; correios: boolean }) {
   const { bag, setBag, cupom, setCupom, pronto } = useLoja();
   const [step, setStep] = useState(0);
   const [ck, setCk] = useState<DadosCliente>({});
-  const [ship, setShip] = useState<FormaEntrega>("aplicativo");
+  const [ship, setShip] = useState<FormaEntrega>(correios ? "correios" : "aplicativo");
+  const [fretes, setFretes] = useState<OpcaoFrete[] | null>(null);
+  const [frete, setFrete] = useState<OpcaoFrete | null>(null);
+  const [cotando, setCotando] = useState(false);
   const [pay, setPay] = useState<FormaPagamento>("pix");
   const [erro, setErro] = useState("");
   const [faltando, setFaltando] = useState<string[]>([]);
@@ -41,6 +53,12 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
   const [gerando, setGerando] = useState(false);
 
   const t = calcularTotais(CFG, linhasSacola(bag), step >= 3 ? pay : null, cupom);
+  const valorFrete = ship === "correios" && frete ? frete.valor : 0;
+  const total = t.total + valorFrete;
+  const falta = faltaFreteGratis(CFG, t.subtotal - t.desconto);
+
+  // Sacola ou cupom mudaram: o frete precisa ser calculado de novo.
+  useEffect(() => { setFretes(null); setFrete(null); }, [bag, cupom]);
 
   if (pix) return <PixView codigo={pix.codigo} total={pix.total} at={pix.at} wa={pix.wa} pedidoId={pix.id} />;
   if (enviado)
@@ -92,7 +110,31 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
   };
   const ir = (s: number) => { setErro(""); setFaltando([]); setStep(s); };
 
-  const pedidoAtual = () => montarPedido({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck });
+  const pedidoAtual = () => montarPedido({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete });
+
+  // Cota PAC e SEDEX no servidor (Melhor Envio) para o CEP digitado.
+  const cotar = async (cep: string) => {
+    setFretes(null);
+    setFrete(null);
+    if (!cepValido(cep)) return setErro("Digite um CEP válido.");
+    setErro("");
+    setCotando(true);
+    try {
+      const r = await fetch("/api/frete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cep, cupom, itens: bag.map((l) => ({ id: l.id, q: l.q })) }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.erro || "Não foi possível calcular o frete.");
+      setFretes(d.opcoes);
+      setFrete(d.opcoes[0] ?? null);
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "Não foi possível calcular o frete.");
+    } finally {
+      setCotando(false);
+    }
+  };
 
   const enviar = async (at: string) => {
     const atendente = CFG.atendentes.find((a) => a.nome === at) ?? CFG.atendentes[0];
@@ -131,7 +173,7 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
       const r = await fetch("/api/pagamento/mercadopago", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck }),
+        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: frete && { servico: frete.servico } }),
       });
       const d = await r.json();
       if (!r.ok || !d.url) throw new Error(d.erro || "Não foi possível gerar o pagamento.");
@@ -145,7 +187,7 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
 
   const resumo = (
     <details open className="sm">
-      <summary style={{ fontSize: 15 }}>RESUMO DO PEDIDO · {brl(t.total)}</summary>
+      <summary style={{ fontSize: 15 }}>RESUMO DO PEDIDO · {brl(total)}</summary>
       {bag.map((l) => {
         const p = porId(l.id);
         if (!p) return null;
@@ -157,11 +199,15 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
         );
       })}
       <div className="tt"><span>Subtotal</span><span>{brl(t.subtotal)}</span></div>
-      <div className="tt"><span>Entrega</span><span>{ship === "retirada" ? "Retirada" : "Por aplicativo"}</span></div>
       {t.desconto ? <div className="tt"><span>Desconto ({t.cupom?.codigo})</span><span>-{brl(t.desconto)}</span></div> : null}
       {t.descontoPix ? <div className="tt"><span>Desconto Pix (5%)</span><span>-{brl(t.descontoPix)}</span></div> : null}
-      <div className="tt big"><span>Total</span><span>{brl(t.total)}</span></div>
-      <small style={{ color: "var(--mut)" }}>O valor da entrega por aplicativo é informado no atendimento.</small>
+      <div className="tt">
+        <span>{ship === "correios" ? `Frete${frete ? ` Correios ${frete.nome}` : ""}` : "Entrega"}</span>
+        <span>{ship === "retirada" ? "Retirada" : ship === "aplicativo" ? "Por aplicativo" : frete ? (frete.gratis ? "Grátis" : brl(frete.valor)) : "Calcule pelo CEP"}</span>
+      </div>
+      <div className="tt big"><span>Total</span><span>{brl(total)}</span></div>
+      {ship === "aplicativo" ? <small style={{ color: "var(--mut)" }}>O valor da entrega por aplicativo é informado no atendimento.</small> : null}
+      {ship === "correios" && falta ? <small style={{ color: "var(--mut)" }}>Faltam {brl(falta)} em peças para o frete grátis (acima de {brl(GRATIS_ACIMA)}).</small> : null}
     </details>
   );
 
@@ -196,10 +242,16 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
           className="fg"
           style={{ marginTop: 16 }}
           noValidate
-          onSubmit={(e) => { e.preventDefault(); const d = ler(e.currentTarget); if (ship === "retirada" || validar(d, OBRIG_END)) ir(3); }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            const d = ler(e.currentTarget);
+            if (ship !== "retirada" && !validar(d, OBRIG_END)) return;
+            if (ship === "correios" && !frete) return setErro(cotando ? "Aguarde o cálculo do frete." : "Calcule o frete e escolha PAC ou SEDEX.");
+            ir(3);
+          }}
         >
           <div className="s">
-            {([["aplicativo", "Entrega por aplicativo", "Valor informado no momento da compra, por conta da cliente."], ["retirada", "Retirada", "O endereço é enviado após a confirmação da compra."]] as const).map(([v, tt, sub]) => (
+            {ENTREGAS.filter(([v]) => v !== "correios" || correios).map(([v, tt, sub]) => (
               <label className="opc" key={v}>
                 <input type="radio" name="sh" value={v} checked={ship === v} onChange={(e) => { ler(e.currentTarget.form!); setShip(v); }} />
                 <span>{tt}<br /><small>{sub}</small></span>
@@ -208,7 +260,47 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
           </div>
           {ship === "retirada" ? null : (
             <>
-              {fld("cep", "CEP", "00000-000")}{fld("end", "Endereço")}{fld("num", "Número")}{fld("cmp", "Complemento")}
+              {ship === "correios" ? (
+                <>
+                  <label className="s">
+                    CEP
+                    <span style={{ display: "flex", gap: 8, minWidth: 0 }}>
+                      <input
+                        name="cep"
+                        inputMode="numeric"
+                        placeholder="00000-000"
+                        defaultValue={ck.cep || ""}
+                        autoComplete="postal-code"
+                        className={faltando.includes("cep") ? "bad" : undefined}
+                        style={{ flex: 1, minWidth: 0 }}
+                        onChange={() => { setFretes(null); setFrete(null); }}
+                        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); cotar(e.currentTarget.value); } }}
+                      />
+                      <button
+                        type="button"
+                        className="btn o"
+                        style={{ padding: "0 16px", whiteSpace: "nowrap" }}
+                        disabled={cotando}
+                        onClick={(e) => cotar(String(new FormData(e.currentTarget.form!).get("cep") || ""))}
+                      >
+                        {cotando ? "CALCULANDO…" : "CALCULAR FRETE"}
+                      </button>
+                    </span>
+                  </label>
+                  <div className="s">
+                    {fretes?.map((o) => (
+                      <label className="opc" key={o.servico}>
+                        <input type="radio" name="fr" checked={frete?.servico === o.servico} onChange={() => setFrete(o)} />
+                        <span>
+                          Correios {o.nome} · {o.gratis ? <>Grátis <s style={{ color: "var(--mut)" }}>{brl(o.valorOriginal)}</s></> : brl(o.valor)}
+                          <br /><small>Entrega em {textoPrazo(o.prazo)} após a confirmação do pagamento.</small>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </>
+              ) : fld("cep", "CEP", "00000-000")}
+              {fld("end", "Endereço")}{fld("num", "Número")}{fld("cmp", "Complemento")}
               {fld("bai", "Bairro")}{fld("cid", "Cidade")}{fld("uf", "Estado")}{fld("dest", "Destinatário", "", "s")}
             </>
           )}
@@ -247,14 +339,14 @@ export function CheckoutView({ mercadoPago }: { mercadoPago: boolean }) {
               : mercadoPago
                 ? "Você paga no ambiente seguro do Mercado Pago, ou envia o pedido pelo WhatsApp para combinar com o atendimento."
                 : "Você envia o pedido pelo WhatsApp e o atendimento combina o pagamento no cartão."}{" "}
-            O valor da entrega por aplicativo é combinado no atendimento. Nenhum dado de cartão é coletado neste site.
+            {ship === "aplicativo" ? "O valor da entrega por aplicativo é combinado no atendimento. " : ""}Nenhum dado de cartão é coletado neste site.
           </p>
           <div className="er s">{erro}</div>
           {pay === "pix" && PIX_ATIVO ? (
-            <button className="btn s" name="via" value="pix">PAGAR COM PIX · {brl(t.total)}</button>
+            <button className="btn s" name="via" value="pix">PAGAR COM PIX · {brl(total)}</button>
           ) : pay !== "pix" && mercadoPago ? (
             <>
-              <button className="btn s" name="via" value="mp" disabled={gerando}>{gerando ? "GERANDO PAGAMENTO…" : `PAGAR COM MERCADO PAGO · ${brl(t.total)}`}</button>
+              <button className="btn s" name="via" value="mp" disabled={gerando}>{gerando ? "GERANDO PAGAMENTO…" : `PAGAR COM MERCADO PAGO · ${brl(total)}`}</button>
               <button className="btn o s" name="via" value="wa" disabled={gerando}>ENVIAR PEDIDO PELO WHATSAPP</button>
             </>
           ) : (

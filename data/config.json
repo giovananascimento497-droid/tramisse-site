@@ -5,7 +5,8 @@
   "_aparencia": "Visual do site: \"editorial\" (original) ou \"loja\" (cabeçalho com categorias, faixa de vantagens, títulos em maiúsculo). Prévia sem publicar: abra o site com ?visual=loja (e ?visual=editorial para voltar).",
   "aparencia": "loja",
   "barraSuperior": [
-    "ENTREGA POR APLICATIVO",
+    "FRETE GRÁTIS ACIMA DE R$ 799",
+    "ENVIO PARA TODO O BRASIL",
     "ATÉ 2X SEM JUROS",
     "5% DE DESCONTO NO PIX",
     "TROCAS EM ATÉ 7 DIAS"
@@ -24,7 +25,39 @@
   },
   "entrega": {
     "aplicativo": true,
-    "retirada": true
+    "retirada": true,
+    "correios": {
+      "_comentario": "Frete calculado pelo Melhor Envio (token em MELHORENVIO_TOKEN, na Netlify). servicos: ids do Melhor Envio (1 = Correios PAC, 2 = Correios SEDEX). freteGratisAcima: valor das peças (vitrine, já com cupom) a partir do qual o serviço mais barato sai grátis. Pacote: um envelope de segurança; a altura cresce por peça e o peso é a soma de pesoPorPeca (kg, já com a peça dobrada e embalada) + o peso do envelope.",
+      "cepOrigem": "66640001",
+      "servicos": [
+        1,
+        2
+      ],
+      "freteGratisAcima": 799,
+      "diasPreparo": 1,
+      "embalagem": {
+        "nome": "Envelope de segurança",
+        "largura": 32,
+        "comprimento": 40,
+        "alturaPorPeca": 3,
+        "alturaMinima": 2,
+        "peso": 0.05
+      },
+      "pesoPorPeca": {
+        "Blusas": 0.3,
+        "Camisas": 0.3,
+        "T-shirts": 0.25,
+        "Regatas": 0.2,
+        "Coletes": 0.35,
+        "Calças": 0.6,
+        "Shorts": 0.3,
+        "Saias": 0.35,
+        "Vestidos": 0.45,
+        "Macacões": 0.6,
+        "Conjuntos": 0.7,
+        "padrao": 0.4
+      }
+    }
   },
   "trocas": {
     "prazoDias": 7

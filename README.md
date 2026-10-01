@@ -46,13 +46,21 @@ Links antigos com `#/...` (ex.: `/#/p/vestido-poa`) são redirecionados para a r
 - **Vitrine:** `preco` em `data/products.json` é o valor base (preço sugerido da planilha); o site mostra base + 5% (taxa do Mercado Pago embutida), **arredondado para cima até terminar em ,90**. Ex.: R$ 149,90 → 157,40 → **R$ 157,90** (2x de R$ 78,95 sem juros). Ajustes em `pagamento` no `data/config.json` (`taxaCartao`, `centavosVitrine`, `descontoPix`, `maxParcelas`).
 - **Cartão (crédito até 2x sem juros ou débito):** pago no **Mercado Pago** (Checkout Pro). Cada peça vai com o seu valor exato (com cupom, se houver); a soma é o total do site. Só a forma escolhida é liberada no Mercado Pago.
 - **Pix: 5% de desconto** sobre a vitrine (R$ 157,90 → R$ 150,01), pago direto na **chave CNPJ da loja**. O site gera o QR Code e o Pix copia e cola com o valor e o nº do pedido; a cliente envia o comprovante pelo WhatsApp.
-- A entrega por aplicativo não entra no valor pago online: é combinada no atendimento.
+- **Frete:** pelos Correios (PAC/SEDEX), calculado pelo CEP e pago junto (veja "Frete" abaixo). A entrega por aplicativo (Belém) não entra no valor pago online: é combinada no atendimento.
 - Sem token do Mercado Pago ou sem chave Pix, a opção correspondente vira "enviar pelo WhatsApp".
 
 **Para ativar o Pix:** preencha `pagamento.pix.chave` no `data/config.json` com o CNPJ (só números) e confira `nome` (até 25 letras, sem acento) e `cidade`.
 
 **Para ativar o Mercado Pago:** crie uma aplicação em mercadopago.com.br/developers (Suas integrações → Credenciais) e cadastre o *Access Token* na variável `MERCADOPAGO_ACCESS_TOKEN` (Netlify → Project configuration → Environment variables; localmente, em `.env.local`, veja `.env.example`). Comece pelo token de teste (`TEST-...`) e depois troque pelo de produção (`APP_USR-...`). **Nunca** coloque o token no código.
 No painel do Mercado Pago, deixe o parcelamento em 2x **sem juros para a compradora** (a taxa já está embutida na vitrine).
+
+## Frete (Correios pelo Melhor Envio)
+- No checkout, a opção **Correios (PAC ou SEDEX)** calcula o frete pelo CEP da cliente (`src/app/api/frete/`, `src/lib/frete/`). Também há "Calcular frete" na página do produto.
+- **Frete grátis:** quando as peças (vitrine, já com cupom) somam `freteGratisAcima` (R$ 799), o serviço mais barato (PAC) sai grátis. O desconto do Pix vale **só sobre as peças**; o frete entra cheio.
+- O frete vai como um item a mais no Mercado Pago (o servidor refaz a cotação; o valor do navegador é ignorado), soma no QR Code do Pix e aparece no WhatsApp e no e-mail do pedido.
+- Ajustes em `entrega.correios` no `data/config.json`: CEP de origem, serviços (1 = PAC, 2 = SEDEX), frete grátis, dias de preparo, medidas do envelope de segurança e peso por tipo de peça (kg, já embalada).
+- **Para ativar:** criar conta em melhorenvio.com.br → **Integrações → Permissões de acesso → Gerar novo token** (marcar ao menos "shipping-calculate") → cadastrar em `MELHORENVIO_TOKEN` na Netlify → novo deploy. Para testar antes, usar um token do sandbox (sandbox.melhorenvio.com.br) com `MELHORENVIO_AMBIENTE=sandbox`. **Nunca** colocar o token no código. Sem token, a opção Correios não aparece.
+- Etiquetas: compradas no painel do Melhor Envio para cada pedido pago (o site ainda não gera a etiqueta sozinho).
 
 ## Pedidos por e-mail (Netlify Forms)
 Cada pedido finalizado no site (WhatsApp, Pix ou Mercado Pago aprovado/em processamento) é registrado no formulário **"pedidos"** da Netlify (`public/__forms.html`, enviado por `src/lib/avisoPedido.ts`). A Netlify guarda a lista em **Forms** e manda um e-mail por pedido.

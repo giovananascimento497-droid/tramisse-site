@@ -3,7 +3,8 @@ import { CFG } from "@/lib/config";
 // Faixa de vantagens logo abaixo do banner (números vindos da configuração da loja).
 const P = CFG.pagamento;
 const ITENS: [string, string, React.ReactNode][] = [
-  ["ENTREGA POR APLICATIVO", "Ou retirada. Valor informado na compra",
+  [CFG.entrega.correios.freteGratisAcima ? `FRETE GRÁTIS ACIMA DE R$ ${CFG.entrega.correios.freteGratisAcima}` : "ENVIO PARA TODO O BRASIL",
+    "Pelos Correios. Em Belém, também por aplicativo",
     <path key="e" d="M3 7h11v9H3zM14 10h4l3 3v3h-7M7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM17 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />],
   [`ATÉ ${P.maxParcelas}X SEM JUROS`, "No cartão de crédito",
     <path key="c" d="M3 6h18v12H3zM3 10h18M7 15h4" />],

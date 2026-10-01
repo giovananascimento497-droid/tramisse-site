@@ -122,3 +122,6 @@ body.loja .ed-only{display:none!important}
 /* Banner de uma peça por vez no visual loja: nome em sans maiúsculo */
 body.loja .hs-um .hs-txt b{font:500 clamp(26px,3vw,44px)/1.15 var(--sans);text-transform:uppercase;letter-spacing:.06em}
 body.loja .hs-um .hs-txt span{font-weight:500;letter-spacing:.18em}
+/* Opções do checkout (entrega, frete, pagamento): bolinha à esquerda do texto */
+body.loja .fg .opc{display:flex;gap:14px;align-items:center}
+body.loja .fg .opc input{width:auto;flex:none;margin:0;accent-color:var(--ink)}

@@ -1,5 +1,5 @@
 import { brl } from "./payment/pricing";
-import { resumoPedido } from "./payment/whatsapp";
+import { resumoPedido, textoEntrega } from "./payment/whatsapp";
 import type { Pedido } from "./types";
 
 const PAGAMENTO = { pix: "Pix (5% de desconto)", debito: "Cartão de débito", credito: "Cartão de crédito (até 2x sem juros)" } as const;
@@ -18,8 +18,9 @@ export function avisarPedido(p: Pedido, info: { id: string; canal: string; situa
     cliente: [c.n, c.sn].filter(Boolean).join(" "),
     email: c.e || "",
     telefone: c.tel || "",
-    entrega: p.entrega === "retirada" ? "Retirada" : "Entrega por aplicativo",
+    entrega: textoEntrega(p).split(":")[0],
     endereco: p.entrega === "retirada" ? "" : [c.end, c.num, c.cmp, c.bai, c.cid, c.uf, c.cep].filter(Boolean).join(", ") + (c.dest ? ` (destinatário: ${c.dest})` : ""),
+    frete: p.frete ? (p.frete.gratis ? "Grátis" : brl(p.frete.valor)) : "",
     pagamento: PAGAMENTO[p.pagamento],
     total: brl(p.total),
     itens: p.itens.map((i) => `${i.q}x ${i.nome} — ${i.cor}, tam. ${i.tam} — ${brl(i.precoFinal * i.q)}`).join("\n"),

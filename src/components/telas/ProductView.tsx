@@ -5,6 +5,7 @@ import { CL, cores, estoqueDe, porId, tamanhoUnico, tamanhos } from "@/lib/catal
 import { CFG } from "@/lib/config";
 import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
+import { CalcularFrete } from "../CalcularFrete";
 import { FavButton } from "../FavButton";
 import { Ph } from "../Ph";
 
@@ -51,7 +52,7 @@ export function ProductView({ id }: { id: number }) {
     ["COMPOSIÇÃO", p.tecido ? `Tecido: ${p.tecido}.` : "Sob consulta no atendimento."],
     ["DETALHES", `Tamanhos da peça: ${tams.join(", ")}.`],
     ["CUIDADOS", "Siga as instruções da etiqueta da peça."],
-    ["ENTREGA", "Entrega exclusivamente por aplicativo, mediante consulta. O valor é de responsabilidade da cliente e informado no momento da compra. A retirada também é possível."],
+    ["ENTREGA", `Envio para todo o Brasil pelos Correios (PAC ou SEDEX), com o frete calculado pelo CEP${CFG.entrega.correios.freteGratisAcima ? ` e grátis acima de ${brl(CFG.entrega.correios.freteGratisAcima)}` : ""}. Em Belém, também há entrega por aplicativo (valor informado na compra) ou retirada.`],
     ["TROCAS E DEVOLUÇÕES", "Em até 7 dias, com a etiqueta fixada na peça e mediante disponibilidade de estoque. Solicite pelo nosso atendimento."],
   ];
 
@@ -144,6 +145,7 @@ export function ProductView({ id }: { id: number }) {
           )}
           <FavButton id={p.id} style={{ position: "static", border: "1px solid var(--ln)", width: 52 }} />
         </div>
+        {p.emBreve ? null : <CalcularFrete id={p.id} q={q} />}
         <div style={{ marginTop: 32 }}>
           {acordeao.map(([t, c]) => (
             <details key={t}><summary>{t}</summary><p>{c}</p></details>

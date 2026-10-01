@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
+import { porId } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
+import { cotarFrete, melhorEnvioAtivo } from "@/lib/frete/melhorenvio";
+import { calcularTotais } from "@/lib/payment/pricing";
 import { criarPreferencia, mercadoPagoAtivo } from "@/lib/payment/mercadopago";
 import { montarPedido } from "@/lib/payment/pedido";
 
@@ -8,7 +11,24 @@ import { montarPedido } from "@/lib/payment/pedido";
 export async function POST(req: Request) {
   if (!mercadoPagoAtivo()) return NextResponse.json({ erro: "Pagamento online indisponível." }, { status: 503 });
   const dados = await req.json().catch(() => null);
-  const pedido = dados && montarPedido(dados);
+  if (!dados) return NextResponse.json({ erro: "Pedido inválido. Confira a sacola." }, { status: 400 });
+  // Correios: o frete é cotado de novo aqui (o valor que veio do navegador é ignorado).
+  let frete = null;
+  if (dados.entrega === "correios") {
+    if (!melhorEnvioAtivo()) return NextResponse.json({ erro: "Envio pelos Correios indisponível no momento." }, { status: 503 });
+    const linhas = (Array.isArray(dados.bag) ? dados.bag : []).map((l: { id: number; q: number }) => ({ p: porId(Number(l.id)), q: Number(l.q) }));
+    if (!linhas.length || linhas.some((l: { p?: unknown }) => !l.p)) return NextResponse.json({ erro: "Pedido inválido. Confira a sacola." }, { status: 400 });
+    const t = calcularTotais(CFG, linhas.map((l: { p: { preco: number }; q: number }) => ({ preco: l.p.preco, q: l.q })), null, dados.cupom);
+    try {
+      const opcoes = await cotarFrete(dados.cliente?.cep || "", linhas, t.subtotal - t.desconto);
+      frete = opcoes.find((o) => o.servico === Number(dados.frete?.servico)) ?? null;
+    } catch (e) {
+      console.error(e);
+      return NextResponse.json({ erro: "Não foi possível calcular o frete agora. Tente de novo." }, { status: 502 });
+    }
+    if (!frete) return NextResponse.json({ erro: "Escolha o frete de novo." }, { status: 400 });
+  }
+  const pedido = montarPedido({ ...dados, frete });
   if (!pedido) return NextResponse.json({ erro: "Pedido inválido. Confira a sacola." }, { status: 400 });
   // Pix é pago direto na chave da loja (com desconto), não pelo Mercado Pago.
   if (pedido.pagamento === "pix") return NextResponse.json({ erro: "Pix é pago pela chave da loja." }, { status: 400 });

@@ -41,7 +41,12 @@ export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: str
       quantity: i.q,
       currency_id: "BRL",
       unit_price: i.precoFinal,
-    })),
+    })).concat(
+      // Frete dos Correios como mais um item (frete grátis não entra).
+      pedido.frete && pedido.frete.valor > 0
+        ? [{ id: `frete-${pedido.frete.servico}`, title: `Frete Correios ${pedido.frete.nome}`, quantity: 1, currency_id: "BRL", unit_price: pedido.frete.valor }]
+        : [],
+    ),
     payer: { name: c.n, surname: c.sn, email: c.e },
     external_reference: opcoes.referencia,
     statement_descriptor: "TRAMISSE",
@@ -52,7 +57,7 @@ export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: str
       excluded_payment_types: TIPOS.filter((t) => !PERMITIDOS[pedido.pagamento].includes(t)).map((id) => ({ id })),
       installments: pedido.pagamento === "credito" ? opcoes.maxParcelas : 1,
     },
-    metadata: { pagamento: pedido.pagamento, entrega: pedido.entrega, cupom: pedido.cupom ?? null, total: pedido.total },
+    metadata: { pagamento: pedido.pagamento, entrega: pedido.entrega, cupom: pedido.cupom ?? null, frete: pedido.frete?.valor ?? null, total: pedido.total },
   };
   const r = await mp("/checkout/preferences", { method: "POST", body: JSON.stringify(corpo) });
   // Token de teste (TEST-...) usa o ambiente de testes do Mercado Pago.

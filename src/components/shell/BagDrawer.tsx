@@ -70,7 +70,11 @@ export function BagDrawer() {
             })}
           </div>
           <p style={{ textAlign: "center", fontSize: 13, color: "var(--mut)", margin: "16px 0 0" }}>
-            Entrega por aplicativo: o valor é informado na compra.
+            {CFG.entrega.correios.freteGratisAcima
+              ? t.subtotal - t.desconto >= CFG.entrega.correios.freteGratisAcima
+                ? "Você ganhou frete grátis pelos Correios (PAC)."
+                : `Faltam ${brl(CFG.entrega.correios.freteGratisAcima - (t.subtotal - t.desconto))} para o frete grátis.`
+              : "Frete calculado pelo CEP no checkout."}
           </p>
           <div className="cp">
             <input
@@ -84,7 +88,7 @@ export function BagDrawer() {
           </div>
           <div className="er">{erro || (cupom ? <span className="okk">Cupom {cupom} aplicado.</span> : null)}</div>
           <div className="tt"><span>Subtotal</span><span>{brl(t.subtotal)}</span></div>
-          <div className="tt"><span>Entrega</span><span>Por aplicativo</span></div>
+          <div className="tt"><span>Entrega</span><span>Calculada no checkout</span></div>
           {t.desconto ? <div className="tt"><span>Desconto</span><span>-{brl(t.desconto)}</span></div> : null}
           <div className="tt big"><span>Total</span><span>{brl(t.total)}</span></div>
           <Link className="btn f" href="/checkout" style={{ marginTop: 16 }} onClick={fechar}>FINALIZAR COMPRA</Link>
