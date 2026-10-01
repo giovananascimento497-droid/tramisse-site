@@ -6,7 +6,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reels } from "@/components/Reels";
 import { Tile } from "@/components/Tile";
-import { PRODS, slug } from "@/lib/catalog";
+import { PRODS, slug, temEstoque } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import type { Produto } from "@/lib/types";
 
@@ -37,7 +37,7 @@ export default function Home() {
   const TP = CFG.fotosHome;
   return (
     <>
-      <HeroShop fotos={PRODS.filter((p) => p.imagens.length && !p.emBreve).map(({ slug, nome, imagens, preco }) => ({ slug, nome, preco, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
+      <HeroShop fotos={PRODS.filter((p) => p.imagens.length && temEstoque(p)).map(({ slug, nome, imagens, preco }) => ({ slug, nome, preco, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
 
       <Beneficios />
 

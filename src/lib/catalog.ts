@@ -28,6 +28,8 @@ export const ordenaTamanhos = (l: string[]) => [...new Set(l)].sort((a, b) => sk
 export const cores = (p: Produto) => [...new Set(p.variantes.map((v) => v.cor))];
 export const tamanhos = (p: Produto) => ordenaTamanhos(p.variantes.map((v) => v.tamanho));
 export const temEstoque = (p: Produto) => !p.emBreve && p.variantes.some((v) => v.estoque > 0);
+// Esgotada: continua no site com a etiqueta ESGOTADO (no fim das listas), sem compra.
+export const esgotado = (p: Produto) => !p.emBreve && !temEstoque(p);
 // Tamanho pré-selecionado quando a cor só tem um tamanho.
 export const tamanhoUnico = (p: Produto, cor: string) => {
   const t = p.variantes.filter((v) => v.cor === cor).map((v) => v.tamanho);
@@ -44,7 +46,8 @@ export const porSlug = (s: string) => PRODS.find((p) => p.slug === s);
 // Peças "coming soon" (emBreve) só aparecem na coleção coming-soon.
 export function listar(k: string, sub?: string): Produto[] {
   if (k === "coming-soon") return PRODS.filter((p) => p.emBreve);
-  const l = PRODS.filter((p) => !p.emBreve);
+  // Esgotadas por último (sort estável: o resto mantém a ordem).
+  const l = PRODS.filter((p) => !p.emBreve).sort((a, b) => Number(esgotado(a)) - Number(esgotado(b)));
   if (k === "new-in") return l.filter((p) => p.flags.novo);
   if (k === "curadoria") return l.filter((p) => p.flags.curadoria);
   if (k === "sale") return l.filter((p) => p.precoDe);

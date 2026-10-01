@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type CSSProperties, type MouseEvent } from "react";
-import { CL, cores, estoqueDe, porId, tamanhoUnico, tamanhos } from "@/lib/catalog";
+import { CL, cores, esgotado, estoqueDe, porId, tamanhoUnico, tamanhos } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
@@ -13,6 +13,7 @@ export function ProductView({ id }: { id: number }) {
   const p = porId(id)!;
   const cs = cores(p);
   const tams = tamanhos(p);
+  const semEstoque = esgotado(p);
   const { bag, setBag, abrir, setGuia } = useLoja();
   const [cor, setCor] = useState(cs[0]);
   const [tam, setTam] = useState<string | null>(tamanhoUnico(p, cs[0]));
@@ -44,7 +45,7 @@ export function ProductView({ id }: { id: number }) {
   // Coming soon: em vez de comprar, avisa a atendente pelo WhatsApp.
   const aviseMe = () => {
     const at = CFG.atendentes[0];
-    const texto = `Olá! Quero ser avisada quando a peça ${p.nome}${tam ? ` (${CL[cor].nome}, tam. ${tam})` : ""} chegar à Tramisse.`;
+    const texto = `Olá! Quero ser avisada quando a peça ${p.nome}${tam ? ` (${CL[cor].nome}, tam. ${tam})` : ""} ${semEstoque ? "voltar ao estoque" : "chegar à Tramisse"}.`;
     window.open(`https://wa.me/${at.whatsapp}?text=${encodeURIComponent(texto)}`, "_blank");
   };
   const acordeao: [string, string][] = [
@@ -113,7 +114,7 @@ export function ProductView({ id }: { id: number }) {
             <button
               key={t}
               aria-pressed={tam === t}
-              disabled={!p.emBreve && estoqueDe(p, cor, t) < 1}
+              disabled={!p.emBreve && !semEstoque && estoqueDe(p, cor, t) < 1}
               onClick={() => { setTam(t); setQ(1); setErro(""); }}
             >
               {t}
@@ -121,9 +122,13 @@ export function ProductView({ id }: { id: number }) {
           ))}
         </div>
         <div className="er">
-          {erro || (!p.emBreve && tam && estoqueDe(p, cor, tam) === 1 ? <span style={{ color: "var(--mut)" }}>Última peça nesse tamanho.</span> : null)}
+          {erro || (!p.emBreve && !semEstoque && tam && estoqueDe(p, cor, tam) === 1 ? <span style={{ color: "var(--mut)" }}>Última peça nesse tamanho.</span> : null)}
         </div>
-        {p.emBreve ? (
+        {semEstoque ? (
+          <p style={{ color: "var(--mut)", fontSize: 14, margin: "8px 0 20px" }}>
+            Esta peça está esgotada. Toque em &quot;Avise-me&quot; e a nossa atendente te avisa pelo WhatsApp se ela voltar.
+          </p>
+        ) : p.emBreve ? (
           <p style={{ color: "var(--mut)", fontSize: 14, margin: "8px 0 20px" }}>
             Esta peça ainda não chegou. Toque em &quot;Avise-me&quot; e a nossa atendente te avisa pelo WhatsApp quando estiver disponível.
           </p>
@@ -138,14 +143,16 @@ export function ProductView({ id }: { id: number }) {
           </>
         )}
         <div style={{ display: "flex", gap: 8 }}>
-          {p.emBreve ? (
+          {semEstoque ? (
+            <button className="btn" style={{ flex: 1 }} onClick={aviseMe}>ESGOTADO · AVISE-ME</button>
+          ) : p.emBreve ? (
             <button className="btn" style={{ flex: 1 }} onClick={aviseMe}>AVISE-ME QUANDO CHEGAR</button>
           ) : (
             <button className="btn" style={{ flex: 1 }} onClick={adicionar}>ADICIONAR À SACOLA</button>
           )}
           <FavButton id={p.id} style={{ position: "static", border: "1px solid var(--ln)", width: 52 }} />
         </div>
-        {p.emBreve ? null : <CalcularFrete id={p.id} q={q} />}
+        {p.emBreve || semEstoque ? null : <CalcularFrete id={p.id} q={q} />}
         <div style={{ marginTop: 32 }}>
           {acordeao.map(([t, c]) => (
             <details key={t}><summary>{t}</summary><p>{c}</p></details>

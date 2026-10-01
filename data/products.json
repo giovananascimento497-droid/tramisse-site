@@ -161,7 +161,7 @@
         {
           "cor": "un",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []
@@ -385,22 +385,22 @@
         {
           "cor": "pr",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "pr",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "ma",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "ma",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []

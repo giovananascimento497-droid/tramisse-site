@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CL, listar, slug, TODAS_CORES, TODOS_TAMANHOS, TREE, INFO, tamanhos, cores, temEstoque } from "@/lib/catalog";
+import { CL, listar, slug, TODAS_CORES, TODOS_TAMANHOS, TREE, INFO, tamanhos, cores, temEstoque, esgotado } from "@/lib/catalog";
 import { useLoja, type Filtros } from "@/store/Store";
 import { Grid } from "../ProductCard";
 
@@ -19,8 +19,10 @@ export function CategoryView({ k, sub }: { k: string; sub?: string }) {
   if (F.est) l = l.filter((p) => p.estilo === F.est);
   if (F.disp) l = l.filter(temEstoque);
   const o = F.o || "n";
+  // Esgotadas sempre no fim, em qualquer ordenação.
   l = [...l].sort((a, b) =>
-    o === "lo" ? a.preco - b.preco : o === "hi" ? b.preco - a.preco : o === "b" ? Number(b.flags.maisVendida) - Number(a.flags.maisVendida) : b.id - a.id,
+    Number(esgotado(a)) - Number(esgotado(b)) ||
+    (o === "lo" ? a.preco - b.preco : o === "hi" ? b.preco - a.preco : o === "b" ? Number(b.flags.maisVendida) - Number(a.flags.maisVendida) : b.id - a.id),
   );
 
   const sel = (n: keyof Filtros, lbl: string, opts: [string, string][]) => (

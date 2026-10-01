@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CL, cores } from "@/lib/catalog";
+import { CL, cores, esgotado } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { brl, parcelado } from "@/lib/payment/pricing";
 import type { Produto } from "@/lib/types";
@@ -12,6 +12,8 @@ export function ProductCard({ p }: { p: Produto }) {
     <article className="card">
       {p.emBreve ? (
         <span className="tag">COMING SOON</span>
+      ) : esgotado(p) ? (
+        <span className="tag">ESGOTADO</span>
       ) : p.precoDe ? (
         <span className="tag">-{Math.round((1 - p.preco / p.precoDe) * 100)}%</span>
       ) : p.flags.novo ? (

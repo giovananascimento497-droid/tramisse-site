@@ -125,3 +125,7 @@ body.loja .hs-um .hs-txt span{font-weight:500;letter-spacing:.18em}
 /* Opções do checkout (entrega, frete, pagamento): bolinha à esquerda do texto */
 body.loja .fg .opc{display:flex;gap:14px;align-items:center}
 body.loja .fg .opc input{width:auto;flex:none;margin:0;accent-color:var(--ink)}
+/* Menu principal sempre numa linha só (telas de computador menores: letra e espaço um pouco menores) */
+@media(min-width:1000px){body.loja nav.pri>div>a{white-space:nowrap}}
+@media(min-width:1000px) and (max-width:1399px){body.loja .hd{gap:20px}body.loja header .logo{width:180px}body.loja header nav.pri{gap:14px;font-size:11px;letter-spacing:.1em}body.loja .hd .ic{gap:0}}
+@media(min-width:1000px) and (max-width:1149px){body.loja .hd{gap:16px}body.loja header .logo{width:160px}body.loja header nav.pri{gap:10px;letter-spacing:.06em}}
