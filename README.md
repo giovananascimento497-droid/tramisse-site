@@ -49,7 +49,7 @@ Links antigos com `#/...` (ex.: `/#/p/vestido-poa`) são redirecionados para a r
 - **Frete:** pelos Correios (PAC/SEDEX), calculado pelo CEP e pago junto (veja "Frete" abaixo). A entrega por aplicativo (Belém) não entra no valor pago online: é combinada no atendimento.
 - Sem token do Mercado Pago ou sem chave Pix, a opção correspondente vira "enviar pelo WhatsApp".
 
-**Para ativar o Pix:** preencha `pagamento.pix.chave` no `data/config.json` com o CNPJ (só números) e confira `nome` (até 25 letras, sem acento) e `cidade`.
+**Pix:** chave em `pagamento.pix` no `data/config.json` (hoje a chave aleatória da Victoria no Mercado Pago, provisória). Para trocar pelo CNPJ: `chave` (só números), `nome` (até 25 letras, sem acento), `cidade`, e `titular`/`banco` (só exibição).
 
 **Para ativar o Mercado Pago:** crie uma aplicação em mercadopago.com.br/developers (Suas integrações → Credenciais) e cadastre o *Access Token* na variável `MERCADOPAGO_ACCESS_TOKEN` (Netlify → Project configuration → Environment variables; localmente, em `.env.local`, veja `.env.example`). Comece pelo token de teste (`TEST-...`) e depois troque pelo de produção (`APP_USR-...`). **Nunca** coloque o token no código.
 No painel do Mercado Pago, deixe o parcelamento em 2x **sem juros para a compradora** (a taxa já está embutida na vitrine).

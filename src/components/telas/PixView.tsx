@@ -8,6 +8,8 @@ import { brl } from "@/lib/payment/pricing";
 import { formataCnpj } from "@/lib/payment/pix";
 import { useLoja } from "@/store/Store";
 
+const PIX = CFG.pagamento.pix;
+
 // Tela do Pix: QR Code + "copia e cola" com o valor do pedido (já com 5% de desconto),
 // e o envio do pedido/comprovante para a atendente pelo WhatsApp.
 export function PixView({ codigo, total, at, wa, pedidoId }: { codigo: string; total: number; at: string; wa: string; pedidoId: string }) {
@@ -23,7 +25,7 @@ export function PixView({ codigo, total, at, wa, pedidoId }: { codigo: string; t
     <div className="pg">
       <h1>Pague com Pix</h1>
       <p>
-        Pedido nº {pedidoId} · <b style={{ fontWeight: 500 }}>{brl(total)}</b> (já com 5% de desconto). Abra o app do seu banco,
+        Pedido nº {pedidoId} · <b style={{ fontWeight: 500 }}>{brl(total)}</b> (já com 5% de desconto nas peças). Abra o app do seu banco,
         escolha Pix e leia o QR Code ou use o código copia e cola.
       </p>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -32,7 +34,10 @@ export function PixView({ codigo, total, at, wa, pedidoId }: { codigo: string; t
         <input readOnly value={codigo} aria-label="Pix copia e cola" onFocus={(e) => e.currentTarget.select()} />
         <button className="btn o" onClick={copiar} style={{ padding: "0 20px" }}>COPIAR</button>
       </div>
-      <p style={{ fontSize: 14 }}>Chave Pix (CNPJ): {formataCnpj(CFG.pagamento.pix.chave)}</p>
+      <p style={{ fontSize: 14 }}>
+        Chave Pix: {formataCnpj(PIX.chave)}
+        {PIX.titular ? <><br />Favorecida: {PIX.titular}{PIX.banco ? ` (${PIX.banco})` : ""}</> : null}
+      </p>
       <p>Depois de pagar, envie o pedido e o comprovante para a {at} pelo WhatsApp: o atendimento confirma e combina a entrega ou a retirada com você.</p>
       <p>
         <a className="btn" href={wa} target="_blank" rel="noopener">ENVIAR PEDIDO E COMPROVANTE</a>{" "}

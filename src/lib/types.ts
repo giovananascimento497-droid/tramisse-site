@@ -48,8 +48,8 @@ export type Config = {
     centavosVitrine: number | null; // vitrine arredondada para cima até terminar nesses centavos (ex.: 0.9 -> ,90)
     descontoPix: number; // desconto sobre a vitrine no Pix
     maxParcelas: number; // crédito sem juros
-    // Chave Pix da loja (CNPJ, só números). Vazia = Pix combinado pelo WhatsApp.
-    pix: { chave: string; nome: string; cidade: string };
+    // Chave Pix da loja. Vazia = Pix combinado pelo WhatsApp. titular/banco: só para exibir à cliente.
+    pix: { chave: string; nome: string; cidade: string; titular?: string; banco?: string };
   };
   entrega: {
     aplicativo: boolean;
