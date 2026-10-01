@@ -188,7 +188,7 @@
         {
           "cor": "xa",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -275,7 +275,7 @@
         {
           "cor": "br",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []
@@ -427,7 +427,7 @@
         {
           "cor": "am",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "am",
@@ -472,7 +472,7 @@
         {
           "cor": "ma",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []
@@ -588,7 +588,7 @@
         {
           "cor": "ma",
           "tamanho": "GG",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []
@@ -620,7 +620,7 @@
         {
           "cor": "ma",
           "tamanho": "GG",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []
@@ -763,21 +763,21 @@
         {
           "cor": "am",
           "tamanho": "P",
-          "estoque": 2
+          "estoque": 1
         }
       ],
       "imagens": []
     },
     {
-      "id": 108,
-      "slug": "colete-mayumi",
-      "nome": "Colete Mayumi",
-      "descricao": "",
+      "id": 135,
+      "slug": "conjunto-mayumi",
+      "nome": "Conjunto Mayumi",
+      "descricao": "Conjunto colete e calça Mayumi.",
       "tecido": "",
-      "preco": 159.9,
+      "preco": 359.9,
       "precoDe": 0,
       "categoria": "roupas",
-      "subcategoria": "Coletes",
+      "subcategoria": "Conjuntos",
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
@@ -790,34 +790,7 @@
         {
           "cor": "un",
           "tamanho": "G",
-          "estoque": 1
-        }
-      ],
-      "imagens": []
-    },
-    {
-      "id": 109,
-      "slug": "calca-mayumi",
-      "nome": "Calça Mayumi",
-      "descricao": "",
-      "tecido": "",
-      "preco": 200,
-      "precoDe": 0,
-      "categoria": "roupas",
-      "subcategoria": "Calças",
-      "estilo": "",
-      "colecao": "Coleção atual",
-      "flags": {
-        "novo": true,
-        "curadoria": false,
-        "maisVendida": false
-      },
-      "emBreve": false,
-      "variantes": [
-        {
-          "cor": "un",
-          "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []
@@ -877,42 +850,15 @@
       "imagens": []
     },
     {
-      "id": 112,
-      "slug": "blusa-juliemy",
-      "nome": "Blusa Juliemy",
-      "descricao": "",
+      "id": 136,
+      "slug": "conjunto-juliemy",
+      "nome": "Conjunto Juliemy",
+      "descricao": "Conjunto blusa e calça Juliemy, vendido junto.",
       "tecido": "",
-      "preco": 110,
+      "preco": 390,
       "precoDe": 0,
       "categoria": "roupas",
-      "subcategoria": "Blusas",
-      "estilo": "",
-      "colecao": "Coleção atual",
-      "flags": {
-        "novo": true,
-        "curadoria": false,
-        "maisVendida": false
-      },
-      "emBreve": false,
-      "variantes": [
-        {
-          "cor": "un",
-          "tamanho": "M",
-          "estoque": 1
-        }
-      ],
-      "imagens": []
-    },
-    {
-      "id": 113,
-      "slug": "calca-juliemy",
-      "nome": "Calça Juliemy",
-      "descricao": "",
-      "tecido": "",
-      "preco": 280,
-      "precoDe": 0,
-      "categoria": "roupas",
-      "subcategoria": "Calças",
+      "subcategoria": "Conjuntos",
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
@@ -1043,21 +989,21 @@
         {
           "cor": "un",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []
     },
     {
-      "id": 118,
-      "slug": "blusa-hannah",
-      "nome": "Blusa Hannah",
-      "descricao": "",
+      "id": 137,
+      "slug": "conjunto-hannah-luara",
+      "nome": "Conjunto Hannah e Luara",
+      "descricao": "Conjunto blusa Hannah e calça Luara, vendido junto.",
       "tecido": "",
-      "preco": 149.9,
+      "preco": 379.9,
       "precoDe": 0,
       "categoria": "roupas",
-      "subcategoria": "Blusas",
+      "subcategoria": "Conjuntos",
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
@@ -1097,34 +1043,7 @@
         {
           "cor": "un",
           "tamanho": "G",
-          "estoque": 1
-        }
-      ],
-      "imagens": []
-    },
-    {
-      "id": 120,
-      "slug": "calca-luara",
-      "nome": "Calça Luara",
-      "descricao": "",
-      "tecido": "",
-      "preco": 230,
-      "precoDe": 0,
-      "categoria": "roupas",
-      "subcategoria": "Calças",
-      "estilo": "",
-      "colecao": "Coleção atual",
-      "flags": {
-        "novo": true,
-        "curadoria": false,
-        "maisVendida": false
-      },
-      "emBreve": false,
-      "variantes": [
-        {
-          "cor": "un",
-          "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": []
@@ -1188,7 +1107,7 @@
         {
           "cor": "je",
           "tamanho": "40",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1219,7 +1138,7 @@
         {
           "cor": "jm",
           "tamanho": "42",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1309,7 +1228,7 @@
         {
           "cor": "je",
           "tamanho": "36",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1340,7 +1259,7 @@
         {
           "cor": "jc",
           "tamanho": "44",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
