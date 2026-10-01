@@ -995,9 +995,9 @@
     },
     {
       "id": 137,
-      "slug": "conjunto-hannah-luara",
-      "nome": "Conjunto Hannah e Luara",
-      "descricao": "Conjunto blusa Hannah e calça Luara, vendido junto.",
+      "slug": "conjunto-hannah",
+      "nome": "Conjunto Hannah",
+      "descricao": "Conjunto preto de blusa Hannah, com renda e mangas em babado, e calça Luara, com barra franzida de amarrar. Vendido junto.",
       "tecido": "",
       "preco": 379.9,
       "precoDe": 0,
@@ -1013,12 +1013,17 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "pr",
           "tamanho": "P",
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-hannah-1.jpg",
+        "/assets/products/conjunto-hannah-2.jpg",
+        "/assets/products/conjunto-hannah-3.jpg",
+        "/assets/products/conjunto-hannah-4.jpg"
+      ]
     },
     {
       "id": 119,

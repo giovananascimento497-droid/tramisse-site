@@ -47,7 +47,7 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - `fotos-nao-identificadas/`: fotos recebidas que não correspondem a peças do catálogo.
 - **Catálogo = estoque real** (planilha de 30/09/2026, importada por `scripts/importar-estoque-2026-09.mjs`, que não roda de novo). Cada variante (cor + tamanho) tem o estoque real; o site não deixa comprar acima dele (página, sacola e servidor). Custo, lucro e fornecedora **nunca** vão para o site (o catálogo é público).
 - **Coming soon:** `emBreve: true` no produto. Aparece só em `/categoria/coming-soon` (e na seção da home), com etiqueta COMING SOON e botão "Avise-me quando chegar" (WhatsApp) no lugar da compra.
-- **Esgotada:** todas as variantes com `estoque: 0` (e sem `emBreve`). Continua no site com etiqueta ESGOTADO, no fim das listas, com "Esgotado · Avise-me" (WhatsApp) no lugar da compra; sai do banner da home (`esgotado()` em `src/lib/catalog.ts`). Conjuntos vendidos juntos viram um produto só (ex.: Conjunto Mayumi, Juliemy, Hannah e Luara).
+- **Esgotada:** todas as variantes com `estoque: 0` (e sem `emBreve`). Continua no site com etiqueta ESGOTADO, no fim das listas, com "Esgotado · Avise-me" (WhatsApp) no lugar da compra; sai do banner da home (`esgotado()` em `src/lib/catalog.ts`). Conjuntos vendidos juntos viram um produto só (ex.: Conjunto Mayumi, Juliemy, Hannah).
 - `fotos-fora-do-estoque/`: fotos de peças do catálogo antigo que não estão no estoque atual.
 
 ## Estado atual e pendências
