@@ -5,7 +5,7 @@
   "empresa": {
     "razaoSocial": "GIOVANA NASCIMENTO DA SILVA",
     "cnpj": "68.602.868/0001-03",
-    "cidade": "Belém (PA)"
+    "cidade": "Belém/PA"
   },
   "_aparencia": "Visual do site: \"editorial\" (original) ou \"loja\" (cabeçalho com categorias, faixa de vantagens, títulos em maiúsculo). Prévia sem publicar: abra o site com ?visual=loja (e ?visual=editorial para voltar).",
   "aparencia": "loja",
