@@ -291,7 +291,7 @@
       "id": 102,
       "slug": "conjunto-poa",
       "nome": "Conjunto Poá",
-      "descricao": "",
+      "descricao": "Conjunto em poá de top cropped de alças finas com renda e saia longa.",
       "tecido": "",
       "preco": 249.9,
       "precoDe": 0,
@@ -307,12 +307,15 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "of",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-poa-1.jpg",
+        "/assets/products/conjunto-poa-2.jpg"
+      ]
     },
     {
       "id": 15,
