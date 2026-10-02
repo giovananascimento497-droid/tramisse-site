@@ -140,33 +140,6 @@
   },
   "produtos": [
     {
-      "id": 101,
-      "slug": "body-com-bluse",
-      "nome": "Body com Bluse",
-      "descricao": "",
-      "tecido": "",
-      "preco": 117.9,
-      "precoDe": 0,
-      "categoria": "roupas",
-      "subcategoria": "Blusas",
-      "estilo": "",
-      "colecao": "Coleção atual",
-      "flags": {
-        "novo": true,
-        "curadoria": false,
-        "maisVendida": false
-      },
-      "emBreve": false,
-      "variantes": [
-        {
-          "cor": "un",
-          "tamanho": "P",
-          "estoque": 0
-        }
-      ],
-      "imagens": []
-    },
-    {
       "id": 11,
       "slug": "conjunto-xadrez",
       "nome": "Conjunto Xadrez",
@@ -746,8 +719,8 @@
       "id": 107,
       "slug": "conjunto-dandara",
       "nome": "Conjunto Dandara",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Conjunto de blusa sem mangas assimétrica com fivela e calça pantalona.",
+      "tecido": "Two Way",
       "preco": 211.06,
       "precoDe": 0,
       "categoria": "roupas",
@@ -767,7 +740,11 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-dandara-1.jpg",
+        "/assets/products/conjunto-dandara-2.jpg",
+        "/assets/products/conjunto-dandara-3.jpg"
+      ]
     },
     {
       "id": 38,
