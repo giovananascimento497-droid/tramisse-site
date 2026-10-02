@@ -138,3 +138,5 @@ body.loja .fg .opc input{width:auto;flex:none;margin:0;accent-color:var(--ink)}
 .ck-lk{background:none;border:0;padding:8px 4px;font:inherit;font-size:12px;text-decoration:underline;color:var(--car);cursor:pointer}
 @media(max-width:600px){.ck-ban{left:8px;right:8px;bottom:8px;padding:16px}.ck-bts{width:100%}.ck-bts .btn{flex:1}}
 .ft-ck{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
+/* Visual sempre claro: não acompanha o modo escuro do celular (nem o escurecimento automático do navegador). */
+:root{color-scheme:only light}

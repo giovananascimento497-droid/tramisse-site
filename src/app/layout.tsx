@@ -22,7 +22,8 @@ export const metadata: Metadata = {
   description: "Tramisse, moda feminina brasileira contemporânea. Essencial. Atemporal.",
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
+// Sempre no visual claro da marca (mesmo com o celular no modo escuro).
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", colorScheme: "only light", themeColor: "#F7F5F1" };
 
 // Dados estruturados da marca (Google): nome, site, logo e perfis oficiais (Instagram etc.).
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tramisse.com.br";
@@ -37,7 +38,7 @@ const ORGANIZACAO = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" data-theme="light">
       <head>
         {/* Mesmo carregamento de fontes do site estático, para o CSS original funcionar sem mudanças. */}
         <link
