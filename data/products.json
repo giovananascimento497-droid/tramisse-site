@@ -331,7 +331,7 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": true,
-        "curadoria": true,
+        "curadoria": false,
         "maisVendida": false
       },
       "emBreve": false,
@@ -671,7 +671,7 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": true,
-        "curadoria": true,
+        "curadoria": false,
         "maisVendida": true
       },
       "emBreve": false,
@@ -824,7 +824,7 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": true,
-        "curadoria": false,
+        "curadoria": true,
         "maisVendida": false
       },
       "emBreve": false,
@@ -884,7 +884,7 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": true,
-        "curadoria": false,
+        "curadoria": true,
         "maisVendida": false
       },
       "emBreve": false,
@@ -1046,7 +1046,7 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": true,
-        "curadoria": false,
+        "curadoria": true,
         "maisVendida": false
       },
       "emBreve": false,
@@ -1108,7 +1108,7 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": true,
-        "curadoria": false,
+        "curadoria": true,
         "maisVendida": true
       },
       "emBreve": false,
