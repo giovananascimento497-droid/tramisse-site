@@ -220,7 +220,9 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/vestido-recorte-na-cintura-1.jpg"
+      ]
     },
     {
       "id": 9,
@@ -278,7 +280,10 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-degage-1.jpg",
+        "/assets/products/blusa-degage-2.jpg"
+      ]
     },
     {
       "id": 10,
@@ -361,7 +366,9 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-renda-no-busto-1.jpg"
+      ]
     },
     {
       "id": 103,
@@ -475,7 +482,11 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-tule-manga-1.jpg",
+        "/assets/products/blusa-tule-manga-2.jpg",
+        "/assets/products/blusa-tule-manga-3.jpg"
+      ]
     },
     {
       "id": 37,
@@ -502,7 +513,9 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-alca-liocel-1.jpg"
+      ]
     },
     {
       "id": 36,
@@ -564,14 +577,17 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/calca-ingrid-1.jpg",
+        "/assets/products/calca-ingrid-2.jpg"
+      ]
     },
     {
       "id": 104,
       "slug": "conjunto-luma",
       "nome": "Conjunto Luma",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Conjunto de blusa com manga assimétrica e calça pantalona.",
+      "tecido": "Viscose",
       "preco": 230.24,
       "precoDe": 0,
       "categoria": "roupas",
@@ -591,14 +607,19 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-luma-1.jpg",
+        "/assets/products/conjunto-luma-2.jpg",
+        "/assets/products/conjunto-luma-3.jpg",
+        "/assets/products/conjunto-luma-4.jpg"
+      ]
     },
     {
       "id": 105,
       "slug": "conjunto-pietra",
       "nome": "Conjunto Pietra",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Conjunto de saia midi e blusa sem mangas com faixa na cintura.",
+      "tecido": "Viscose",
       "preco": 238.93,
       "precoDe": 0,
       "categoria": "roupas",
@@ -613,23 +634,26 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "ma",
+          "cor": "mr",
           "tamanho": "M",
           "estoque": 1
         },
         {
-          "cor": "ma",
+          "cor": "mr",
           "tamanho": "GG",
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-pietra-1.jpg",
+        "/assets/products/conjunto-pietra-2.jpg"
+      ]
     },
     {
       "id": 106,
       "slug": "conjunto-margot",
       "nome": "Conjunto Margot",
-      "descricao": "",
+      "descricao": "Conjunto de calça e blusa de manga longa com faixa na cintura, modelagem fluida.",
       "tecido": "",
       "preco": 247.53,
       "precoDe": 0,
@@ -645,12 +669,15 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "mr",
+          "cor": "vi",
           "tamanho": "GG",
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-margot-1.jpg",
+        "/assets/products/conjunto-margot-2.jpg"
+      ]
     },
     {
       "id": 33,
@@ -672,7 +699,7 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "cr",
+          "cor": "ma",
           "tamanho": "P",
           "estoque": 1
         }
@@ -765,14 +792,16 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-amarelo-manteiga-1.jpg"
+      ]
     },
     {
       "id": 135,
       "slug": "conjunto-mayumi",
       "nome": "Conjunto Mayumi",
-      "descricao": "Conjunto colete e calça Mayumi.",
-      "tecido": "",
+      "descricao": "Conjunto em alfaiataria risca de giz: colete e calça pantalona.",
+      "tecido": "Alfaiataria risca de giz",
       "preco": 359.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -787,19 +816,24 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "vi",
           "tamanho": "G",
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-mayumi-1.jpg",
+        "/assets/products/conjunto-mayumi-2.jpg",
+        "/assets/products/conjunto-mayumi-3.jpg",
+        "/assets/products/conjunto-mayumi-4.jpg"
+      ]
     },
     {
       "id": 110,
       "slug": "calca-leila",
       "nome": "Calça Leila",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Calça de alfaiataria pantalona, risca de giz.",
+      "tecido": "Alfaiataria risca de giz",
       "preco": 200,
       "precoDe": 0,
       "categoria": "roupas",
@@ -819,7 +853,10 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/calca-leila-1.jpg",
+        "/assets/products/calca-leila-2.jpg"
+      ]
     },
     {
       "id": 111,
@@ -852,8 +889,8 @@
       "id": 136,
       "slug": "conjunto-juliemy",
       "nome": "Conjunto Juliemy",
-      "descricao": "Conjunto blusa e calça Juliemy, vendido junto.",
-      "tecido": "",
+      "descricao": "Conjunto listrado de top tomara que caia e calça pantalona.",
+      "tecido": "Capri Especial",
       "preco": 390,
       "precoDe": 0,
       "categoria": "roupas",
@@ -873,14 +910,17 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/conjunto-juliemy-1.jpg",
+        "/assets/products/conjunto-juliemy-2.jpg"
+      ]
     },
     {
       "id": 114,
       "slug": "blusa-paris",
       "nome": "Blusa Paris",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Blusa de gola alta em poá, com costas abertas.",
+      "tecido": "Rayon Sara",
       "preco": 149.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -895,29 +935,32 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "ro",
           "tamanho": "P",
           "estoque": 1
         },
         {
-          "cor": "un",
+          "cor": "ro",
           "tamanho": "M",
           "estoque": 1
         },
         {
-          "cor": "un",
+          "cor": "ro",
           "tamanho": "G",
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-paris-1.jpg",
+        "/assets/products/blusa-paris-2.jpg"
+      ]
     },
     {
       "id": 115,
       "slug": "blusa-geovana",
       "nome": "Blusa Geovana",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Blusa de alças finas, estampada, com franzido e amarração na cintura.",
+      "tecido": "Silky cristal",
       "preco": 139.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -932,19 +975,22 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "ve",
           "tamanho": "P",
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-geovana-1.jpg",
+        "/assets/products/blusa-geovana-2.jpg"
+      ]
     },
     {
       "id": 116,
       "slug": "blusa-isabel",
       "nome": "Blusa Isabel",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Blusa de manga longa em guipir.",
+      "tecido": "Guipir Mirage",
       "preco": 200,
       "precoDe": 0,
       "categoria": "roupas",
@@ -959,19 +1005,24 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "ve",
           "tamanho": "P",
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-isabel-1.jpg",
+        "/assets/products/blusa-isabel-2.jpg",
+        "/assets/products/blusa-isabel-3.jpg",
+        "/assets/products/blusa-isabel-4.jpg"
+      ]
     },
     {
       "id": 117,
       "slug": "regata-isabel",
       "nome": "Regata Isabel",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Regata em guipir com gola alta.",
+      "tecido": "Guipir Mirage",
       "preco": 149.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -986,12 +1037,15 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "ro",
           "tamanho": "M",
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/regata-isabel-1.jpg",
+        "/assets/products/regata-isabel-2.jpg"
+      ]
     },
     {
       "id": 137,
@@ -1029,8 +1083,8 @@
       "id": 119,
       "slug": "blusa-mavie",
       "nome": "Blusa Mavie",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Blusa frente única com decote em V e costas abertas.",
+      "tecido": "Twill Joy Life",
       "preco": 149.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1045,12 +1099,15 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "of",
           "tamanho": "G",
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-mavie-1.jpg",
+        "/assets/products/blusa-mavie-2.jpg"
+      ]
     },
     {
       "id": 2,
@@ -1082,7 +1139,10 @@
           "estoque": 1
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/calca-tina-1.jpg",
+        "/assets/products/calca-tina-2.jpg"
+      ]
     },
     {
       "id": 22,
