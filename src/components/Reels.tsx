@@ -33,7 +33,7 @@ export function Reels({ id }: { id: string }) {
   }, []);
 
   return (
-    <div className="car reels" id={id} ref={ref}>
+    <div className={`car reels${CFG.videos.length <= 3 ? " r3" : ""}`} id={id} ref={ref}>
       {CFG.videos.map((v, i) => {
         const p = v.produtoId ? porId(v.produtoId) : undefined;
         if (v.produtoId && !p) return null;

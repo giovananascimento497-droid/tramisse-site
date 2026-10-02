@@ -140,3 +140,5 @@ body.loja .fg .opc input{width:auto;flex:none;margin:0;accent-color:var(--ink)}
 .ft-ck{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
 /* Visual sempre claro: não acompanha o modo escuro do celular (nem o escurecimento automático do navegador). */
 :root{color-scheme:only light}
+/* Seção de vídeos com até 3 vídeos: ocupam a largura toda no computador. */
+@media(min-width:1001px){body.loja .reels.r3 .reel{flex-basis:calc(33.333% - 11px)}}

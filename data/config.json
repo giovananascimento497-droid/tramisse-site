@@ -111,39 +111,18 @@
   "videos": [
     {
       "src": "/assets/videos/video-1.mp4",
-      "poster": "/assets/videos/video-1.jpg"
+      "poster": "/assets/videos/video-1.jpg",
+      "titulo": "Tramisse"
     },
     {
       "src": "/assets/videos/video-2.mp4",
-      "poster": "/assets/videos/video-2.jpg"
+      "poster": "/assets/videos/video-2.jpg",
+      "titulo": "Tramisse"
     },
     {
       "src": "/assets/videos/video-3.mp4",
-      "poster": "/assets/videos/video-3.jpg"
-    },
-    {
-      "produtoId": 29,
-      "src": ""
-    },
-    {
-      "produtoId": 33,
-      "src": ""
-    },
-    {
-      "produtoId": 11,
-      "src": ""
-    },
-    {
-      "produtoId": 25,
-      "src": ""
-    },
-    {
-      "produtoId": 19,
-      "src": ""
-    },
-    {
-      "produtoId": 36,
-      "src": ""
+      "poster": "/assets/videos/video-3.jpg",
+      "titulo": "Tramisse"
     }
   ],
   "hero": {

@@ -57,7 +57,7 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 
 ## Estado atual e pendências
 - Feito: home editorial, seção de vídeos em carrossel, categorias com filtros, produto com galeria/zoom, sacola com cupom (`TRAMISSE10`), checkout por etapas, conta/favoritos (localStorage), páginas institucionais.
-- Vídeos: 3 vídeos reais em `public/assets/videos/` (convertidos para H.264 720 px, sem áudio) no início de `videos` do `config.json`, ainda sem `produtoId` (falta a cliente dizer de quais peças são). Entradas sem `src` mostram a foto da peça.
+- Vídeos: a seção "Em movimento" da home mostra só os 3 vídeos reais (`public/assets/videos/`, H.264 720 px, sem áudio) com o nome TRAMISSE e sem link (peças ainda não chegaram; quando chegarem, pôr `produtoId`).
 - Acessórios e Sale estão vazios (catálogo só tem roupas, sem preço promocional).
 - 42 das 55 peças sem foto e sem descrição (as novas da planilha). Cor "Cor única" (`un`) onde a planilha não informa a cor.
 - Fotos individuais por peça, TikTok/Pinterest pendentes. Frete: envelope 30 × 20 cm, ~400 g por peça (conjunto 800 g).
