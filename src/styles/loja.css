@@ -129,3 +129,12 @@ body.loja .fg .opc input{width:auto;flex:none;margin:0;accent-color:var(--ink)}
 @media(min-width:1000px){body.loja nav.pri>div>a{white-space:nowrap}}
 @media(min-width:1000px) and (max-width:1399px){body.loja .hd{gap:20px}body.loja header .logo{width:180px}body.loja header nav.pri{gap:14px;font-size:11px;letter-spacing:.1em}body.loja .hd .ic{gap:0}}
 @media(min-width:1000px) and (max-width:1149px){body.loja .hd{gap:16px}body.loja header .logo{width:160px}body.loja header nav.pri{gap:10px;letter-spacing:.06em}}
+/* Aviso de cookies (vale nos dois visuais) */
+.ck-ban{position:fixed;left:16px;right:16px;bottom:16px;z-index:65;max-width:980px;margin:0 auto;display:flex;gap:20px 32px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:20px 24px;background:var(--bg);border:1px solid var(--ln);box-shadow:0 18px 40px rgba(30,29,27,.14);font-size:13px;line-height:1.5}
+.ck-txt{flex:1 1 420px;min-width:0}.ck-txt>b{display:block;font:600 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
+.ck-txt p{margin:0;color:var(--car)}.ck-txt a{text-decoration:underline}
+.ck-prefs{display:grid;gap:8px;margin-top:12px}.ck-prefs label{display:flex;gap:10px;align-items:flex-start;color:var(--car)}.ck-prefs input{margin-top:3px;accent-color:var(--ink)}
+.ck-bts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ck-bts .btn{padding:12px 20px;font-size:11px}
+.ck-lk{background:none;border:0;padding:8px 4px;font:inherit;font-size:12px;text-decoration:underline;color:var(--car);cursor:pointer}
+@media(max-width:600px){.ck-ban{left:8px;right:8px;bottom:8px;padding:16px}.ck-bts{width:100%}.ck-bts .btn{flex:1}}
+.ft-ck{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}

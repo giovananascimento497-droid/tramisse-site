@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CFG } from "@/lib/config";
+import { CookiePrefsLink } from "./CookiePrefsLink";
 
 export function Footer() {
   const L = (t: string, h: string) => <Link key={t} href={h}>{t}</Link>;
@@ -39,6 +40,8 @@ export function Footer() {
         <p style={{ color: "var(--mut)", fontSize: 13, marginTop: 24 }}>© 2026 Tramisse. Todos os direitos reservados.
           <br />
           {CFG.empresa.razaoSocial} · CNPJ {CFG.empresa.cnpj} · {CFG.empresa.cidade}
+          <br />
+          <CookiePrefsLink />
         </p>
       </div>
     </footer>

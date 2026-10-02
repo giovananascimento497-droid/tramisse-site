@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { HashRedirect } from "@/components/HashRedirect";
 import { BagDrawer } from "@/components/shell/BagDrawer";
 import { Chrome } from "@/components/shell/Chrome";
+import { CookieBanner } from "@/components/shell/CookieBanner";
 import { Footer } from "@/components/shell/Footer";
 import { Header } from "@/components/shell/Header";
 import { MenuDrawer } from "@/components/shell/MenuDrawer";
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Overlays />
           <Chrome />
           <HashRedirect />
+          <CookieBanner />
         </StoreProvider>
       </body>
     </html>
