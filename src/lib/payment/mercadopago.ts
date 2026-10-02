@@ -9,7 +9,7 @@ const token = () => (process.env.MERCADOPAGO_ACCESS_TOKEN || "").trim();
 export const mercadoPagoAtivo = () => Boolean(token());
 
 // A forma de pagamento é escolhida no site, então o Mercado Pago só oferece a escolhida
-// (crédito em até 2x sem juros ou débito). Pix é pago direto na chave da loja.
+// (crédito em até maxParcelas sem juros ou débito). Pix é pago direto na chave da loja.
 // "account_money" (saldo na conta Mercado Pago) não pode ser excluído: o Mercado Pago recusa a preferência.
 const TIPOS = ["credit_card", "debit_card", "bank_transfer", "ticket", "atm", "prepaid_card"];
 const PERMITIDOS: Record<FormaPagamento, string[]> = {

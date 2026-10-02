@@ -10,7 +10,7 @@ import { useLoja } from "@/store/Store";
 
 const PIX = CFG.pagamento.pix;
 
-// Tela do Pix: QR Code + "copia e cola" com o valor do pedido (já com 5% de desconto),
+// Tela do Pix: QR Code + "copia e cola" com o valor do pedido (já com o desconto do Pix),
 // e o envio do pedido/comprovante para a atendente pelo WhatsApp.
 export function PixView({ codigo, total, at, wa, pedidoId }: { codigo: string; total: number; at: string; wa: string; pedidoId: string }) {
   const { toast } = useLoja();
@@ -25,7 +25,7 @@ export function PixView({ codigo, total, at, wa, pedidoId }: { codigo: string; t
     <div className="pg">
       <h1>Pague com Pix</h1>
       <p>
-        Pedido nº {pedidoId} · <b style={{ fontWeight: 500 }}>{brl(total)}</b> (já com 5% de desconto nas peças). Abra o app do seu banco,
+        Pedido nº {pedidoId} · <b style={{ fontWeight: 500 }}>{brl(total)}</b> (já com {Math.round(CFG.pagamento.descontoPix * 100)}% de desconto nas peças). Abra o app do seu banco,
         escolha Pix e leia o QR Code ou use o código copia e cola.
       </p>
       {/* eslint-disable-next-line @next/next/no-img-element */}

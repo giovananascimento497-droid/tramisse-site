@@ -355,7 +355,7 @@ function Editor(props: {
           Preço base (R$)
           <input type="number" inputMode="decimal" min="0" step="0.01" value={p.preco || ""} onChange={(e) => set({ preco: Number(e.target.value) })} />
           <small style={{ color: "var(--mut)" }}>
-            {vitrine ? <>Na loja: <b>{brl(vitrine)}</b> (com os 5% do cartão) · Pix: {brl(precoPix(CFG, vitrine))}</> : "O site soma 5% e arredonda para ,90."}
+            {vitrine ? <>Na loja: <b>{brl(vitrine)}</b> (já cobre a taxa do cartão) · Pix: {brl(precoPix(CFG, vitrine))}</> : "O site soma a taxa do cartão e arredonda para ,90."}
           </small>
         </label>
         <label>

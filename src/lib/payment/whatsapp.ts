@@ -1,10 +1,11 @@
 import type { Atendente, Pedido } from "../types";
-import { brl } from "./pricing";
+import { CFG } from "../config";
+import { brl, nomesPagamento, pctPix } from "./pricing";
 import type { ProvedorPagamento } from "./provider";
 
 import { textoPrazo } from "../frete/regras";
 
-const NOMES_PAGAMENTO = { pix: "Pix (5% de desconto)", debito: "Cartão de débito", credito: "Cartão de crédito (até 2x sem juros)" } as const;
+const NOMES_PAGAMENTO = nomesPagamento(CFG);
 
 // Forma de entrega com o endereço (usada no WhatsApp e no e-mail do pedido).
 export function textoEntrega(p: Pedido): string {
@@ -24,7 +25,7 @@ export function resumoPedido(p: Pedido): string {
     p.itens.map((i) => `• ${i.nome} — ${i.cor}, tam. ${i.tam}, ${i.q}x — ${brl(i.precoUnitario * i.q)}`).join("\n") +
     `\n\nSubtotal: ${brl(p.subtotal)}` +
     (p.desconto ? `\nDesconto (${p.cupom}): -${brl(p.desconto)}` : "") +
-    (p.descontoPix ? `\nDesconto Pix (5%): -${brl(p.descontoPix)}` : "") +
+    (p.descontoPix ? `\nDesconto Pix (${pctPix(CFG)}): -${brl(p.descontoPix)}` : "") +
     (p.frete ? `\nFrete Correios ${p.frete.nome}: ${p.frete.gratis ? "grátis" : brl(p.frete.valor)}` : "") +
     `\n${p.entrega === "aplicativo" ? "Total (sem entrega)" : "Total"}: ${brl(p.total)}\nPagamento: ${NOMES_PAGAMENTO[p.pagamento]}` +
     (p.pagamentoOnline && p.pagamentoOnline.provedor !== "Pix"

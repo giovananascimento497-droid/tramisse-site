@@ -1,8 +1,9 @@
-import { brl } from "./payment/pricing";
+import { CFG } from "./config";
+import { brl, nomesPagamento } from "./payment/pricing";
 import { resumoPedido, textoEntrega } from "./payment/whatsapp";
 import type { Pedido } from "./types";
 
-const PAGAMENTO = { pix: "Pix (5% de desconto)", debito: "Cartão de débito", credito: "Cartão de crédito (até 2x sem juros)" } as const;
+const PAGAMENTO = nomesPagamento(CFG);
 
 // Registra o pedido no Netlify Forms (formulário "pedidos", definido em public/__forms.html).
 // A Netlify guarda o pedido no painel (Forms) e manda e-mail para o endereço configurado lá.

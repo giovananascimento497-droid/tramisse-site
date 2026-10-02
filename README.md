@@ -43,7 +43,7 @@ Variante = cor + tamanho + **estoque real** (quantas peças existem; o site não
 Links antigos com `#/...` (ex.: `/#/p/vestido-poa`) são redirecionados para a rota nova.
 
 ## Preços e pagamento
-- **Vitrine:** `preco` em `data/products.json` é o valor base (preço sugerido da planilha); o site mostra base + 5% (taxa do Mercado Pago embutida), **arredondado para cima até terminar em ,90**. Ex.: R$ 149,90 → 157,40 → **R$ 157,90** (2x de R$ 78,95 sem juros). Ajustes em `pagamento` no `data/config.json` (`taxaCartao`, `centavosVitrine`, `descontoPix`, `maxParcelas`).
+- **Vitrine:** `preco` em `data/products.json` é o valor base (o que a loja quer receber); o site mostra base ÷ (1 − 14,59%) (taxa do Mercado Pago: receber na hora 4,99% + 3x sem juros 9,60%), **arredondado para cima até terminar em ,90**. Ex.: R$ 149,90 → 175,51 → **R$ 175,90** (3x de R$ 58,63 sem juros; Pix com 10%: R$ 158,31). Ajustes em `pagamento` no `data/config.json` (`taxaCartao`, `centavosVitrine`, `descontoPix`, `maxParcelas`).
 - **Cartão (crédito até 2x sem juros ou débito):** pago no **Mercado Pago** (Checkout Pro). Cada peça vai com o seu valor exato (com cupom, se houver); a soma é o total do site. Só a forma escolhida é liberada no Mercado Pago.
 - **Pix: 5% de desconto** sobre a vitrine (R$ 157,90 → R$ 150,01), pago direto na **chave CNPJ da loja**. O site gera o QR Code e o Pix copia e cola com o valor e o nº do pedido; a cliente envia o comprovante pelo WhatsApp.
 - **Frete:** pelos Correios (PAC/SEDEX), calculado pelo CEP e pago junto (veja "Frete" abaixo). A entrega por aplicativo (Belém) não entra no valor pago online: é combinada no atendimento.

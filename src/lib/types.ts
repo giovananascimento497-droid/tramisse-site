@@ -45,7 +45,7 @@ export type Config = {
   aparencia: "editorial" | "loja"; // visual do site (src/styles/loja.css vale só com "loja")
   barraSuperior: string[];
   pagamento: {
-    taxaCartao: number; // embutida no preço de vitrine (taxa do Mercado Pago)
+    taxaCartao: number; // taxa do Mercado Pago coberta pela vitrine (vitrine = base ÷ (1 − taxa))
     centavosVitrine: number | null; // vitrine arredondada para cima até terminar nesses centavos (ex.: 0.9 -> ,90)
     descontoPix: number; // desconto sobre a vitrine no Pix
     maxParcelas: number; // crédito sem juros

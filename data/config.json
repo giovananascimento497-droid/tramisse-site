@@ -12,16 +12,16 @@
   "barraSuperior": [
     "FRETE GRÁTIS ACIMA DE R$ 799",
     "ENVIO PARA TODO O BRASIL",
-    "ATÉ 2X SEM JUROS",
-    "5% DE DESCONTO NO PIX",
+    "ATÉ 3X SEM JUROS",
+    "10% DE DESCONTO NO PIX",
     "TROCAS EM ATÉ 7 DIAS"
   ],
   "pagamento": {
-    "_comentario": "precos em data/products.json são o valor base (preço sugerido). Vitrine = base + taxaCartao, arredondada PARA CIMA até terminar em centavosVitrine (null = sem arredondar). Pix: descontoPix sobre a vitrine.",
-    "taxaCartao": 0.05,
+    "_comentario": "precos em data/products.json são o valor base (o que a loja quer receber). Vitrine = base ÷ (1 − taxaCartao), arredondada PARA CIMA até terminar em centavosVitrine (null = sem arredondar). taxaCartao cobre a pior taxa do Mercado Pago (receber na hora 4,99% + parcelamento em 3x sem juros 9,60% = 14,59%). Pix: descontoPix sobre a vitrine.",
+    "taxaCartao": 0.1459,
     "centavosVitrine": 0.9,
-    "descontoPix": 0.05,
-    "maxParcelas": 2,
+    "descontoPix": 0.1,
+    "maxParcelas": 3,
     "pix": {
       "_comentario": "chave: chave Pix (CNPJ só números, CPF, e-mail, telefone ou aleatória). nome/cidade: até 25/15 letras, sem acento (vão dentro do código Pix). titular/banco: só para mostrar à cliente.",
       "chave": "bb12fb9d-5940-4048-8a8f-08b394a1d156",

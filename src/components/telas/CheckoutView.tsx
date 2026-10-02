@@ -20,8 +20,8 @@ const ETAPAS = ["SACOLA", "IDENTIFICAÇÃO", "ENTREGA", "PAGAMENTO"];
 const OBRIG_ID = ["e", "n", "sn", "tel"];
 const OBRIG_END = ["cep", "end", "num", "bai", "cid", "uf", "dest"];
 const PAGAMENTOS: [FormaPagamento, string, string][] = [
-  ["pix", "Pix", "5% de desconto."],
-  ["credito", "Cartão de crédito", "Em até 2x sem juros."],
+  ["pix", "Pix", `${Math.round(CFG.pagamento.descontoPix * 100)}% de desconto nas peças.`],
+  ["credito", "Cartão de crédito", `Em até ${CFG.pagamento.maxParcelas}x sem juros.`],
   ["debito", "Cartão de débito", "À vista."],
 ];
 const PIX_ATIVO = Boolean(CFG.pagamento.pix.chave);
@@ -200,7 +200,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
       })}
       <div className="tt"><span>Subtotal</span><span>{brl(t.subtotal)}</span></div>
       {t.desconto ? <div className="tt"><span>Desconto ({t.cupom?.codigo})</span><span>-{brl(t.desconto)}</span></div> : null}
-      {t.descontoPix ? <div className="tt"><span>Desconto Pix (5%)</span><span>-{brl(t.descontoPix)}</span></div> : null}
+      {t.descontoPix ? <div className="tt"><span>Desconto Pix ({Math.round(CFG.pagamento.descontoPix * 100)}%)</span><span>-{brl(t.descontoPix)}</span></div> : null}
       <div className="tt">
         <span>{ship === "correios" ? `Frete${frete ? ` Correios ${frete.nome}` : ""}` : "Entrega"}</span>
         <span>{ship === "retirada" ? "Retirada" : ship === "aplicativo" ? "Por aplicativo" : frete ? (frete.gratis ? "Grátis" : brl(frete.valor)) : "Calcule pelo CEP"}</span>
