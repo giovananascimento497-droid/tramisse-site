@@ -40,8 +40,8 @@
       "diasPreparo": 1,
       "embalagem": {
         "nome": "Envelope de segurança",
-        "largura": 32,
-        "comprimento": 40,
+        "largura": 20,
+        "comprimento": 30,
         "alturaPorPeca": 3,
         "alturaMinima": 2,
         "peso": 0.05
@@ -49,16 +49,16 @@
       "pesoPorPeca": {
         "Blusas": 0.3,
         "Camisas": 0.3,
-        "T-shirts": 0.25,
-        "Regatas": 0.2,
-        "Coletes": 0.35,
-        "Calças": 0.6,
+        "T-shirts": 0.3,
+        "Regatas": 0.3,
+        "Coletes": 0.3,
+        "Calças": 0.3,
         "Shorts": 0.3,
-        "Saias": 0.35,
-        "Vestidos": 0.45,
-        "Macacões": 0.6,
-        "Conjuntos": 0.7,
-        "padrao": 0.4
+        "Saias": 0.3,
+        "Vestidos": 0.3,
+        "Macacões": 0.4,
+        "Conjuntos": 0.6,
+        "padrao": 0.3
       }
     }
   },
