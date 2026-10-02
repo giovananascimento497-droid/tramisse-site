@@ -31,7 +31,9 @@ async function mp(caminho: string, init?: RequestInit) {
   return corpo;
 }
 
-export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: string; origem: string; maxParcelas: number }) {
+// opcoes.estoque: peças compradas no formato "id:cor:tamanho:qtd|..." (volta no aviso de pagamento
+// para o site baixar o estoque sozinho quando o pagamento for aprovado).
+export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: string; origem: string; maxParcelas: number; estoque?: string }) {
   const c = pedido.cliente;
   const https = opcoes.origem.startsWith("https://");
   const retorno = `${opcoes.origem}/checkout/retorno`;
@@ -54,12 +56,12 @@ export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: str
     statement_descriptor: "TRAMISSE",
     back_urls: { success: retorno, pending: retorno, failure: retorno },
     // O Mercado Pago só volta sozinho para o site quando o endereço é https (em produção).
-    ...(https ? { auto_return: "approved" } : {}),
+    ...(https ? { auto_return: "approved", notification_url: `${opcoes.origem}/api/pagamento/mercadopago/webhook?source_news=webhooks` } : {}),
     payment_methods: {
       excluded_payment_types: TIPOS.filter((t) => !PERMITIDOS[pedido.pagamento].includes(t)).map((id) => ({ id })),
       installments: pedido.pagamento === "credito" ? opcoes.maxParcelas : 1,
     },
-    metadata: { pagamento: pedido.pagamento, entrega: pedido.entrega, cupom: pedido.cupom ?? null, frete: pedido.frete?.valor ?? null, total: pedido.total },
+    metadata: { estoque: opcoes.estoque ?? "", pagamento: pedido.pagamento, entrega: pedido.entrega, cupom: pedido.cupom ?? null, frete: pedido.frete?.valor ?? null, total: pedido.total },
   };
   const r = await mp("/checkout/preferences", { method: "POST", body: JSON.stringify(corpo) });
   // Token de teste (TEST-...) usa o ambiente de testes do Mercado Pago.
@@ -75,6 +77,7 @@ export async function consultarPagamento(id: string) {
     status: r.status as string, // approved | pending | in_process | rejected | cancelled ...
     referencia: (r.external_reference as string) || "",
     valor: Number(r.transaction_amount) || 0,
+    estoque: String(r.metadata?.estoque || ""),
   };
 }
 

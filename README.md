@@ -62,6 +62,13 @@ No painel do Mercado Pago, deixe o parcelamento em 2x **sem juros para a comprad
 - **Para ativar:** criar conta em melhorenvio.com.br → **Integrações → Permissões de acesso → Gerar novo token** (marcar ao menos "shipping-calculate") → cadastrar em `MELHORENVIO_TOKEN` na Netlify → novo deploy. Para testar antes, usar um token do sandbox (sandbox.melhorenvio.com.br) com `MELHORENVIO_AMBIENTE=sandbox`. **Nunca** colocar o token no código. Sem token, a opção Correios não aparece.
 - Etiquetas: compradas no painel do Melhor Envio para cada pedido pago (o site ainda não gera a etiqueta sozinho).
 
+## Painel /admin
+Em **tramisse.com.br/admin** (login com senha): editar nome, preço base, descrição, tecido, categoria, New In/Curadoria/Coming soon, estoque por cor e tamanho e fotos (envio, ordem, remoção), e cadastrar peças novas. As mudanças ficam pendentes até **PUBLICAR ALTERAÇÕES**; aí viram um commit em `data/products.json` (e fotos em `public/assets/products/`) e a Netlify publica o site em ~3 minutos. Cada publicação gasta minutos de build da Netlify: junte várias alterações antes de publicar.
+- **Estoque automático:** pagamento aprovado no Mercado Pago baixa o estoque sozinho (webhook `/api/pagamento/mercadopago/webhook`, uma vez por pagamento, registrado em `data/vendas-processadas.json`). Pix e vendas fora do site: diminuir no painel.
+- Estoque é salvo como diferença: se uma venda acontecer com o painel aberto, ela não é desfeita.
+- **Configurar (Netlify → Environment variables):** `ADMIN_SENHA` e `GITHUB_TOKEN` (GitHub → Settings → Developer settings → Fine-grained tokens → só o repositório `tramisse-site`, permissão **Contents: Read and write**). Depois, Trigger deploy.
+- Código: `src/components/admin/AdminView.tsx`, `src/lib/admin/` (login, GitHub, regras do catálogo) e `src/app/api/admin/`.
+
 ## Pedidos por e-mail (Netlify Forms)
 Cada pedido finalizado no site (WhatsApp, Pix ou Mercado Pago aprovado/em processamento) é registrado no formulário **"pedidos"** da Netlify (`public/__forms.html`, enviado por `src/lib/avisoPedido.ts`). A Netlify guarda a lista em **Forms** e manda um e-mail por pedido.
 - Ativar (uma vez): Netlify → projeto → **Forms** → **Enable form detection** → novo deploy.

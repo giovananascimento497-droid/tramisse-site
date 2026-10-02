@@ -37,7 +37,10 @@ export async function POST(req: Request) {
   const referencia = `T${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
   const origem = process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin;
   try {
-    const { url } = await criarPreferencia(pedido, { referencia, origem, maxParcelas: CFG.pagamento.maxParcelas });
+    const estoque = (dados.bag as { id: number; cor: string; tam: string; q: number }[])
+      .map((l) => [Number(l.id), String(l.cor), String(l.tam), Number(l.q)].join(":"))
+      .join("|");
+    const { url } = await criarPreferencia(pedido, { referencia, origem, maxParcelas: CFG.pagamento.maxParcelas, estoque });
     return NextResponse.json({ url, referencia, pedido });
   } catch (e) {
     console.error(e);
