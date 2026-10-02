@@ -59,5 +59,5 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - Vídeos: preencher `src` em `CFG.videos` (ainda não há vídeos reais).
 - Acessórios e Sale estão vazios (catálogo só tem roupas, sem preço promocional).
 - 42 das 55 peças sem foto e sem descrição (as novas da planilha). Cor "Cor única" (`un`) onde a planilha não informa a cor.
-- Fotos individuais por peça, TikTok/Pinterest pendentes. Frete: envelope 30 × 20 cm, ~300 g por peça (conjunto 600 g).
+- Fotos individuais por peça, TikTok/Pinterest pendentes. Frete: envelope 30 × 20 cm, ~400 g por peça (conjunto 800 g).
 - Migração para Next.js feita (rotas reais). Painel `/admin` feito (peças, estoque, fotos). Próximos passos possíveis: pedidos e cupons no painel.
