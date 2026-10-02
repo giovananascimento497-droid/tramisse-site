@@ -25,7 +25,7 @@ npm run typecheck
 | Regras de preço e finalização do pedido | `src/lib/payment/` |
 
 **Produto novo:** adicione um item em `produtos` no `data/products.json` (copie um existente e troque `id`, `slug`, nome, preço, variantes…) e coloque as fotos com o nome do slug.
-Variante = cor + tamanho + **estoque real** (quantas peças existem; o site não vende acima disso). `preco` = preço sugerido da planilha (a vitrine soma 5% e arredonda para ,90). Flags: `novo` (New In), `curadoria`, `maisVendida`.
+Variante = cor + tamanho + **estoque real** (quantas peças existem; o site não vende acima disso). `preco` = preço sugerido da planilha (a vitrine cobre a taxa do cartão, 14,59%, e arredonda para ,90). Flags: `novo` (New In), `curadoria`, `maisVendida`.
 **Coming soon:** `"emBreve": true` (fica só na vitrine Coming Soon, com "Avise-me"). Quando a peça chegar: `"emBreve": false`, `flags.novo: true` e o estoque de cada variante.
 
 **Vídeos:** coloque os arquivos em `public/assets/videos/` e preencha `src` em `videos` no `data/config.json` (ex.: `"src": "/assets/videos/look-01.mp4"`). Use MP4 (H.264) vertical, curto e leve.
@@ -44,15 +44,15 @@ Links antigos com `#/...` (ex.: `/#/p/vestido-poa`) são redirecionados para a r
 
 ## Preços e pagamento
 - **Vitrine:** `preco` em `data/products.json` é o valor base (o que a loja quer receber); o site mostra base ÷ (1 − 14,59%) (taxa do Mercado Pago: receber na hora 4,99% + 3x sem juros 9,60%), **arredondado para cima até terminar em ,90**. Ex.: R$ 149,90 → 175,51 → **R$ 175,90** (3x de R$ 58,63 sem juros; Pix com 10%: R$ 158,31). Ajustes em `pagamento` no `data/config.json` (`taxaCartao`, `centavosVitrine`, `descontoPix`, `maxParcelas`).
-- **Cartão (crédito até 2x sem juros ou débito):** pago no **Mercado Pago** (Checkout Pro). Cada peça vai com o seu valor exato (com cupom, se houver); a soma é o total do site. Só a forma escolhida é liberada no Mercado Pago.
-- **Pix: 5% de desconto** sobre a vitrine (R$ 157,90 → R$ 150,01), pago direto na **chave CNPJ da loja**. O site gera o QR Code e o Pix copia e cola com o valor e o nº do pedido; a cliente envia o comprovante pelo WhatsApp.
+- **Cartão (crédito até 3x sem juros ou débito):** pago no **Mercado Pago** (Checkout Pro). Cada peça vai com o seu valor exato (com cupom, se houver); a soma é o total do site. Só a forma escolhida é liberada no Mercado Pago.
+- **Pix: 10% de desconto** sobre a vitrine (R$ 175,90 → R$ 158,31), pago direto na **chave Pix da loja**. O site gera o QR Code e o Pix copia e cola com o valor e o nº do pedido; a cliente envia o comprovante pelo WhatsApp.
 - **Frete:** pelos Correios (PAC/SEDEX), calculado pelo CEP e pago junto (veja "Frete" abaixo). A entrega por aplicativo (Belém) não entra no valor pago online: é combinada no atendimento.
 - Sem token do Mercado Pago ou sem chave Pix, a opção correspondente vira "enviar pelo WhatsApp".
 
 **Pix:** chave em `pagamento.pix` no `data/config.json` (hoje a chave aleatória da Victoria no Mercado Pago, provisória). Para trocar pelo CNPJ: `chave` (só números), `nome` (até 25 letras, sem acento), `cidade`, e `titular`/`banco` (só exibição).
 
 **Para ativar o Mercado Pago:** crie uma aplicação em mercadopago.com.br/developers (Suas integrações → Credenciais) e cadastre o *Access Token* na variável `MERCADOPAGO_ACCESS_TOKEN` (Netlify → Project configuration → Environment variables; localmente, em `.env.local`, veja `.env.example`). Comece pelo token de teste (`TEST-...`) e depois troque pelo de produção (`APP_USR-...`). **Nunca** coloque o token no código.
-No painel do Mercado Pago, deixe o parcelamento em 2x **sem juros para a compradora** (a taxa já está embutida na vitrine).
+No painel do Mercado Pago, deixe o parcelamento em até 3x **sem juros para a compradora** (a taxa já está embutida na vitrine).
 
 ## Frete (Correios pelo Melhor Envio)
 - No checkout, a opção **Correios (PAC ou SEDEX)** calcula o frete pelo CEP da cliente (`src/app/api/frete/`, `src/lib/frete/`). Também há "Calcular frete" na página do produto.
@@ -86,7 +86,7 @@ O projeto já tem o `netlify.toml`. A Netlify detecta o Next.js e instala o adap
 - [x] Etapa 1: base Next.js, rotas reais, dados em `data/`, camada de pagamento e área `/admin`.
 - [x] Etapa 2: CSS original, produtos/config convertidos para `data/`, fotos organizadas, logo provisório.
 - [x] Etapa 3: telas migradas (home, categoria com filtros, produto, sacola, checkout, conta, favoritos, busca, páginas).
-- [x] Pagamento online: cartão pelo Mercado Pago (itens com valor exato) e Pix com 5% de desconto na chave da loja.
+- [x] Pagamento online: cartão pelo Mercado Pago (itens com valor exato) e Pix com 10% de desconto na chave da loja.
 - [ ] Etapa 4: backend (banco, pedidos, estoque, confirmação automática de pagamento por webhook) e painel com login.
 
 ## Pendências de conteúdo
