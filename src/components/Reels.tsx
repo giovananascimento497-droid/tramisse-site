@@ -34,20 +34,26 @@ export function Reels({ id }: { id: string }) {
 
   return (
     <div className="car reels" id={id} ref={ref}>
-      {CFG.videos.map((v) => {
-        const p = porId(v.produtoId);
-        if (!p) return null;
-        return (
-          <Link key={v.produtoId} className="reel" href={`/produto/${p.slug}`}>
+      {CFG.videos.map((v, i) => {
+        const p = v.produtoId ? porId(v.produtoId) : undefined;
+        if (v.produtoId && !p) return null;
+        const poster = v.poster || p?.imagens[0];
+        const conteudo = (
+          <>
             {v.src ? (
-              <video src={v.src} poster={p.imagens[0]} muted loop playsInline preload="none"></video>
-            ) : p.imagens[0] ? (
+              <video src={v.src} poster={poster} muted loop playsInline preload="none"></video>
+            ) : p?.imagens[0] ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img className="kb" loading="lazy" src={p.imagens[0]} alt={p.nome} />
             ) : null}
-            <span>{p.nome.toUpperCase()}</span>
-          </Link>
+            {v.titulo || p ? <span>{(v.titulo || p!.nome).toUpperCase()}</span> : null}
+          </>
         );
+        return p ? (
+          <Link key={i} className="reel" href={`/produto/${p.slug}`}>{conteudo}</Link>
+        ) : v.src ? (
+          <div key={i} className="reel">{conteudo}</div>
+        ) : null;
       })}
     </div>
   );

@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { baixarEstoque } from "@/lib/admin/catalogo";
 import { githubAtivo } from "@/lib/admin/github";
 import { consultarPagamento, mercadoPagoAtivo } from "@/lib/payment/mercadopago";
+import { atualizarPorMercadoPago } from "@/lib/pedidos/store";
 
 export const dynamic = "force-dynamic";
 
 // Aviso do Mercado Pago (webhook). O conteúdo do aviso não é confiado: o pagamento é
 // consultado de novo no Mercado Pago e, se estiver aprovado, o estoque baixa sozinho
-// (uma vez só por pagamento) com um commit em data/products.json.
+// (uma vez só por pagamento) com um commit em data/products.json. O pedido no painel
+// também é atualizado.
 export async function POST(req: Request) {
   const url = new URL(req.url);
   const corpo = await req.json().catch(() => ({}));
@@ -16,6 +18,8 @@ export async function POST(req: Request) {
   if (tipo !== "payment" || !/^\d+$/.test(id) || !mercadoPagoAtivo()) return NextResponse.json({ ok: true });
   try {
     const p = await consultarPagamento(id);
+    // Situação do pedido no painel (aprovado → Pago).
+    await atualizarPorMercadoPago(p.referencia, { id: p.id, status: p.status }).catch((e) => console.error(e));
     if (p.status !== "approved" || !p.estoque || !githubAtivo()) return NextResponse.json({ ok: true, status: p.status });
     const itens = p.estoque.split("|").map((s) => {
       const [i, cor, tam, q] = s.split(":");

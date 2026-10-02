@@ -1,7 +1,7 @@
 import { CFG } from "./config";
 import { brl, nomesPagamento } from "./payment/pricing";
 import { resumoPedido, textoEntrega } from "./payment/whatsapp";
-import type { Pedido } from "./types";
+import type { DadosCliente, FormaEntrega, FormaPagamento, ItemSacola, OpcaoFrete, Pedido } from "./types";
 
 const PAGAMENTO = nomesPagamento(CFG);
 
@@ -32,6 +32,29 @@ export function avisarPedido(p: Pedido, info: { id: string; canal: string; situa
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams(dados).toString(),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {}
+}
+
+// Registra o pedido no painel /admin (aba Pedidos). O servidor remonta o pedido pelo catálogo.
+// Também nunca atrapalha a compra.
+export function registrarPedido(dados: {
+  id: string;
+  canal: "whatsapp" | "pix";
+  atendente: string;
+  bag: ItemSacola[];
+  cupom?: string | null;
+  pagamento: FormaPagamento;
+  entrega: FormaEntrega;
+  cliente: DadosCliente;
+  frete?: OpcaoFrete | null;
+}) {
+  try {
+    fetch("/api/pedidos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados),
       keepalive: true,
     }).catch(() => {});
   } catch {}

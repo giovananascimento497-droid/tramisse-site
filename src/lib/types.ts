@@ -73,7 +73,8 @@ export type Config = {
   redes: { nome: string; url: string }[];
   // Primeira tela da home (imagem de início). imagem vazia = só as fotos das peças.
   hero: { imagem: string; frase: string; textoFrase: string };
-  videos: { produtoId: number; src: string }[];
+  // Vídeos da seção "Em movimento". Sem produtoId = vídeo da marca, sem link para peça.
+  videos: { produtoId?: number; src: string; poster?: string; titulo?: string }[];
   imagensMarca: { brand: string; cover: string };
   fotosHome: Record<string, number | "brand" | "cover">;
 };

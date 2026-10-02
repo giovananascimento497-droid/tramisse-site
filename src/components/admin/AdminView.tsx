@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CFG } from "@/lib/config";
 import { brl, precoPix, precoVitrine } from "@/lib/payment/pricing";
 import type { Catalogo, Produto, Variante } from "@/lib/types";
+import { PedidosView } from "./PedidosView";
 
 type Sessao = { configurado: boolean; github: boolean; logado: boolean };
 type FotoNova = { caminho: string; blob: string; preview: string };
@@ -50,6 +51,7 @@ export function AdminView() {
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todas");
   const [ocupado, setOcupado] = useState("");
+  const [aba, setAba] = useState<"pecas" | "pedidos">("pecas");
 
   const carregarSessao = () => api("/api/admin/sessao").then(setSessao).catch(() => setSessao({ configurado: false, github: false, logado: false }));
   useEffect(() => { carregarSessao(); }, []);
@@ -221,14 +223,19 @@ export function AdminView() {
       <div className="adm-top">
         <h1>Painel Tramisse</h1>
         <div className="adm-acoes">
-          <button className="btn o" onClick={novaPeca}>+ NOVA PEÇA</button>
+          {aba === "pecas" ? <button className="btn o" onClick={novaPeca}>+ NOVA PEÇA</button> : null}
           <button className="btn o" onClick={sair}>SAIR</button>
         </div>
       </div>
-      {aviso ? <p className="adm-ok">{aviso}</p> : null}
-      {erro ? <p className="er" style={{ margin: "8px 0" }}>{erro}</p> : null}
+      <nav className="adm-abas">
+        <button className={aba === "pecas" ? "on" : ""} onClick={() => setAba("pecas")}>PEÇAS</button>
+        <button className={aba === "pedidos" ? "on" : ""} onClick={() => { setAba("pedidos"); setSel(null); }}>PEDIDOS</button>
+      </nav>
+      {aba === "pedidos" ? <PedidosView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
+      {aba === "pecas" && aviso ? <p className="adm-ok">{aviso}</p> : null}
+      {aba === "pecas" && erro ? <p className="er" style={{ margin: "8px 0" }}>{erro}</p> : null}
 
-      {atual ? (
+      {aba !== "pecas" ? null : atual ? (
         <Editor
           p={atual}
           cat={cat!}

@@ -5,6 +5,7 @@ import { cotarFrete, melhorEnvioAtivo } from "@/lib/frete/melhorenvio";
 import { calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
 import { criarPreferencia, mercadoPagoAtivo } from "@/lib/payment/mercadopago";
 import { montarPedido } from "@/lib/payment/pedido";
+import { salvarPedido } from "@/lib/pedidos/store";
 
 // Cria o link de pagamento do Mercado Pago para o pedido da sacola.
 // O valor é recalculado aqui a partir do catálogo; o navegador só manda o que foi escolhido.
@@ -44,6 +45,9 @@ export async function POST(req: Request) {
     const minimo = pedido.itens.reduce((s, i) => s + (porId(i.id)?.precoBase ?? 0) * i.q, 0) + (pedido.frete?.valor ?? 0);
     const maxParcelas = parcelasPedido(CFG, pedido.total, minimo);
     const { url } = await criarPreferencia(pedido, { referencia, origem, maxParcelas, estoque });
+    // Registra no painel (aguardando pagamento). Se falhar, a compra segue normalmente.
+    const atendente = CFG.atendentes.find((a) => a.nome === dados.atendente)?.nome ?? CFG.atendentes[0].nome;
+    await salvarPedido({ id: referencia, canal: "mercadopago", atendente, situacao: "aguardando", pedido }).catch((e) => console.error(e));
     return NextResponse.json({ url, referencia, pedido });
   } catch (e) {
     console.error(e);

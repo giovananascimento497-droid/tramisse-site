@@ -110,6 +110,18 @@
   ],
   "videos": [
     {
+      "src": "/assets/videos/video-1.mp4",
+      "poster": "/assets/videos/video-1.jpg"
+    },
+    {
+      "src": "/assets/videos/video-2.mp4",
+      "poster": "/assets/videos/video-2.jpg"
+    },
+    {
+      "src": "/assets/videos/video-3.mp4",
+      "poster": "/assets/videos/video-3.jpg"
+    },
+    {
       "produtoId": 29,
       "src": ""
     },

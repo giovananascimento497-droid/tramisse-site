@@ -24,3 +24,22 @@
 .adm-foto div{display:flex;justify-content:space-between}.adm-foto button{flex:1;border:1px solid var(--ln);background:var(--bg);padding:6px 0;cursor:pointer}
 .adm-add{display:grid;place-items:center;aspect-ratio:4/5;border:1px dashed var(--car);color:var(--car);font-size:13px;cursor:pointer;text-align:center;padding:8px}
 @media(max-width:700px){.adm .fg{grid-template-columns:1fr}.adm .fg .s{grid-column:auto}}
+/* Abas e pedidos */
+.adm-abas{display:flex;gap:24px;border-bottom:1px solid var(--ln);margin:0 0 20px}
+.adm-abas button{border:0;background:none;padding:10px 0;font:500 12px var(--sans);letter-spacing:.16em;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.adm-abas button.on{color:var(--ink);border-bottom-color:var(--ink)}
+.adm-resumo{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 4px}
+.adm-resumo button{border:1px solid var(--ln);background:var(--bg);padding:8px 12px;font:inherit;font-size:13px;color:var(--car);cursor:pointer}
+.adm-resumo button.on{border-color:var(--ink);color:var(--ink)}.adm-resumo b{color:var(--ink);font-weight:600}
+.adm-filtros .btn{padding:0 14px}
+.adm-lista .adm-nm small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-tag.adm-s-aguardando{background:var(--mar);color:var(--ink);border:1px solid var(--ln)}
+.adm-tag.adm-s-pago{background:var(--ink)}
+.adm-tag.adm-s-separacao,.adm-tag.adm-s-enviado{background:var(--car)}
+.adm-tag.adm-s-entregue,.adm-tag.adm-s-cancelado{background:none;color:var(--mut);border:1px solid var(--ln)}
+.adm-ped p{line-height:1.7}
+.adm-itens{list-style:none;padding:0;margin:0;border-top:1px solid var(--ln)}
+.adm-itens li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--ln)}
+.adm-itens li.t{font-weight:500}.adm-itens a{text-decoration:underline}
+.adm-ped textarea{border:1px solid var(--ln);background:var(--bg);padding:10px 12px;font:inherit;resize:vertical}
+.adm-filtros{flex-wrap:wrap}.adm-filtros input{min-width:180px}

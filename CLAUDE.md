@@ -46,6 +46,7 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - **Pedidos por e-mail:** `src/lib/avisoPedido.ts` registra cada pedido finalizado no Netlify Forms (formulário `pedidos` em `public/__forms.html`); a Netlify envia e-mail pelas notificações configuradas no painel. Nunca colocar e-mails de destino no código.
 - `src/app/api/pagamento/mercadopago/`: cria o link (POST, recalcula o preço no servidor), consulta o pagamento (GET `[id]`) e recebe o aviso do Mercado Pago (`webhook`: pagamento aprovado baixa o estoque sozinho, uma vez por pagamento; peças vão em `metadata.estoque` da preferência). Retorno em `/checkout/retorno`.
 - **Painel `/admin`** (`src/components/admin/AdminView.tsx`, `src/lib/admin/`, `src/app/api/admin/`): login com `ADMIN_SENHA` (cookie assinado, 12 h); edita peças/preço base/estoque/fotos e publica com um commit no GitHub (`GITHUB_TOKEN`, Git Data API) em `data/products.json` + `public/assets/products/<slug>-<id>.jpg`; a Netlify republica. Estoque é aplicado como diferença sobre a versão mais nova (não desfaz venda). Campos aceitos são só os do tipo `Produto` (nunca custo/lucro/fornecedora). **O painel e o webhook fazem commits no branch publicado: sempre dar `git pull` antes de mexer no código.**
+- **Pedidos no painel** (aba PEDIDOS, `src/components/admin/PedidosView.tsx`, `src/lib/pedidos/`, `src/app/api/pedidos/` e `src/app/api/admin/pedidos/`): cada pedido (WhatsApp, Pix, Mercado Pago) fica no **Netlify Blobs** (store `pedidos`, privado; nunca no GitHub, pois tem dados pessoais). O servidor remonta o pedido pelo catálogo. Mercado Pago aprovado vira "Pago" sozinho (webhook e página de retorno); o resto a loja muda à mão (situação, rastreio, observações). Testes locais: `PEDIDOS_DIR=<pasta>`.
 - Imagens em `public/assets/` (servidas em `/assets/...`); fotos das peças em `public/assets/products/<slug>-<n>.jpg`. Peça sem foto mostra o degradê na cor da peça.
 - `fotos-nao-identificadas/`: fotos recebidas que não correspondem a peças do catálogo.
 - **Catálogo = estoque real** (planilha de 30/09/2026, importada por `scripts/importar-estoque-2026-09.mjs`, que não roda de novo). Cada variante (cor + tamanho) tem o estoque real; o site não deixa comprar acima dele (página, sacola e servidor). Custo, lucro e fornecedora **nunca** vão para o site (o catálogo é público).
@@ -56,8 +57,8 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 
 ## Estado atual e pendências
 - Feito: home editorial, seção de vídeos em carrossel, categorias com filtros, produto com galeria/zoom, sacola com cupom (`TRAMISSE10`), checkout por etapas, conta/favoritos (localStorage), páginas institucionais.
-- Vídeos: preencher `src` em `CFG.videos` (ainda não há vídeos reais).
+- Vídeos: 3 vídeos reais em `public/assets/videos/` (convertidos para H.264 720 px, sem áudio) no início de `videos` do `config.json`, ainda sem `produtoId` (falta a cliente dizer de quais peças são). Entradas sem `src` mostram a foto da peça.
 - Acessórios e Sale estão vazios (catálogo só tem roupas, sem preço promocional).
 - 42 das 55 peças sem foto e sem descrição (as novas da planilha). Cor "Cor única" (`un`) onde a planilha não informa a cor.
 - Fotos individuais por peça, TikTok/Pinterest pendentes. Frete: envelope 30 × 20 cm, ~400 g por peça (conjunto 800 g).
-- Migração para Next.js feita (rotas reais). Painel `/admin` feito (peças, estoque, fotos). Próximos passos possíveis: pedidos e cupons no painel.
+- Migração para Next.js feita (rotas reais). Painel `/admin` feito (peças, estoque, fotos). Pedidos no painel feitos. Próximo passo possível: cupons no painel.

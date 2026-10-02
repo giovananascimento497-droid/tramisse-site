@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CL, porId } from "@/lib/catalog";
-import { avisarPedido } from "@/lib/avisoPedido";
+import { avisarPedido, registrarPedido } from "@/lib/avisoPedido";
 import { montarPedido } from "@/lib/payment/pedido";
 import { CFG } from "@/lib/config";
 import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
@@ -146,7 +146,9 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     if (!pedido) return setErro("Não foi possível montar o pedido. Confira a sacola.");
     const r = await provedorWhatsApp(atendente).finalizar(pedido);
     if (r.tipo !== "redirecionar") return;
-    avisarPedido(pedido, { id: novoId(), canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: atendente.nome });
+    const id = novoId();
+    avisarPedido(pedido, { id, canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: atendente.nome });
+    registrarPedido({ id, canal: "whatsapp", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete });
     setEnviado({ at: atendente.nome, wa: r.url });
     setBag(() => []);
     setCupom(null);
@@ -162,6 +164,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     const codigo = codigoPix({ ...CFG.pagamento.pix, valor: pedido.total, txid: id });
     const texto = resumoPedido({ ...pedido, pagamentoOnline: { provedor: "Pix", id, status: "aguardando comprovante" } });
     avisarPedido(pedido, { id, canal: "Site (Pix)", situacao: "Aguardando Pix (conferir comprovante)", atendente: atendente.nome });
+    registrarPedido({ id, canal: "pix", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete });
     setPix({ at: atendente.nome, wa: `https://wa.me/${atendente.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, id });
     setBag(() => []);
     setCupom(null);
@@ -177,7 +180,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
       const r = await fetch("/api/pagamento/mercadopago", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: frete && { servico: frete.servico } }),
+        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: frete && { servico: frete.servico }, atendente: at }),
       });
       const d = await r.json();
       if (!r.ok || !d.url) throw new Error(d.erro || "Não foi possível gerar o pagamento.");
