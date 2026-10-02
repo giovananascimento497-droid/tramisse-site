@@ -47,7 +47,10 @@ export async function cotarFrete(cep: string, linhas: { p: Produto; q: number }[
     cache: "no-store",
   });
   const corpo = await r.json().catch(() => null);
-  if (!r.ok || !Array.isArray(corpo)) throw new Error(`Melhor Envio ${r.status}: ${corpo?.message || "erro"}`);
+  if (!r.ok || !Array.isArray(corpo)) {
+    const det = corpo?.errors ? Object.values(corpo.errors as Record<string, string[]>).flat().join("; ") : "";
+    throw new Error(`Melhor Envio ${r.status}: ${corpo?.message || corpo?.error || "erro"}${det ? ` (${det})` : ""}`);
+  }
   const opcoes = (corpo as Resposta[])
     .filter((o) => !o.error && c.servicos.includes(o.id) && Number(o.custom_price ?? o.price) > 0)
     .map((o) => ({

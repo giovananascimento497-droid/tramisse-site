@@ -24,6 +24,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ opcoes, faltaFreteGratis: faltaFreteGratis(CFG, valorPecas) });
   } catch (e) {
     console.error(e);
-    return NextResponse.json({ erro: "Não foi possível calcular o frete agora. Tente de novo." }, { status: 502 });
+    // O motivo dado pelo Melhor Envio vai junto (sem dados secretos) para facilitar o diagnóstico.
+    const motivo = e instanceof Error ? e.message : "";
+    return NextResponse.json({ erro: `Não foi possível calcular o frete agora. Tente de novo.${motivo ? ` [${motivo}]` : ""}` }, { status: 502 });
   }
 }
