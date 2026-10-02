@@ -41,6 +41,7 @@ export type Config = {
   marca: string;
   tagline: string;
   assinatura: string;
+  empresa: { razaoSocial: string; cnpj: string; cidade: string }; // identificação exigida em loja online (Decreto 7.962/2013)
   aparencia: "editorial" | "loja"; // visual do site (src/styles/loja.css vale só com "loja")
   barraSuperior: string[];
   pagamento: {

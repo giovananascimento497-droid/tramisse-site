@@ -36,7 +36,10 @@ export function Footer() {
           <em>Débito</em>
           <em>Mercado Pago</em>
         </div>
-        <p style={{ color: "var(--mut)", fontSize: 13, marginTop: 24 }}>© 2026 Tramisse. Todos os direitos reservados.</p>
+        <p style={{ color: "var(--mut)", fontSize: 13, marginTop: 24 }}>© 2026 Tramisse. Todos os direitos reservados.
+          <br />
+          {CFG.empresa.razaoSocial} · CNPJ {CFG.empresa.cnpj} · {CFG.empresa.cidade}
+        </p>
       </div>
     </footer>
   );
