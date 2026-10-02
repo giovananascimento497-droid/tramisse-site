@@ -746,9 +746,9 @@
       "id": 107,
       "slug": "conjunto-dandara",
       "nome": "Conjunto Dandara",
-      "descricao": "Conjunto de blusa sem mangas com fivela e calça pantalona.",
-      "tecido": "Two Way",
-      "preco": 219.9,
+      "descricao": "",
+      "tecido": "",
+      "preco": 211.06,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Conjuntos",
@@ -762,16 +762,12 @@
       "emBreve": false,
       "variantes": [
         {
-          "cor": "mr",
+          "cor": "az",
           "tamanho": "P",
           "estoque": 1
         }
       ],
-      "imagens": [
-        "/assets/products/conjunto-dandara-1.jpg",
-        "/assets/products/conjunto-dandara-2.jpg",
-        "/assets/products/conjunto-dandara-3.jpg"
-      ]
+      "imagens": []
     },
     {
       "id": 38,
