@@ -17,8 +17,13 @@
     "TROCAS EM ATÉ 7 DIAS"
   ],
   "pagamento": {
-    "_comentario": "precos em data/products.json são o valor base (o que a loja quer receber). Vitrine = base ÷ (1 − taxaCartao), arredondada PARA CIMA até terminar em centavosVitrine (null = sem arredondar). taxaCartao cobre a pior taxa do Mercado Pago (receber na hora 4,99% + parcelamento em 3x sem juros 9,60% = 14,59%). Pix: descontoPix sobre a vitrine.",
-    "taxaCartao": 0.1459,
+    "_comentario": "precos em data/products.json são o valor base (o que a loja quer receber). Taxas do Mercado Pago (totais, recebendo na hora): taxasCartao por nº de parcelas sem juros. Cada peça cobre a taxa das parcelas que o preço dela permite (parcela mínima = parcelaMinima): vitrine = base ÷ (1 − taxa), arredondada PARA CIMA até terminar em centavosVitrine. No checkout, o nº de parcelas liberado é o maior que respeita a parcela mínima e cuja taxa ainda é coberta pelo pedido. Pix: descontoPix sobre a vitrine.",
+    "taxasCartao": {
+      "1": 0.0498,
+      "2": 0.0751,
+      "3": 0.096
+    },
+    "parcelaMinima": 80,
     "centavosVitrine": 0.9,
     "descontoPix": 0.1,
     "maxParcelas": 3,

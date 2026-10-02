@@ -3,14 +3,40 @@ import type { Config, Cupom, FormaPagamento } from "../types";
 export const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 export const r2 = (v: number) => Math.round((v + Number.EPSILON) * 100) / 100;
 
-// Preço mostrado no site: base ÷ (1 − taxa do cartão), para que, descontada a taxa do Mercado Pago
-// (a pior: receber na hora + 3x sem juros), sobre o preço base. Arredondado PARA CIMA até terminar
-// em ,90 (centavosVitrine). Ex.: R$ 149,90 ÷ 0,8541 = 175,51 -> R$ 175,90.
-export const precoVitrine = (cfg: Config, base: number) => {
-  const v = r2(Math.ceil((base / (1 - cfg.pagamento.taxaCartao)) * 100 - 1e-6) / 100);
+// Taxa total do Mercado Pago para n parcelas (1 = à vista).
+export const taxaParcelas = (cfg: Config, n: number) => cfg.pagamento.taxasCartao[String(n)] ?? cfg.pagamento.taxasCartao["1"];
+
+// Quantas parcelas sem juros um valor permite pela parcela mínima (1 a maxParcelas).
+export const parcelasPermitidas = (cfg: Config, valor: number) =>
+  Math.max(1, Math.min(cfg.pagamento.maxParcelas, Math.floor(valor / cfg.pagamento.parcelaMinima + 1e-9)));
+
+const arredonda = (cfg: Config, v: number) => {
   const c = cfg.pagamento.centavosVitrine;
-  return c == null ? v : r2(Math.ceil(r2(v - c) - 1e-9) + c);
+  const x = r2(Math.ceil(v * 100 - 1e-6) / 100);
+  return c == null ? x : r2(Math.ceil(r2(x - c) - 1e-9) + c);
 };
+
+// Preço mostrado no site, proporcional à taxa: cobre a taxa do Mercado Pago das parcelas que o
+// próprio preço permite (parcela mínima). Ex.: base 149,90 -> 157,90 (só à vista, 4,98%);
+// 219,90 -> 237,90 (até 2x, 7,51%); 389,90 -> 431,90 (até 3x, 9,60%). Arredondado para cima até ,90.
+export const precoVitrine = (cfg: Config, base: number) => {
+  let n = 1;
+  let v = arredonda(cfg, base / (1 - taxaParcelas(cfg, n)));
+  for (let i = 0; i < 4; i++) {
+    const m = parcelasPermitidas(cfg, v);
+    if (m <= n) break;
+    n = m;
+    v = arredonda(cfg, base / (1 - taxaParcelas(cfg, n)));
+  }
+  return v;
+};
+
+// Parcelas liberadas para um pedido: respeita a parcela mínima e só libera n parcelas se,
+// descontada a taxa de n parcelas, o pedido ainda paga o valor base das peças (mais o frete).
+export function parcelasPedido(cfg: Config, total: number, minimoLiquido: number) {
+  for (let n = parcelasPermitidas(cfg, total); n > 1; n--) if (total * (1 - taxaParcelas(cfg, n)) >= minimoLiquido - 0.01) return n;
+  return 1;
+}
 
 export function acharCupom(cfg: Config, codigo?: string | null): Cupom | undefined {
   if (!codigo) return undefined;
@@ -18,9 +44,11 @@ export function acharCupom(cfg: Config, codigo?: string | null): Cupom | undefin
   return cfg.cupons.find((x) => x.codigo.toUpperCase() === c);
 }
 
-// "ou 3x de R$ 58,63 sem juros"
-export const parcelado = (cfg: Config, preco: number) =>
-  `ou ${cfg.pagamento.maxParcelas}x de ${brl(r2(preco / cfg.pagamento.maxParcelas))} sem juros`;
+// "ou 2x de R$ 118,95 sem juros" (vazio quando o preço só permite à vista)
+export const parcelado = (cfg: Config, preco: number) => {
+  const n = parcelasPermitidas(cfg, preco);
+  return n < 2 ? "" : `ou ${n}x de ${brl(r2(preco / n))} sem juros`;
+};
 
 export const precoPix = (cfg: Config, preco: number) => r2(preco * (1 - cfg.pagamento.descontoPix));
 

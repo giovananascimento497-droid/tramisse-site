@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { porId } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { cotarFrete, melhorEnvioAtivo } from "@/lib/frete/melhorenvio";
-import { calcularTotais } from "@/lib/payment/pricing";
+import { calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
 import { criarPreferencia, mercadoPagoAtivo } from "@/lib/payment/mercadopago";
 import { montarPedido } from "@/lib/payment/pedido";
 
@@ -40,7 +40,10 @@ export async function POST(req: Request) {
     const estoque = (dados.bag as { id: number; cor: string; tam: string; q: number }[])
       .map((l) => [Number(l.id), String(l.cor), String(l.tam), Number(l.q)].join(":"))
       .join("|");
-    const { url } = await criarPreferencia(pedido, { referencia, origem, maxParcelas: CFG.pagamento.maxParcelas, estoque });
+    // Parcelas sem juros: parcela mínima e taxa do Mercado Pago coberta pelo pedido (peças pelo valor base + frete).
+    const minimo = pedido.itens.reduce((s, i) => s + (porId(i.id)?.precoBase ?? 0) * i.q, 0) + (pedido.frete?.valor ?? 0);
+    const maxParcelas = parcelasPedido(CFG, pedido.total, minimo);
+    const { url } = await criarPreferencia(pedido, { referencia, origem, maxParcelas, estoque });
     return NextResponse.json({ url, referencia, pedido });
   } catch (e) {
     console.error(e);

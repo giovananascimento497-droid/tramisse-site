@@ -89,7 +89,7 @@ export function ProductView({ id }: { id: number }) {
           {p.precoDe ? <><s style={{ color: "var(--mut)", fontSize: 16 }}>{brl(p.precoDe)}</s> </> : null}
           {brl(p.preco)}
         </div>
-        <small style={{ color: "var(--mut)" }}>{brl(precoPix(CFG, p.preco))} no Pix ({Math.round(CFG.pagamento.descontoPix * 100)}% de desconto) · {parcelado(CFG, p.preco)}</small>
+        <small style={{ color: "var(--mut)" }}>{brl(precoPix(CFG, p.preco))} no Pix ({Math.round(CFG.pagamento.descontoPix * 100)}% de desconto){parcelado(CFG, p.preco) ? ` · ${parcelado(CFG, p.preco)}` : " · à vista no cartão"}</small>
         <p className="lbl" style={{ marginTop: 24 }}>COR: {CL[cor].nome.toUpperCase()}</p>
         <div className="opt">
           {cs.map((c) => (

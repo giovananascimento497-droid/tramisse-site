@@ -11,6 +11,7 @@ const bruto = dados as Catalogo;
 export const PRODS: Produto[] = bruto.produtos.map((p) => ({
   ...p,
   preco: precoVitrine(CFG, p.preco),
+  precoBase: p.preco,
   precoDe: p.precoDe ? precoVitrine(CFG, p.precoDe) : 0,
 }));
 export const catalogo: Catalogo = { ...bruto, produtos: PRODS };

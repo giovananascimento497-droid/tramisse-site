@@ -8,7 +8,7 @@ import { montarPedido } from "@/lib/payment/pedido";
 import { CFG } from "@/lib/config";
 import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
 import { codigoPix } from "@/lib/payment/pix";
-import { brl, calcularTotais } from "@/lib/payment/pricing";
+import { brl, calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
 import { provedorWhatsApp, resumoPedido } from "@/lib/payment/whatsapp";
 import type { DadosCliente, FormaEntrega, FormaPagamento, OpcaoFrete } from "@/lib/types";
 import { useLoja } from "@/store/Store";
@@ -21,7 +21,7 @@ const OBRIG_ID = ["e", "n", "sn", "tel"];
 const OBRIG_END = ["cep", "end", "num", "bai", "cid", "uf", "dest"];
 const PAGAMENTOS: [FormaPagamento, string, string][] = [
   ["pix", "Pix", `${Math.round(CFG.pagamento.descontoPix * 100)}% de desconto nas peças.`],
-  ["credito", "Cartão de crédito", `Em até ${CFG.pagamento.maxParcelas}x sem juros.`],
+  ["credito", "Cartão de crédito", ""], // texto calculado com as parcelas liberadas para a sacola
   ["debito", "Cartão de débito", "À vista."],
 ];
 const PIX_ATIVO = Boolean(CFG.pagamento.pix.chave);
@@ -55,6 +55,10 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   const t = calcularTotais(CFG, linhasSacola(bag), step >= 3 ? pay : null, cupom);
   const valorFrete = ship === "correios" && frete ? frete.valor : 0;
   const total = t.total + valorFrete;
+  // Parcelas sem juros liberadas para esta sacola (parcela mínima e taxa coberta pelo pedido).
+  const tCartao = calcularTotais(CFG, linhasSacola(bag), "credito", cupom);
+  const baseSacola = bag.reduce((s, l) => s + (porId(l.id)?.precoBase ?? 0) * l.q, 0);
+  const parcelas = parcelasPedido(CFG, tCartao.total + valorFrete, baseSacola + valorFrete);
   const falta = faltaFreteGratis(CFG, t.subtotal - t.desconto);
 
   // Sacola ou cupom mudaram: o frete precisa ser calculado de novo.
@@ -323,7 +327,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
             {PAGAMENTOS.map(([v, tt, sub]) => (
               <label className="opc" key={v}>
                 <input type="radio" name="pay" value={v} checked={pay === v} onChange={() => setPay(v)} />
-                <span>{tt}<br /><small>{sub}</small></span>
+                <span>{tt}<br /><small>{v === "credito" ? (parcelas > 1 ? `Em até ${parcelas}x sem juros.` : `À vista (parcelamento a partir de ${brl(CFG.pagamento.parcelaMinima * 2)}).`) : sub}</small></span>
               </label>
             ))}
           </div>

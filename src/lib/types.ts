@@ -13,6 +13,7 @@ export type Produto = {
   tecido: string;
   preco: number;
   precoDe: number; // preço "de" (promoção); 0 = sem promoção
+  precoBase?: number; // valor base (data/products.json), preenchido pelo catálogo ao calcular a vitrine
   // Em data/products.json, preco/precoDe são o valor base. Ao carregar o catálogo
   // (src/lib/catalog.ts) viram o preço de vitrine, já com a taxa do cartão embutida.
   categoria: string; // "roupas" | "acessorios"
@@ -45,7 +46,8 @@ export type Config = {
   aparencia: "editorial" | "loja"; // visual do site (src/styles/loja.css vale só com "loja")
   barraSuperior: string[];
   pagamento: {
-    taxaCartao: number; // taxa do Mercado Pago coberta pela vitrine (vitrine = base ÷ (1 − taxa))
+    taxasCartao: Record<string, number>; // taxa total do Mercado Pago por nº de parcelas ("1" = à vista)
+    parcelaMinima: number; // valor mínimo de cada parcela no crédito
     centavosVitrine: number | null; // vitrine arredondada para cima até terminar nesses centavos (ex.: 0.9 -> ,90)
     descontoPix: number; // desconto sobre a vitrine no Pix
     maxParcelas: number; // crédito sem juros

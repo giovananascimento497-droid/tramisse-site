@@ -29,7 +29,7 @@ export function ProductCard({ p }: { p: Produto }) {
       </div>
       <Link className="n" href={href}>{p.nome}</Link>
       <b>{p.precoDe ? <s>{brl(p.precoDe)}</s> : null}{brl(p.preco)}</b>
-      <small>{parcelado(CFG, p.preco)}</small>
+      {parcelado(CFG, p.preco) ? <small>{parcelado(CFG, p.preco)}</small> : null}
     </article>
   );
 }
