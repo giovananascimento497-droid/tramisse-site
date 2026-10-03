@@ -1880,17 +1880,17 @@
         {
           "cor": "ma",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "ma",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "ma",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
