@@ -1501,17 +1501,17 @@
       "id": 125,
       "slug": "t-shirt-nina",
       "nome": "T-Shirt Nina",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Aquele básico atemporal, uma t-shit confeccionada em tecido 100% algodão e modelagem clássica.",
+      "tecido": "100% algodão",
       "preco": 70.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "T-shirts",
-      "estilo": "",
+      "estilo": "Básico",
       "colecao": "Coming soon",
       "flags": {
         "novo": false,
-        "curadoria": false,
+        "curadoria": true,
         "maisVendida": false
       },
       "emBreve": true,
@@ -1522,7 +1522,12 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/t-shirt-nina-musf4i9q.jpg",
+        "/assets/products/t-shirt-nina-musf4iww.jpg",
+        "/assets/products/t-shirt-nina-musf4jgo.jpg",
+        "/assets/products/t-shirt-nina-musf4jvr.jpg"
+      ]
     },
     {
       "id": 126,
