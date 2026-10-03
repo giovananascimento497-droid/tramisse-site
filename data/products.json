@@ -1555,7 +1555,7 @@
       "id": 127,
       "slug": "blusa-poa",
       "nome": "Blusa Poá",
-      "descricao": "",
+      "descricao": "Blusa confeccionada em tecido leve com estampa clássica de poá, unindo elegância e sofisticação em uma peça atemporal. Possui modelagem solta com caimento fluido, gola alta frente única com amarração e detalhe de argola, que adiciona charme e refinamento ao visual. O design sem mangas e as costas abertas valorizam a silhueta com delicadeza, enquanto a barra assimétrica confere movimento e modernidade. Versátil e elegante, é perfeita para composições com saias, alfaiataria ou jeans, transitando com facilidade entre produções casuais e ocasiões especiais.",
       "tecido": "",
       "preco": 99.9,
       "precoDe": 0,
@@ -1571,12 +1571,15 @@
       "emBreve": true,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "of",
           "tamanho": "P",
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-poa-musc5vmo.jpg",
+        "/assets/products/blusa-poa-musc5w4z.jpg"
+      ]
     },
     {
       "id": 128,
