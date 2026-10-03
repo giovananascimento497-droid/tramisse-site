@@ -1823,8 +1823,8 @@
       "id": 134,
       "slug": "blusa-cassandra",
       "nome": "Blusa Cassandra",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Blusa Frente Única com Detalhe Metálico\n\nUma peça de silhueta fluida e elegante, com decote em V e modelagem frente única que valoriza os ombros.\n\nO destaque fica para a alça que contorna o pescoço e é finalizada por uma fivela metálica geométrica, trazendo um toque sofisticado e contemporâneo. O corpo possui caimento soltinho, com uma sobreposição assimétrica na parte frontal que cria movimento e deixa a peça ainda mais interessante.",
+      "tecido": "Crepe",
       "preco": 164.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1849,7 +1849,14 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-cassandra-musfied4.jpg",
+        "/assets/products/blusa-cassandra-musfieyn.jpg",
+        "/assets/products/blusa-cassandra-musfiftp.jpg",
+        "/assets/products/blusa-cassandra-musfiglc.jpg",
+        "/assets/products/blusa-cassandra-musfihg3.jpg",
+        "/assets/products/blusa-cassandra-musfii2y.jpg"
+      ]
     }
   ]
 }
