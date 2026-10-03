@@ -1924,17 +1924,17 @@
         {
           "cor": "br",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "br",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "br",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
