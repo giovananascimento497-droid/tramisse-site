@@ -1622,9 +1622,9 @@
       "id": 129,
       "slug": "blusa-estampa-torcao",
       "nome": "Blusa Estampa Torção",
-      "descricao": "",
-      "tecido": "",
-      "preco": 105.9,
+      "descricao": "Blusa confeccionada em malha, com modelagem ajustada ao corpo e design assimétrico que valoriza o colo e traz modernidade à produção. O modelo possui decote de um ombro só, com detalhe drapeado que envolve delicadamente o braço, criando um efeito sofisticado e feminino.",
+      "tecido": "Poliéster, Poliamida, Elastano",
+      "preco": 132,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
@@ -1648,7 +1648,11 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-estampa-torcao-musf1w0f.jpg",
+        "/assets/products/blusa-estampa-torcao-musf1v57.jpg",
+        "/assets/products/blusa-estampa-torcao-musf1wx0.jpg"
+      ]
     },
     {
       "id": 130,
