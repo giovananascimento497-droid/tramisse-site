@@ -1699,13 +1699,13 @@
       "id": 131,
       "slug": "blusa-tabata",
       "nome": "Blusa Tabata",
-      "descricao": "",
+      "descricao": "Blusa frente única de caimento fluido, com decote drapeado e amarração delicada, uma peça minimalista que traduz elegância sem esforço.",
       "tecido": "",
-      "preco": 119.9,
+      "preco": 128,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
-      "estilo": "",
+      "estilo": "Sofisticado",
       "colecao": "Coming soon",
       "flags": {
         "novo": false,
@@ -1735,7 +1735,14 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-tabata-musfb5lk.jpg",
+        "/assets/products/blusa-tabata-musfb642.jpg",
+        "/assets/products/blusa-tabata-musfb6ts.jpg",
+        "/assets/products/blusa-tabata-musfb7fy.jpg",
+        "/assets/products/blusa-tabata-musfb7yg.jpg",
+        "/assets/products/blusa-tabata-musfb8fh.jpg"
+      ]
     },
     {
       "id": 132,
