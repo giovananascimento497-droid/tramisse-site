@@ -1490,7 +1490,12 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/colete-nicole-musc24pt.jpg",
+        "/assets/products/colete-nicole-musc23z0.jpg",
+        "/assets/products/colete-nicole-musc2592.jpg",
+        "/assets/products/colete-nicole-musc25ql.jpg"
+      ]
     },
     {
       "id": 125,
