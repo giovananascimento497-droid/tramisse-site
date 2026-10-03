@@ -1343,7 +1343,7 @@
       "slug": "bermuda-paloma-fio",
       "nome": "Bermuda Paloma Fio",
       "descricao": "",
-      "tecido": "",
+      "tecido": "Jeans 100% algodão",
       "preco": 139.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1368,7 +1368,12 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/bermuda-paloma-fio-musbr9iq.jpg",
+        "/assets/products/bermuda-paloma-fio-musbr8uu.jpg",
+        "/assets/products/bermuda-paloma-fio-musbra0k.jpg",
+        "/assets/products/bermuda-paloma-fio-musbrajz.jpg"
+      ]
     },
     {
       "id": 122,
