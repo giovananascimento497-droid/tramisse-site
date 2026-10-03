@@ -1426,8 +1426,8 @@
       "id": 123,
       "slug": "calca-barrel-estonada",
       "nome": "Calça Barrel Estonada",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Calça na modelagem barrel e lavagem estonada vintage, com detalhes em recorte.",
+      "tecido": "Algodão",
       "preco": 184.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1452,7 +1452,13 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/calca-barrel-estonada-musbtx1v.jpg",
+        "/assets/products/calca-barrel-estonada-musbtxil.jpg",
+        "/assets/products/calca-barrel-estonada-musbty5w.jpg",
+        "/assets/products/calca-barrel-estonada-musbtypu.jpg",
+        "/assets/products/calca-barrel-estonada-musbtz9r.jpg"
+      ]
     },
     {
       "id": 124,
