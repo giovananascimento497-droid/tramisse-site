@@ -1584,14 +1584,14 @@
     {
       "id": 128,
       "slug": "blusa-estampa-ombro-a-ombro",
-      "nome": "Blusa Estampa Ombro a Ombro",
-      "descricao": "",
-      "tecido": "",
-      "preco": 105.9,
+      "nome": "Blusa Nicola",
+      "descricao": "Blusa estampada com modelagem ajustável e design ombro a ombro. Possui sobreposição drapeada no busto e detalhe franzido lateral com amarração, permitindo ajustar o caimento e criando um efeito assimétrico na barra.",
+      "tecido": "Poliamida, Elastano",
+      "preco": 139.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
-      "estilo": "",
+      "estilo": "Casual",
       "colecao": "Coming soon",
       "flags": {
         "novo": false,
@@ -1611,7 +1611,12 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-estampa-ombro-a-ombro-musewppu.jpg",
+        "/assets/products/blusa-estampa-ombro-a-ombro-musewqdz.jpg",
+        "/assets/products/blusa-estampa-ombro-a-ombro-musewr2n.jpg",
+        "/assets/products/blusa-estampa-ombro-a-ombro-musewrne.jpg"
+      ]
     },
     {
       "id": 129,
