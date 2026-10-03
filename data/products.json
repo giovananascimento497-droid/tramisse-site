@@ -1533,13 +1533,13 @@
       "id": 126,
       "slug": "t-shirt-nai",
       "nome": "T-Shirt Nai",
-      "descricao": "",
+      "descricao": "Aquele básico atemporal, uma t-shit confeccionada em tecido 100% algodão e modelagem clássica.",
       "tecido": "",
       "preco": 70.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "T-shirts",
-      "estilo": "",
+      "estilo": "Basico",
       "colecao": "Coming soon",
       "flags": {
         "novo": false,
@@ -1549,12 +1549,17 @@
       "emBreve": true,
       "variantes": [
         {
-          "cor": "ma",
+          "cor": "vi",
           "tamanho": "G",
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/t-shirt-nai-musf5ui1.jpg",
+        "/assets/products/t-shirt-nai-musf5uxu.jpg",
+        "/assets/products/t-shirt-nai-musf5vi9.jpg",
+        "/assets/products/t-shirt-nai-musf5vyk.jpg"
+      ]
     },
     {
       "id": 127,
