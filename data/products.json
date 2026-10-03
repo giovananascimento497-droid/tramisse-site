@@ -1379,8 +1379,8 @@
       "id": 122,
       "slug": "wide-leg-paloma",
       "nome": "Wide Leg Paloma",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Calça em modelagem wide leg straight, lavagem marmorizada em algodão.",
+      "tecido": "Algodão",
       "preco": 189.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1415,7 +1415,12 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/wide-leg-paloma-musbsit7.jpg",
+        "/assets/products/wide-leg-paloma-musbsjjp.jpg",
+        "/assets/products/wide-leg-paloma-musbsk86.jpg",
+        "/assets/products/wide-leg-paloma-musbsl88.jpg"
+      ]
     },
     {
       "id": 123,
