@@ -1857,6 +1857,50 @@
         "/assets/products/blusa-cassandra-musfihg3.jpg",
         "/assets/products/blusa-cassandra-musfii2y.jpg"
       ]
+    },
+    {
+      "id": 138,
+      "slug": "blusa-victoria",
+      "nome": "Blusa Victoria",
+      "descricao": "Blusa Renda com Amarração Lateral\n\nDelicada e cheia de personalidade, a blusa é confeccionada em renda texturizada de trama aberta, com transparência sutil e toque artesanal.\n\nA modelagem apresenta gola alta arredondada e mangas curtas, criando uma silhueta limpa e elegante. O destaque fica para a amarração lateral na altura da cintura, finalizada por um detalhe ovalado em tom contrastante, que permite ajustar o caimento e cria um drapeado delicado na lateral.\n\nO comprimento alongado e o caimento levemente ajustado valorizam a silhueta sem perder a leveza característica da renda.",
+      "tecido": "Poliamida",
+      "preco": 160,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Casual chic",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "emBreve": true,
+      "variantes": [
+        {
+          "cor": "ma",
+          "tamanho": "G",
+          "estoque": 1
+        },
+        {
+          "cor": "ma",
+          "tamanho": "P",
+          "estoque": 1
+        },
+        {
+          "cor": "ma",
+          "tamanho": "M",
+          "estoque": 1
+        }
+      ],
+      "imagens": [
+        "/assets/products/blusa-victoria-musp6x18.jpg",
+        "/assets/products/blusa-victoria-musp6s4n.jpg",
+        "/assets/products/blusa-victoria-musp6tq4.jpg",
+        "/assets/products/blusa-victoria-musp6uyr.jpg",
+        "/assets/products/blusa-victoria-musp6yar.jpg",
+        "/assets/products/blusa-victoria-musp6z0t.jpg"
+      ]
     }
   ]
 }
