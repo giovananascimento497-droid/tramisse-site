@@ -1748,13 +1748,13 @@
       "id": 132,
       "slug": "blusa-yuri",
       "nome": "Blusa Yuri",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Blusa Assimétrica com Gola\n\nUma peça de design contemporâneo que une caimento fluido e um detalhe marcante na gola. A modelagem assimétrica cria uma silhueta leve e elegante, enquanto o tecido de textura delicada acrescenta sofisticação ao visual.",
+      "tecido": "Crepe",
       "preco": 125.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
-      "estilo": "",
+      "estilo": "Office, Casual, Elegante",
       "colecao": "Coming soon",
       "flags": {
         "novo": false,
@@ -1764,17 +1764,21 @@
       "emBreve": true,
       "variantes": [
         {
-          "cor": "un",
+          "cor": "az",
           "tamanho": "P",
           "estoque": 0
         },
         {
-          "cor": "un",
+          "cor": "az",
           "tamanho": "G",
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-yuri-musfdx18.jpg",
+        "/assets/products/blusa-yuri-musfdwhy.jpg",
+        "/assets/products/blusa-yuri-musfdxqw.jpg"
+      ]
     },
     {
       "id": 133,
