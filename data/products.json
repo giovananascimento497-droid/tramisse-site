@@ -445,7 +445,7 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": true
       },
       "emBreve": false,
       "variantes": [
@@ -461,9 +461,9 @@
         }
       ],
       "imagens": [
-        "/assets/products/blusa-tule-manga-1.jpg",
-        "/assets/products/blusa-tule-manga-2.jpg",
-        "/assets/products/blusa-tule-manga-3.jpg"
+        "/assets/products/blusa-tule-manga-musacgj3.jpg",
+        "/assets/products/blusa-tule-manga-musajelo.jpg",
+        "/assets/products/blusa-tule-manga-musajf7p.jpg"
       ]
     },
     {
