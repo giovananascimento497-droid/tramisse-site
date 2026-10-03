@@ -1901,6 +1901,47 @@
         "/assets/products/blusa-victoria-musp6yar.jpg",
         "/assets/products/blusa-victoria-musp6z0t.jpg"
       ]
+    },
+    {
+      "id": 139,
+      "slug": "blusa-napoleonica",
+      "nome": "Blusa Napoleônica",
+      "descricao": "Blusa de Renda Estilo Napoleão\n\nInspirada na estética clássica das jaquetas Napoleão, esta blusa combina a delicadeza da renda com uma construção marcante e sofisticada.\n\nConfeccionada em renda branca de trama delicada e desenho floral, apresenta gola alta estruturada e mangas curtas levemente amplas, criando uma silhueta elegante. O fechamento frontal é o grande destaque: seis fechos de inspiração oriental, formados por cordões delicados e pequenos botões revestidos, percorrem toda a extensão da peça.",
+      "tecido": "Renda de poliamida",
+      "preco": 169,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Romântico clássico",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "emBreve": true,
+      "variantes": [
+        {
+          "cor": "br",
+          "tamanho": "P",
+          "estoque": 1
+        },
+        {
+          "cor": "br",
+          "tamanho": "M",
+          "estoque": 1
+        },
+        {
+          "cor": "br",
+          "tamanho": "G",
+          "estoque": 1
+        }
+      ],
+      "imagens": [
+        "/assets/products/blusa-napoleonica-muspac2x.jpg",
+        "/assets/products/blusa-napoleonica-muspacxb.jpg",
+        "/assets/products/blusa-napoleonica-muspadwz.jpg"
+      ]
     }
   ]
 }
