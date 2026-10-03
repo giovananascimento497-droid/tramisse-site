@@ -1784,13 +1784,13 @@
       "id": 133,
       "slug": "blusa-francesca",
       "nome": "Blusa Francesca",
-      "descricao": "",
+      "descricao": "Polo em viscose com gola clássica, botões frontais e mangas curtas. Peça versátil, com caimento leve e confortável para o dia a dia.",
       "tecido": "",
-      "preco": 145.9,
+      "preco": 120,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
-      "estilo": "",
+      "estilo": "Daily",
       "colecao": "Coming soon",
       "flags": {
         "novo": false,
@@ -1815,7 +1815,9 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/blusa-francesca-musfg1j5.jpg"
+      ]
     },
     {
       "id": 134,
