@@ -1668,13 +1668,13 @@
       "id": 130,
       "slug": "regata-suellen",
       "nome": "Regata Suellen",
-      "descricao": "",
-      "tecido": "",
-      "preco": 119.9,
+      "descricao": "Regata em crepe com modelagem leve e elegante, perfeita para composições sofisticadas e versáteis. Possui alças finas com regulagem e detalhe de aviamento nas alças, que adiciona charme e delicadeza à peça",
+      "tecido": "Crepe",
+      "preco": 123,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Regatas",
-      "estilo": "",
+      "estilo": "Casual chic",
       "colecao": "Coming soon",
       "flags": {
         "novo": false,
@@ -1689,7 +1689,11 @@
           "estoque": 0
         }
       ],
-      "imagens": []
+      "imagens": [
+        "/assets/products/regata-suellen-musf7he8.jpg",
+        "/assets/products/regata-suellen-musf7i4u.jpg",
+        "/assets/products/regata-suellen-musf7j76.jpg"
+      ]
     },
     {
       "id": 131,
