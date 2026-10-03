@@ -591,9 +591,8 @@
         }
       ],
       "imagens": [
-        "/assets/products/conjunto-luma-1.jpg",
         "/assets/products/conjunto-luma-2.jpg",
-        "/assets/products/conjunto-luma-3.jpg",
+        "/assets/products/conjunto-luma-1.jpg",
         "/assets/products/conjunto-luma-4.jpg"
       ]
     },
