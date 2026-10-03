@@ -1113,7 +1113,7 @@
       "id": 2,
       "slug": "calca-tina",
       "nome": "Calça Tina",
-      "descricao": "Calça pantalona em alfaiataria stretch Ciao Sella.",
+      "descricao": "Calça pantalona em alfaiataria stretch Ciao Sella. \nModelagem pantalona straight, botões revestidos para acabamento premium.",
       "tecido": "Alfaiataria stretch Ciao Sella",
       "preco": 249.9,
       "precoDe": 0,
@@ -1140,8 +1140,13 @@
         }
       ],
       "imagens": [
+        "/assets/products/calca-tina-musbje60.jpg",
+        "/assets/products/calca-tina-musbjxvu.jpg",
         "/assets/products/calca-tina-1.jpg",
-        "/assets/products/calca-tina-2.jpg"
+        "/assets/products/calca-tina-2.jpg",
+        "/assets/products/calca-tina-musbjem8.jpg",
+        "/assets/products/calca-tina-musbjyeu.jpg",
+        "/assets/products/calca-tina-musbjyw8.jpg"
       ]
     },
     {
