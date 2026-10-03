@@ -1199,8 +1199,8 @@
         }
       ],
       "imagens": [
-        "/assets/products/short-maya-1.jpg",
         "/assets/products/short-maya-2.jpg",
+        "/assets/products/short-maya-1.jpg",
         "/assets/products/short-maya-3.jpg"
       ]
     },
