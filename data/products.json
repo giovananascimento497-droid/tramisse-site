@@ -1942,6 +1942,52 @@
         "/assets/products/blusa-napoleonica-muspacxb.jpg",
         "/assets/products/blusa-napoleonica-muspadwz.jpg"
       ]
+    },
+    {
+      "id": 140,
+      "slug": "blusa-flora",
+      "nome": "Blusa Flora",
+      "descricao": "Delicada e atemporal, a peça é confeccionada em renda branca de trama fina, leve e semitransparente, com desenho floral delicado e textura artesanal.",
+      "tecido": "Renda de poliamida",
+      "preco": 123,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Romântico",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false
+      },
+      "emBreve": true,
+      "variantes": [
+        {
+          "cor": "am",
+          "tamanho": "U",
+          "estoque": 0
+        },
+        {
+          "cor": "az",
+          "tamanho": "U",
+          "estoque": 0
+        },
+        {
+          "cor": "ro",
+          "tamanho": "U",
+          "estoque": 0
+        },
+        {
+          "cor": "br",
+          "tamanho": "U",
+          "estoque": 0
+        }
+      ],
+      "imagens": [
+        "/assets/products/blusa-flora-muspg1g2.jpg",
+        "/assets/products/blusa-flora-muspg3ar.jpg",
+        "/assets/products/blusa-flora-muspg50x.jpg"
+      ]
     }
   ]
 }
