@@ -30,6 +30,7 @@ export function MenuDrawer() {
         <Link href="/categoria/new-in" onClick={fechar}>NEW IN</Link>
         <Link href="/categoria/coming-soon" onClick={fechar}>COMING SOON</Link>
         <Link href="/categoria/curadoria" onClick={fechar}>CURADORIA ESPECIAL</Link>
+        <Link href="/categoria/jeans" onClick={fechar}>JEANS</Link>
         {md("roupas", "ROUPAS")}
         {md("acessorios", "ACESSÓRIOS")}
         <Link href="/categoria/sale" onClick={fechar}>SALE</Link>

@@ -15,7 +15,7 @@ export function Footer() {
           <div><h3>TRAMISSE</h3>{L("Sobre nós", "/sobre")}{L("Nossa história", "/sobre")}{L("Contato", "/pagina/contato")}</div>
           <div>
             <h3>SHOP</h3>
-            {L("New In", "/categoria/new-in")}{L("Coming Soon", "/categoria/coming-soon")}{L("Curadoria Especial", "/categoria/curadoria")}{L("Roupas", "/categoria/roupas")}
+            {L("New In", "/categoria/new-in")}{L("Coming Soon", "/categoria/coming-soon")}{L("Curadoria Especial", "/categoria/curadoria")}{L("Jeans", "/categoria/jeans")}{L("Roupas", "/categoria/roupas")}
             {L("Acessórios", "/categoria/acessorios")}{L("Sale", "/categoria/sale")}
           </div>
           <div>

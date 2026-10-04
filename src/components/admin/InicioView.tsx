@@ -6,7 +6,7 @@ import { brl, precoVitrine } from "@/lib/payment/pricing";
 import type { Catalogo, Produto } from "@/lib/types";
 import { api, prepararFoto } from "./util";
 
-type Inicio = { imagem: string; pecas: number[]; fotosHome: Record<string, number> };
+type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number> };
 type FotoNova = { caminho: string; blob: string; preview: string };
 
 const ORIGINAL = "/assets/brand/inicio.jpg";
@@ -132,12 +132,29 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
         )}
       </div>
 
-      <h3>Peças do banner</h3>
-      <p className="adm-dica">Depois da imagem de entrada, as peças se revezam uma por vez (a cada 5 segundos), com a primeira foto de cada uma. Peça esgotada sai do banner sozinha.</p>
-      <div className="adm-flags" style={{ marginBottom: 12 }}>
-        <label><input type="radio" checked={automatico} onChange={() => set({ pecas: [] })} /> Automático (todas as peças com foto e estoque)</label>
-        <label><input type="radio" checked={!automatico} onChange={() => automatico && set({ pecas: cat.produtos.filter(noBanner).slice(0, 6).map((p) => p.id) })} /> Escolher as peças e a ordem</label>
+      <h3>Vídeo da entrada</h3>
+      <p className="adm-dica">A entrada alterna entre a imagem e o vídeo: a imagem fica 6 segundos, o vídeo passa inteiro (sem som) e volta para a imagem.</p>
+      <div className="adm-vids">
+        <label className={!ed.video ? "on" : ""}>
+          <span className="adm-vid-sem">Sem vídeo</span>
+          <span><input type="radio" checked={!ed.video} onChange={() => set({ video: "" })} /> Nenhum</span>
+        </label>
+        {CFG.videos.filter((v) => v.src).map((v, i) => (
+          <label key={v.src} className={ed.video === v.src ? "on" : ""}>
+            <video src={v.src} poster={v.poster} muted loop playsInline autoPlay preload="metadata" />
+            <span><input type="radio" checked={ed.video === v.src} onChange={() => set({ video: v.src })} /> Vídeo {i + 1}</span>
+          </label>
+        ))}
       </div>
+
+      <h3>Peças do banner</h3>
+      <p className="adm-dica">Depois da imagem e do vídeo, as peças podem se revezar uma por vez (a cada 5 segundos), com a primeira foto de cada uma. Peça esgotada sai do banner sozinha.</p>
+      <div className="adm-flags" style={{ marginBottom: 12 }}>
+        <label><input type="radio" checked={ed.semPecas} onChange={() => set({ semPecas: true })} /> Não mostrar peças (só a imagem e o vídeo)</label>
+        <label><input type="radio" checked={!ed.semPecas && automatico} onChange={() => set({ semPecas: false, pecas: [] })} /> Automático (todas as peças com foto e estoque)</label>
+        <label><input type="radio" checked={!ed.semPecas && !automatico} onChange={() => set({ semPecas: false, pecas: automatico ? cat.produtos.filter(noBanner).slice(0, 6).map((p) => p.id) : ed.pecas })} /> Escolher as peças e a ordem</label>
+      </div>
+      <div hidden={ed.semPecas}>
       {automatico ? (
         <div className="adm-mini">
           {listaBanner.map((p) => <span key={p.id} className="adm-th" title={p.nome} style={{ backgroundImage: `url(${p.imagens[0]})` }} />)}
@@ -173,6 +190,8 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
           <button className="btn o" disabled={!add} onClick={() => { set({ pecas: [...ed.pecas, Number(add)] }); setAdd(""); }}>+ ADICIONAR</button>
         </div>
       ) : null}
+
+      </div>
 
       <h3>Fotos de &quot;Compre por categoria&quot;</h3>
       <p className="adm-dica">Escolha de qual peça vem a foto de cada categoria (usa a primeira foto da peça).</p>

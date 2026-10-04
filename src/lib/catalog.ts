@@ -51,6 +51,7 @@ export function listar(k: string, sub?: string): Produto[] {
   const l = PRODS.filter((p) => !p.emBreve).sort((a, b) => Number(esgotado(a)) - Number(esgotado(b)));
   if (k === "new-in") return l.filter((p) => p.flags.novo);
   if (k === "curadoria") return l.filter((p) => p.flags.curadoria);
+  if (k === "jeans") return l.filter((p) => p.flags.jeans);
   if (k === "sale") return l.filter((p) => p.precoDe);
   if (k === "estilo") return l.filter((p) => slug(p.estilo) === sub);
   if (k === "todos") return l;

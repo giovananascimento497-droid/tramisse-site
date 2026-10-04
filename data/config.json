@@ -126,10 +126,12 @@
     }
   ],
   "hero": {
-    "_comentario": "Primeira tela da home: foto de fundo + logo + frase; depois as fotos das peças com SHOP NOW. Deixe 'imagem' vazio para mostrar só as peças.",
+    "_comentario": "Primeira tela da home: imagem de entrada (foto + logo + frase), o vídeo (se houver) e as peças com SHOP NOW (se semPecas for false). Tudo editável no painel, aba Início.",
     "imagem": "/assets/brand/inicio.jpg",
     "frase": "/assets/brand/inicio-frase.svg",
-    "textoFrase": "essencial. atemporal. autêntica"
+    "textoFrase": "essencial. atemporal. autêntica",
+    "video": "/assets/videos/video-2.mp4",
+    "semPecas": true
   },
   "imagensMarca": {
     "brand": "",

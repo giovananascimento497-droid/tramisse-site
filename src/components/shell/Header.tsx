@@ -9,6 +9,7 @@ import { useLoja } from "@/store/Store";
 const ATALHOS: [string, string][] = [
   ["BLUSAS", "/categoria/roupas/blusas"],
   ["CALÇAS", "/categoria/roupas/calcas"],
+  ["JEANS", "/categoria/jeans"],
   ["CONJUNTOS", "/categoria/roupas/conjuntos"],
   ["VESTIDOS", "/categoria/roupas/vestidos"],
   ["CURADORIA", "/categoria/curadoria"],
@@ -49,6 +50,7 @@ export function Header() {
                 <b>COLEÇÕES</b>
                 <Link href="/categoria/new-in">New In</Link>
                 <Link href="/categoria/curadoria">Curadoria Especial</Link>
+                <Link href="/categoria/jeans">Jeans</Link>
                 <Link href="/categoria/coming-soon">Coming Soon</Link>
                 <Link href="/categoria/todos">Ver tudo</Link>
               </div>

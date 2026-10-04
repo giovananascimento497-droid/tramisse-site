@@ -50,7 +50,7 @@ export function limparProduto(p: Produto, cat: Catalogo): { ok: Produto } | { er
       subcategoria: p.subcategoria,
       estilo: String(p.estilo || "").trim(),
       colecao: String(p.colecao || "Coleção atual").trim(),
-      flags: { novo: Boolean(p.flags?.novo), curadoria: Boolean(p.flags?.curadoria), maisVendida: Boolean(p.flags?.maisVendida) },
+      flags: { novo: Boolean(p.flags?.novo), curadoria: Boolean(p.flags?.curadoria), maisVendida: Boolean(p.flags?.maisVendida), jeans: Boolean(p.flags?.jeans) },
       emBreve: Boolean(p.emBreve),
       variantes,
       imagens,

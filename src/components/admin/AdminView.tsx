@@ -364,6 +364,7 @@ function Editor(props: {
         <div className="s adm-flags">
           <label><input type="checkbox" checked={p.flags.novo} onChange={(e) => set({ flags: { ...p.flags, novo: e.target.checked } })} /> New In</label>
           <label><input type="checkbox" checked={p.flags.curadoria} onChange={(e) => set({ flags: { ...p.flags, curadoria: e.target.checked } })} /> Curadoria</label>
+          <label><input type="checkbox" checked={!!p.flags.jeans} onChange={(e) => set({ flags: { ...p.flags, jeans: e.target.checked } })} /> Jeans</label>
           <label><input type="checkbox" checked={p.flags.maisVendida} onChange={(e) => set({ flags: { ...p.flags, maisVendida: e.target.checked } })} /> Mais desejada</label>
           <label><input type="checkbox" checked={!!p.emBreve} onChange={(e) => set({ emBreve: e.target.checked })} /> Coming soon (ainda não chegou)</label>
         </div>

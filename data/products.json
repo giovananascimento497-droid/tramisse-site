@@ -154,7 +154,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": true
+        "maisVendida": true,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -185,7 +186,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": true
+        "maisVendida": true,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -216,7 +218,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": true
+        "maisVendida": true,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -246,7 +249,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -276,7 +280,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -305,7 +310,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -335,7 +341,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -365,7 +372,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -409,7 +417,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": true
+        "maisVendida": true,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -449,7 +458,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": true
+        "maisVendida": true,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -485,7 +495,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -515,7 +526,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -546,7 +558,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -582,7 +595,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -613,7 +627,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -649,7 +664,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -681,7 +697,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": true
+        "maisVendida": true,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -711,7 +728,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -742,7 +760,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -773,7 +792,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -805,7 +825,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -837,7 +858,8 @@
       "flags": {
         "novo": true,
         "curadoria": true,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -868,7 +890,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -900,7 +923,8 @@
       "flags": {
         "novo": true,
         "curadoria": true,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -932,7 +956,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -972,7 +997,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -1002,7 +1028,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -1034,7 +1061,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -1064,7 +1092,8 @@
       "flags": {
         "novo": true,
         "curadoria": true,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -1096,7 +1125,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -1126,7 +1156,8 @@
       "flags": {
         "novo": true,
         "curadoria": true,
-        "maisVendida": true
+        "maisVendida": true,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -1166,7 +1197,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": true
       },
       "emBreve": false,
       "variantes": [
@@ -1202,7 +1234,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": true
       },
       "emBreve": false,
       "variantes": [
@@ -1233,7 +1266,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": false,
       "variantes": [
@@ -1262,7 +1296,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": true
       },
       "emBreve": false,
       "variantes": [
@@ -1292,7 +1327,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": true
+        "maisVendida": true,
+        "jeans": true
       },
       "emBreve": false,
       "variantes": [
@@ -1323,7 +1359,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": true
       },
       "emBreve": false,
       "variantes": [
@@ -1353,7 +1390,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": true
       },
       "emBreve": true,
       "variantes": [
@@ -1390,7 +1428,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": true
       },
       "emBreve": true,
       "variantes": [
@@ -1437,7 +1476,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": true
       },
       "emBreve": true,
       "variantes": [
@@ -1475,7 +1515,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1512,7 +1553,8 @@
       "flags": {
         "novo": false,
         "curadoria": true,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1544,7 +1586,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1576,7 +1619,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1606,7 +1650,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1643,7 +1688,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1679,7 +1725,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1710,7 +1757,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1759,7 +1807,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1795,7 +1844,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1834,7 +1884,8 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1873,7 +1924,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1917,7 +1969,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [
@@ -1958,7 +2011,8 @@
       "flags": {
         "novo": true,
         "curadoria": false,
-        "maisVendida": false
+        "maisVendida": false,
+        "jeans": false
       },
       "emBreve": true,
       "variantes": [

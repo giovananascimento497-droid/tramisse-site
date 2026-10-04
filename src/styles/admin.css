@@ -64,3 +64,9 @@
 .adm-cats select{border:1px solid var(--ln);background:var(--bg);padding:8px;font:inherit;font-size:13px;letter-spacing:0}
 .adm-ul{list-style:none;padding:0;margin:0;border-top:1px solid var(--ln)}
 .adm-mini{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.adm-mini .adm-th{width:36px;height:45px}.adm-mini small{color:var(--mut);margin-left:6px}
+.adm-vids{display:flex;gap:12px;flex-wrap:wrap}
+.adm-vids label{display:flex;flex-direction:column;gap:6px;width:110px;font-size:13px;cursor:pointer}
+.adm-vids video,.adm-vid-sem{width:110px;aspect-ratio:9/16;object-fit:cover;background:var(--mar);border:2px solid transparent}
+.adm-vid-sem{display:grid;place-items:center;color:var(--mut);font-size:12px}
+.adm-vids label.on video,.adm-vids label.on .adm-vid-sem{border-color:var(--ink)}
+.adm-vids input{width:auto;margin:0 4px 0 0}

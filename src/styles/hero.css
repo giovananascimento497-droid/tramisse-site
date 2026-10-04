@@ -36,3 +36,6 @@
   .hs-um .hs-txt span::after{display:none}
   .hs-um .hs-it:hover .hs-txt span{background:#3B3936}
 }
+/* Vídeo da marca (alterna com a imagem de entrada): mesmo layout das peças. */
+.hs-it video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+@media(min-width:701px){.hs-um .hs-it video{position:relative;inset:auto;grid-column:2;grid-row:1;width:100%;height:100%;object-fit:cover;min-height:0}}

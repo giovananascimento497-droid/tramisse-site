@@ -33,6 +33,7 @@ function CompreCategoria({ className, style, TP }: { className: string; style?: 
 // Peças do banner: as escolhidas no painel (na ordem) ou, sem escolha, todas com foto e estoque.
 // Peça esgotada ou sem foto sai sozinha.
 function pecasBanner() {
+  if (CFG.hero.semPecas) return [];
   const ok = (p?: Produto): p is Produto => !!p && !p.emBreve && p.imagens.length > 0 && temEstoque(p);
   const escolhidas = (CFG.hero.pecas ?? []).map(porId).filter(ok);
   return escolhidas.length ? escolhidas : PRODS.filter(ok);

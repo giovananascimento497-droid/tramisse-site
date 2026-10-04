@@ -20,7 +20,7 @@ export type Produto = {
   subcategoria: string;
   estilo: string;
   colecao: string;
-  flags: { novo: boolean; curadoria: boolean; maisVendida: boolean };
+  flags: { novo: boolean; curadoria: boolean; maisVendida: boolean; jeans?: boolean };
   emBreve?: boolean; // Coming soon: aparece só na vitrine Coming Soon, sem compra ("Avise-me")
   variantes: Variante[];
   imagens: string[];
@@ -73,7 +73,8 @@ export type Config = {
   redes: { nome: string; url: string }[];
   // Primeira tela da home (imagem de início). imagem vazia = só as fotos das peças.
   // pecas: ids das peças do banner, na ordem (vazio = todas com foto e estoque). Editável no painel (aba Início).
-  hero: { imagem: string; frase: string; textoFrase: string; pecas?: number[] };
+  // video: vídeo que alterna com a imagem de entrada ("" = sem vídeo); semPecas: não mostra as peças no banner.
+  hero: { imagem: string; frase: string; textoFrase: string; pecas?: number[]; video?: string; semPecas?: boolean };
   // Vídeos da seção "Em movimento". Sem produtoId = vídeo da marca, sem link para peça.
   videos: { produtoId?: number; src: string; poster?: string; titulo?: string }[];
   imagensMarca: { brand: string; cover: string };
