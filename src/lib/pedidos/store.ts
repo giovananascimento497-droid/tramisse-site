@@ -1,6 +1,7 @@
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { getStore } from "@netlify/blobs";
+import { avisarCliente } from "../email";
 import type { PedidoSalvo } from "./tipos";
 
 export { SITUACOES, type PedidoSalvo, type Situacao } from "./tipos";
@@ -51,6 +52,7 @@ export async function salvarPedido(p: Omit<PedidoSalvo, "criadoEm" | "atualizado
   if (antigo) return antigo; // o mesmo pedido não é registrado duas vezes
   const agora = new Date().toISOString();
   const novo: PedidoSalvo = { ...p, criadoEm: agora, atualizadoEm: agora };
+  await comAviso(null, novo);
   await a.set(novo);
   return novo;
 }
@@ -62,8 +64,15 @@ export async function alterarPedido(id: string, mudar: (p: PedidoSalvo) => Parti
   const m = mudar(p);
   if (!m) return p;
   const novo = { ...p, ...m, id: p.id, criadoEm: p.criadoEm, atualizadoEm: new Date().toISOString() };
+  await comAviso(p, novo);
   await a.set(novo);
   return novo;
+}
+
+// E-mail automático para a cliente (pedido recebido, pago, enviado). Nunca impede de salvar.
+async function comAviso(antes: PedidoSalvo | null, novo: PedidoSalvo) {
+  const t = await avisarCliente(antes, novo).catch((e) => { console.error(e); return null; });
+  if (t) novo.avisos = [...(novo.avisos ?? []), t];
 }
 
 // Mais novos primeiro.
@@ -82,6 +91,8 @@ export async function atualizarPorMercadoPago(referencia: string, pagamento: { i
     if (p.mercadoPago?.id === pagamento.id && p.mercadoPago.status === pagamento.status) return null;
     const m: Partial<PedidoSalvo> = { mercadoPago: pagamento };
     if (p.situacao === "aguardando" && pagamento.status === "approved") m.situacao = "pago";
+    // Aprovado: o webhook baixa o estoque deste pagamento (registra aqui para o painel não baixar de novo).
+    if (pagamento.status === "approved" && !p.estoque) m.estoque = { estado: "baixado", seq: 0 };
     // Pagamento devolvido/estornado depois de aprovado: volta a pedir atenção.
     if (p.situacao === "pago" && ["refunded", "charged_back"].includes(pagamento.status)) m.situacao = "cancelado";
     return m;

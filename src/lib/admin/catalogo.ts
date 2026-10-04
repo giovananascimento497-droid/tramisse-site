@@ -107,28 +107,33 @@ export async function publicar(alteracoes: Alteracao[], fotos: { caminho: string
   });
 }
 
-// Baixa o estoque de um pagamento aprovado (uma vez só por pagamento).
-export async function baixarEstoque(pagamentoId: string, itens: { id: number; cor: string; tam: string; q: number }[]) {
+// Muda o estoque de uma venda, uma vez só por chave (ids guardados em vendas-processadas.json).
+// sinal -1 = baixa (venda), +1 = devolve (pedido cancelado). Retorna false se já tinha sido feito.
+export async function moverEstoque(chave: string, mensagem: string, itens: { id: number; cor: string; tam: string; q: number }[], sinal: -1 | 1) {
   let jaFeito = false;
-  await commitArquivos(`Venda paga (Mercado Pago ${pagamentoId}): baixa de estoque`, async () => {
+  await commitArquivos(mensagem, async () => {
     const { catalogo } = await lerCatalogo();
     const v = await lerArquivo(ARQ_VENDAS);
     const feitos: string[] = v ? JSON.parse(v.texto) : [];
-    if (feitos.includes(pagamentoId)) {
+    if (feitos.includes(chave)) {
       jaFeito = true;
       throw new Error("ja-feito");
     }
     for (const it of itens) {
       const p = catalogo.produtos.find((x) => x.id === it.id);
       const va = p?.variantes.find((x) => x.cor === it.cor && x.tamanho === it.tam);
-      if (va) va.estoque = Math.max(0, va.estoque - it.q);
+      if (va) va.estoque = Math.max(0, va.estoque + sinal * it.q);
     }
     return [
       { caminho: ARQ_PRODUTOS, texto: json(catalogo) },
-      { caminho: ARQ_VENDAS, texto: json([...feitos, pagamentoId].slice(-1000)) },
+      { caminho: ARQ_VENDAS, texto: json([...feitos, chave].slice(-1000)) },
     ];
   }).catch((e) => {
     if (!jaFeito) throw e;
   });
   return !jaFeito;
 }
+
+// Baixa o estoque de um pagamento aprovado no Mercado Pago (uma vez só por pagamento).
+export const baixarEstoque = (pagamentoId: string, itens: { id: number; cor: string; tam: string; q: number }[]) =>
+  moverEstoque(pagamentoId, `Venda paga (Mercado Pago ${pagamentoId}): baixa de estoque`, itens, -1);

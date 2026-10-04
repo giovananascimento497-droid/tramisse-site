@@ -254,6 +254,10 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
             const d = ler(e.currentTarget);
             if (ship !== "retirada" && !validar(d, OBRIG_END)) return;
             if (ship === "correios" && !frete) return setErro(cotando ? "Aguarde o cálculo do frete." : "Calcule o frete e escolha PAC ou SEDEX.");
+            if (ship === "correios" && (d.cpf || "").replace(/\D/g, "").length !== 11) {
+              setFaltando(["cpf"]);
+              return setErro("Informe o CPF (11 números): os Correios pedem para a etiqueta.");
+            }
             ir(3);
           }}
         >
@@ -309,6 +313,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
               ) : fld("cep", "CEP", "00000-000")}
               {fld("end", "Endereço")}{fld("num", "Número")}{fld("cmp", "Complemento")}
               {fld("bai", "Bairro")}{fld("cid", "Cidade")}{fld("uf", "Estado")}{fld("dest", "Destinatário", "", "s")}
+              {ship === "correios" ? fld("cpf", "CPF (os Correios pedem para a etiqueta)", "000.000.000-00", "s") : null}
             </>
           )}
           <div className="er s">{erro}</div>

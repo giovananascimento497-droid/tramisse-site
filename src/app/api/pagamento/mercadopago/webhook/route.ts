@@ -19,8 +19,10 @@ export async function POST(req: Request) {
   try {
     const p = await consultarPagamento(id);
     // Situação do pedido no painel (aprovado → Pago).
-    await atualizarPorMercadoPago(p.referencia, { id: p.id, status: p.status }).catch((e) => console.error(e));
+    const ped = await atualizarPorMercadoPago(p.referencia, { id: p.id, status: p.status }).catch((e) => { console.error(e); return null; });
     if (p.status !== "approved" || !p.estoque || !githubAtivo()) return NextResponse.json({ ok: true, status: p.status });
+    // A loja já marcou como pago no painel (estoque baixado por lá): não baixa de novo.
+    if (ped?.estoque && ped.estoque.seq > 0) return NextResponse.json({ ok: true, baixou: false });
     const itens = p.estoque.split("|").map((s) => {
       const [i, cor, tam, q] = s.split(":");
       return { id: Number(i), cor, tam, q: Number(q) };

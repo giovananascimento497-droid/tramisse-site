@@ -24,4 +24,13 @@ export type PedidoSalvo = {
   mercadoPago?: { id: string; status: string };
   rastreio?: string;
   obs?: string;
+  // Estoque desta venda: "baixado" quando ficou paga; "devolvido" se depois foi cancelada. seq = nº de movimentos.
+  estoque?: { estado: "baixado" | "devolvido"; seq: number };
+  // Etiqueta dos Correios comprada pelo Melhor Envio (id = pedido no Melhor Envio).
+  etiqueta?: { id: string; servico: number; preco: number; status: "carrinho" | "paga" | "gerada"; protocolo?: string };
+  // E-mails já mandados para a cliente (recebido, pago, enviado).
+  avisos?: string[];
 };
+
+// Situações que contam como venda (estoque baixado).
+export const VENDIDO: Situacao[] = ["pago", "separacao", "enviado", "entregue"];
