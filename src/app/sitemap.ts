@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { PRODS, rotasCategorias } from "@/lib/catalog";
+import { listar, PRODS, rotasCategorias } from "@/lib/catalog";
 import { PAGINAS } from "@/lib/paginas";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -7,7 +7,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const caminhos = [
     "/",
     "/sobre",
-    ...rotasCategorias().map((r) => `/categoria/${r.join("/")}`),
+    // Só categorias com peças.
+    ...rotasCategorias().filter(([k, s]) => listar(k, s).length > 0).map((r) => `/categoria/${r.join("/")}`),
     ...PRODS.map((p) => `/produto/${p.slug}`),
     ...PAGINAS.map((p) => `/pagina/${p.slug}`),
   ];

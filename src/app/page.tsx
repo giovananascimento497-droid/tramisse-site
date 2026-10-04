@@ -6,7 +6,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reels } from "@/components/Reels";
 import { Tile } from "@/components/Tile";
-import { PRODS, porId, slug, temEstoque } from "@/lib/catalog";
+import { PRODS, porId, slug, TEM_ACESSORIOS, temEstoque } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import type { Produto } from "@/lib/types";
 
@@ -56,7 +56,7 @@ export default function Home() {
       <section className="sec ed-only">
         <div className="w">
           <div className="tiles">
-            {[["NEW IN", "/categoria/new-in"], ["CURADORIA ESPECIAL", "/categoria/curadoria"], ["ROUPAS", "/categoria/roupas"], ["ACESSÓRIOS", "/categoria/acessorios"]].map(
+            {[["NEW IN", "/categoria/new-in"], ["CURADORIA ESPECIAL", "/categoria/curadoria"], ["ROUPAS", "/categoria/roupas"], TEM_ACESSORIOS ? ["ACESSÓRIOS", "/categoria/acessorios"] : ["JEANS", "/categoria/jeans"]].map(
               ([t, h]) => <Tile key={t} t={t} href={h} foto={TP[t]} />,
             )}
           </div>

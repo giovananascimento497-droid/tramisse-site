@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TEM_ACESSORIOS, TEM_SALE } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { CookiePrefsLink } from "./CookiePrefsLink";
 
@@ -16,7 +17,7 @@ export function Footer() {
           <div>
             <h3>SHOP</h3>
             {L("New In", "/categoria/new-in")}{L("Coming Soon", "/categoria/coming-soon")}{L("Curadoria Especial", "/categoria/curadoria")}{L("Jeans", "/categoria/jeans")}{L("Roupas", "/categoria/roupas")}
-            {L("Acessórios", "/categoria/acessorios")}{L("Sale", "/categoria/sale")}
+            {TEM_ACESSORIOS ? L("Acessórios", "/categoria/acessorios") : null}{TEM_SALE ? L("Sale", "/categoria/sale") : null}
           </div>
           <div>
             <h3>ATENDIMENTO</h3>

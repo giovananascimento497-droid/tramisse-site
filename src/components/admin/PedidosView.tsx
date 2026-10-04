@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CFG } from "@/lib/config";
 import { brl, nomesPagamento } from "@/lib/payment/pricing";
 import { textoEntrega } from "@/lib/payment/whatsapp";
+import { ResumoVendas } from "./ResumoVendas";
 import { NOMES_CANAL, NOMES_SITUACAO, SITUACOES, type PedidoSalvo, type Situacao } from "@/lib/pedidos/tipos";
 
 const PAGAMENTO = nomesPagamento(CFG);
@@ -80,6 +81,7 @@ export function PedidosView({ onSair }: { onSair: () => void }) {
     <>
       {aviso ? <p className="adm-ok">{aviso}</p> : null}
       {erro ? <p className="er" style={{ margin: "8px 0" }}>{erro}</p> : null}
+      {pedidos ? <ResumoVendas pedidos={pedidos} /> : null}
       <p className="adm-resumo">
         {(["aguardando", "pago", "separacao", "enviado"] as Situacao[]).map((s) => (
           <button key={s} className={filtro === s ? "on" : ""} onClick={() => setFiltro(filtro === s ? "abertos" : s)}>

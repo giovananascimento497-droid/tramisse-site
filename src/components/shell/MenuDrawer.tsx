@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Fragment } from "react";
-import { slug, TREE } from "@/lib/catalog";
+import { slug, TEM_ACESSORIOS, TEM_SALE, TREE } from "@/lib/catalog";
 import { useLoja } from "@/store/Store";
 
 export function MenuDrawer() {
@@ -32,8 +32,8 @@ export function MenuDrawer() {
         <Link href="/categoria/curadoria" onClick={fechar}>CURADORIA ESPECIAL</Link>
         <Link href="/categoria/jeans" onClick={fechar}>JEANS</Link>
         {md("roupas", "ROUPAS")}
-        {md("acessorios", "ACESSÓRIOS")}
-        <Link href="/categoria/sale" onClick={fechar}>SALE</Link>
+        {TEM_ACESSORIOS ? md("acessorios", "ACESSÓRIOS") : null}
+        {TEM_SALE ? <Link href="/categoria/sale" onClick={fechar}>SALE</Link> : null}
         <Link href="/conta" onClick={fechar}>MINHA CONTA</Link>
         <Link href="/favoritos" onClick={fechar}>FAVORITOS</Link>
         <Link href="/pagina/contato" onClick={fechar}>FALE CONOSCO</Link>

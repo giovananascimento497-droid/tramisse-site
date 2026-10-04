@@ -58,6 +58,10 @@ export function listar(k: string, sub?: string): Produto[] {
   return l.filter((p) => p.categoria === k && (!sub || slug(p.subcategoria) === sub));
 }
 
+// Acessórios e Sale só aparecem nos menus quando têm peça (categoria vazia parece loja incompleta).
+export const TEM_ACESSORIOS = listar("acessorios").length > 0;
+export const TEM_SALE = listar("sale").length > 0;
+
 // Estoque de uma variante (cor + tamanho).
 export const estoqueDe = (p: Produto, cor: string, tamanho: string) =>
   p.variantes.find((v) => v.cor === cor && v.tamanho === tamanho)?.estoque ?? 0;

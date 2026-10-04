@@ -70,3 +70,19 @@
 .adm-vid-sem{display:grid;place-items:center;color:var(--mut);font-size:12px}
 .adm-vids label.on video,.adm-vids label.on .adm-vid-sem{border-color:var(--ink)}
 .adm-vids input{width:auto;margin:0 4px 0 0}
+/* Resumo de vendas (aba Pedidos) */
+.adm-rv{border:1px solid var(--ln);background:var(--mar);padding:16px;margin:0 0 20px}
+.adm-rv summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;font:500 12px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.adm-rv summary select{border:1px solid var(--ln);background:var(--bg);padding:8px 10px;font:inherit;font-size:13px;letter-spacing:0;text-transform:none}
+.adm-rv-num{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.adm-rv-num div{background:var(--bg);padding:14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.adm-rv-num small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.adm-rv-num b{font:400 24px var(--sans);color:var(--ink)}
+.adm-rv-num em{font-style:normal;font-size:12px;color:var(--mut)}
+.adm-rv-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.adm-rv-cols>div{background:var(--bg);padding:14px}
+.adm-rv h4{margin:0 0 8px;font:500 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.adm-rv ul,.adm-rv ol{margin:0;padding:0;list-style:none}
+.adm-rv li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--ln);font-size:14px}
+.adm-rv li:last-child{border-bottom:0}.adm-rv li b{font-weight:500;white-space:nowrap}
+@media(max-width:700px){.adm-rv-num{grid-template-columns:1fr 1fr}.adm-rv-cols{grid-template-columns:1fr}.adm-rv-num b{font-size:20px}}
