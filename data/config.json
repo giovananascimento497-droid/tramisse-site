@@ -131,7 +131,12 @@
     "frase": "/assets/brand/inicio-frase.svg",
     "textoFrase": "essencial. atemporal. autêntica",
     "video": "/assets/videos/video-2.mp4",
-    "semPecas": true
+    "semPecas": false,
+    "pecas": [
+      136,
+      137,
+      2
+    ]
   },
   "imagensMarca": {
     "brand": "",
