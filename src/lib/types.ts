@@ -72,7 +72,8 @@ export type Config = {
   cupons: Cupom[];
   redes: { nome: string; url: string }[];
   // Primeira tela da home (imagem de início). imagem vazia = só as fotos das peças.
-  hero: { imagem: string; frase: string; textoFrase: string };
+  // pecas: ids das peças do banner, na ordem (vazio = todas com foto e estoque). Editável no painel (aba Início).
+  hero: { imagem: string; frase: string; textoFrase: string; pecas?: number[] };
   // Vídeos da seção "Em movimento". Sem produtoId = vídeo da marca, sem link para peça.
   videos: { produtoId?: number; src: string; poster?: string; titulo?: string }[];
   imagensMarca: { brand: string; cover: string };

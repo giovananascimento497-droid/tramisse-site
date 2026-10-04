@@ -6,7 +6,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reels } from "@/components/Reels";
 import { Tile } from "@/components/Tile";
-import { PRODS, slug, temEstoque } from "@/lib/catalog";
+import { PRODS, porId, slug, temEstoque } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import type { Produto } from "@/lib/types";
 
@@ -30,6 +30,14 @@ function CompreCategoria({ className, style, TP }: { className: string; style?: 
   );
 }
 
+// Peças do banner: as escolhidas no painel (na ordem) ou, sem escolha, todas com foto e estoque.
+// Peça esgotada ou sem foto sai sozinha.
+function pecasBanner() {
+  const ok = (p?: Produto): p is Produto => !!p && !p.emBreve && p.imagens.length > 0 && temEstoque(p);
+  const escolhidas = (CFG.hero.pecas ?? []).map(porId).filter(ok);
+  return escolhidas.length ? escolhidas : PRODS.filter(ok);
+}
+
 export default function Home() {
   const novos = PRODS.filter((p) => p.flags.novo && !p.emBreve);
   const desejadas = PRODS.filter((p) => p.flags.maisVendida && !p.emBreve);
@@ -37,7 +45,7 @@ export default function Home() {
   const TP = CFG.fotosHome;
   return (
     <>
-      <HeroShop fotos={PRODS.filter((p) => p.imagens.length && temEstoque(p)).map(({ slug, nome, imagens, preco }) => ({ slug, nome, preco, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
+      <HeroShop fotos={pecasBanner().map(({ slug, nome, imagens, preco }) => ({ slug, nome, preco, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
 
       <Beneficios />
 

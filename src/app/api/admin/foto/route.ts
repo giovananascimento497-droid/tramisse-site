@@ -13,11 +13,13 @@ export async function POST(req: Request) {
   const base64 = String(d?.base64 || "").replace(/^data:image\/jpeg;base64,/, "");
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return NextResponse.json({ erro: "Peça inválida." }, { status: 400 });
   const bytes = Buffer.from(base64, "base64");
-  if (bytes.length < 1000 || bytes.length > 4_000_000 || bytes[0] !== 0xff || bytes[1] !== 0xd8)
+  if (bytes.length < 1000 || bytes.length > 6_000_000 || bytes[0] !== 0xff || bytes[1] !== 0xd8)
     return NextResponse.json({ erro: "Foto inválida ou grande demais." }, { status: 400 });
   try {
     const blob = await enviarBlob(base64);
-    const caminho = `/assets/products/${slug}-${Date.now().toString(36)}.jpg`;
+    // Imagem de início da home vai para /assets/inicio/; foto de peça, para /assets/products/.
+    const pasta = d?.pasta === "inicio" ? "inicio" : "products";
+    const caminho = `/assets/${pasta}/${slug}-${Date.now().toString(36)}.jpg`;
     return NextResponse.json({ caminho, blob });
   } catch (e) {
     console.error(e);

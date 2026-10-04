@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { CFG } from "@/lib/config";
 import { brl, precoPix, precoVitrine } from "@/lib/payment/pricing";
 import type { Catalogo, Produto, Variante } from "@/lib/types";
+import { InicioView } from "./InicioView";
+import { api, prepararFoto } from "./util";
 import { PedidosView } from "./PedidosView";
 
 type Sessao = { configurado: boolean; github: boolean; logado: boolean };
@@ -14,27 +16,6 @@ const slugify = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const total = (p: Produto) => p.variantes.reduce((a, v) => a + v.estoque, 0);
 const igual = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
-
-async function api(caminho: string, init?: RequestInit) {
-  const r = await fetch(caminho, { ...init, headers: { "Content-Type": "application/json" }, cache: "no-store" });
-  const d = await r.json().catch(() => ({}));
-  if (!r.ok) throw Object.assign(new Error(d.erro || "Algo deu errado."), { status: r.status });
-  return d;
-}
-
-// Reduz a foto no próprio navegador (lado maior 1800 px, JPEG) antes de enviar.
-async function prepararFoto(arquivo: File): Promise<string> {
-  const img = await createImageBitmap(arquivo);
-  const k = Math.min(1, 1800 / Math.max(img.width, img.height));
-  const c = document.createElement("canvas");
-  c.width = Math.round(img.width * k);
-  c.height = Math.round(img.height * k);
-  const ctx = c.getContext("2d")!;
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(0, 0, c.width, c.height);
-  ctx.drawImage(img, 0, 0, c.width, c.height);
-  return c.toDataURL("image/jpeg", 0.86);
-}
 
 // Painel da loja: peças, preços, estoque e fotos. As mudanças ficam pendentes até
 // "PUBLICAR ALTERAÇÕES"; aí viram um commit no GitHub e a Netlify atualiza o site.
@@ -51,7 +32,7 @@ export function AdminView() {
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todas");
   const [ocupado, setOcupado] = useState("");
-  const [aba, setAba] = useState<"pecas" | "pedidos">("pecas");
+  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio">("pecas");
 
   const carregarSessao = () => api("/api/admin/sessao").then(setSessao).catch(() => setSessao({ configurado: false, github: false, logado: false }));
   useEffect(() => { carregarSessao(); }, []);
@@ -230,7 +211,9 @@ export function AdminView() {
       <nav className="adm-abas">
         <button className={aba === "pecas" ? "on" : ""} onClick={() => setAba("pecas")}>PEÇAS</button>
         <button className={aba === "pedidos" ? "on" : ""} onClick={() => { setAba("pedidos"); setSel(null); }}>PEDIDOS</button>
+        <button className={aba === "inicio" ? "on" : ""} onClick={() => { setAba("inicio"); setSel(null); }}>INÍCIO</button>
       </nav>
+      {aba === "inicio" ? cat ? <InicioView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
       {aba === "pedidos" ? <PedidosView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "pecas" && aviso ? <p className="adm-ok">{aviso}</p> : null}
       {aba === "pecas" && erro ? <p className="er" style={{ margin: "8px 0" }}>{erro}</p> : null}
