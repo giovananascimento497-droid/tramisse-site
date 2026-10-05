@@ -466,7 +466,7 @@
         {
           "cor": "ma",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "ma",
@@ -964,7 +964,7 @@
         {
           "cor": "ro",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "ro",
