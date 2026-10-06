@@ -49,7 +49,7 @@ export function listar(k: string, sub?: string): Produto[] {
   if (k === "coming-soon") return PRODS.filter((p) => p.emBreve);
   // Esgotadas por último (sort estável: o resto mantém a ordem).
   const l = PRODS.filter((p) => !p.emBreve).sort((a, b) => Number(esgotado(a)) - Number(esgotado(b)));
-  if (k === "new-in") return l.filter((p) => p.flags.novo);
+  if (k === "new-in") return l.filter(ehNovo);
   if (k === "curadoria") return l.filter((p) => p.flags.curadoria);
   if (k === "jeans") return l.filter((p) => p.flags.jeans);
   if (k === "sale") return l.filter((p) => p.precoDe);
@@ -61,6 +61,16 @@ export function listar(k: string, sub?: string): Produto[] {
 // Acessórios e Sale só aparecem nos menus quando têm peça (categoria vazia parece loja incompleta).
 export const TEM_ACESSORIOS = listar("acessorios").length > 0;
 export const TEM_SALE = listar("sale").length > 0;
+
+// New In: marcada como nova e há menos de novoDias (30) desde que chegou. As páginas se
+// refazem uma vez por dia (revalidate), então a peça sai do New In sozinha.
+export function ehNovo(p: Produto) {
+  const hoje = new Date();
+  if (!p.flags.novo || p.emBreve) return false;
+  if (!p.novoDesde) return true;
+  const dias = (hoje.getTime() - new Date(`${p.novoDesde}T12:00:00-03:00`).getTime()) / 86400000;
+  return dias <= (CFG.novoDias ?? 30);
+}
 
 // Estoque de uma variante (cor + tamanho).
 export const estoqueDe = (p: Produto, cor: string, tamanho: string) =>

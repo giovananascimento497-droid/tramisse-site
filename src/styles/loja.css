@@ -142,3 +142,21 @@ body.loja .fg .opc input{width:auto;flex:none;margin:0;accent-color:var(--ink)}
 :root{color-scheme:only light}
 /* Seção de vídeos com até 3 vídeos: ocupam a largura toda no computador. */
 @media(min-width:1001px){body.loja .reels.r3 .reel{flex-basis:calc(33.333% - 11px)}}
+/* Botão flutuante de atendimento (WhatsApp), na cor da marca (sem o verde do WhatsApp). */
+.wf{position:fixed;right:20px;bottom:20px;z-index:35;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.wf-bt{width:54px;height:54px;border-radius:50%;border:0;background:#1E1D1B;color:#F7F5F1;display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 24px rgba(30,29,27,.22)}
+.wf-bt svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
+.wf-caixa{width:min(280px,calc(100vw - 40px));background:#F7F5F1;border:1px solid #DDD6CA;box-shadow:0 12px 32px rgba(30,29,27,.14);padding:18px;display:flex;flex-direction:column;gap:8px}
+.wf-caixa b{font:500 12px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.wf-caixa small{color:#77726B;font-size:13px;line-height:1.5;margin-bottom:4px}
+.wf-caixa a{display:block;text-align:center;padding:12px;border:1px solid #1E1D1B;font:400 12px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.wf-caixa a:hover{background:#1E1D1B;color:#F7F5F1}
+@media(max-width:700px){.wf{right:14px;bottom:14px}.wf-bt{width:50px;height:50px}}
+/* "Avise-me" (lista de espera) na página da peça */
+.av{margin-top:16px;padding:18px;background:var(--mar);gap:12px}
+.av-t{margin:0;font-size:14px;color:var(--car)}
+.av-ck{display:flex!important;flex-direction:row!important;align-items:flex-start;gap:10px;font-size:13px;color:var(--car)}
+.av-ck input{width:auto!important;margin-top:3px}
+.av-wa{margin:0;font-size:13px;color:var(--mut)}.av-wa a{text-decoration:underline}
+.av-ok{margin-top:16px;padding:16px 18px;background:var(--mar);font-size:14px}
+body.m .wf,body.g .wf{display:none}

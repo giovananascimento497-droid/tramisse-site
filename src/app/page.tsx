@@ -6,7 +6,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reels } from "@/components/Reels";
 import { Tile } from "@/components/Tile";
-import { PRODS, porId, slug, TEM_ACESSORIOS, temEstoque } from "@/lib/catalog";
+import { ehNovo, PRODS, porId, slug, TEM_ACESSORIOS, temEstoque } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import type { Produto } from "@/lib/types";
 
@@ -39,9 +39,13 @@ function pecasBanner() {
   return escolhidas.length ? escolhidas : PRODS.filter(ok);
 }
 
+// Refaz a página uma vez por dia (New In vence sozinho depois de 30 dias).
+export const revalidate = 86400;
+
 export default function Home() {
-  const novos = PRODS.filter((p) => p.flags.novo && !p.emBreve);
-  const desejadas = PRODS.filter((p) => p.flags.maisVendida && !p.emBreve);
+  // Vitrine da home: só peças à venda (esgotadas ficam nas categorias, no fim da lista).
+  const novos = PRODS.filter((p) => ehNovo(p) && temEstoque(p));
+  const desejadas = PRODS.filter((p) => p.flags.maisVendida && temEstoque(p));
   const emBreve = PRODS.filter((p) => p.emBreve);
   const TP = CFG.fotosHome;
   return (

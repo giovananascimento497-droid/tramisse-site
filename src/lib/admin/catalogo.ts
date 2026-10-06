@@ -52,11 +52,15 @@ export function limparProduto(p: Produto, cat: Catalogo): { ok: Produto } | { er
       colecao: String(p.colecao || "Coleção atual").trim(),
       flags: { novo: Boolean(p.flags?.novo), curadoria: Boolean(p.flags?.curadoria), maisVendida: Boolean(p.flags?.maisVendida), jeans: Boolean(p.flags?.jeans) },
       emBreve: Boolean(p.emBreve),
+      // Data em que entrou no New In (sem data = hoje).
+      ...(p.flags?.novo ? { novoDesde: /^\d{4}-\d{2}-\d{2}$/.test(String(p.novoDesde)) ? String(p.novoDesde) : hojeBelem() } : {}),
       variantes,
       imagens,
     },
   };
 }
+
+const hojeBelem = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Belem" });
 
 export type Alteracao = { original: Produto | null; novo: Produto };
 

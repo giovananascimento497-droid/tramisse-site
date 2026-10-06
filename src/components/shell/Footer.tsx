@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TEM_ACESSORIOS, TEM_SALE } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { CookiePrefsLink } from "./CookiePrefsLink";
+import { GuiaLink } from "./GuiaLink";
 
 export function Footer() {
   const L = (t: string, h: string) => <Link key={t} href={h}>{t}</Link>;
@@ -21,14 +22,13 @@ export function Footer() {
           </div>
           <div>
             <h3>ATENDIMENTO</h3>
-            {L("Trocas e devoluções", "/pagina/trocas")}{L("Entrega", "/pagina/trocas")}{L("Formas de pagamento", "/pagina/faq")}
-            {L("FAQ", "/pagina/faq")}{L("Guia de tamanhos", "/pagina/faq")}{L("Privacidade", "/pagina/privacidade")}{L("Termos de uso", "/pagina/termos")}
+            {L("Trocas e devoluções", "/pagina/trocas")}{L("Entrega", "/pagina/entrega")}{L("Formas de pagamento", "/pagina/faq")}
+            {L("FAQ", "/pagina/faq")}<GuiaLink />{L("Privacidade", "/pagina/privacidade")}{L("Termos de uso", "/pagina/termos")}
           </div>
           <div>
             <h3>SIGA A TRAMISSE</h3>
-            {CFG.redes.map((s) =>
-              s.url ? <a key={s.nome} href={s.url} target="_blank" rel="noopener">{s.nome}</a> : <Link key={s.nome} href="/">{s.nome}</Link>,
-            )}
+            {/* Só redes com endereço (TikTok e Pinterest aparecem quando tiverem conta). */}
+            {CFG.redes.filter((s) => s.url).map((s) => <a key={s.nome} href={s.url} target="_blank" rel="noopener">{s.nome}</a>)}
           </div>
         </div>
         <div className="ft-pag lj-only">

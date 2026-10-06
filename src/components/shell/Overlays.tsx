@@ -1,8 +1,9 @@
 "use client";
 
+import { CFG } from "@/lib/config";
 import { useLoja } from "@/store/Store";
 
-const MEDIDAS = [["PP", 84, 66, 90], ["P", 88, 70, 94], ["M", 92, 74, 98], ["G", 98, 80, 104], ["GG", 104, 86, 110]];
+const MEDIDAS = CFG.medidas.tabela;
 
 // Fundo escuro das gavetas, guia de tamanhos e aviso rápido (toast).
 export function Overlays() {
@@ -16,10 +17,10 @@ export function Overlays() {
           <table>
             <tbody>
               <tr><th>Tam.</th><th>Busto</th><th>Cintura</th><th>Quadril</th></tr>
-              {MEDIDAS.map((r) => <tr key={r[0]}>{r.map((x) => <td key={x}>{x}</td>)}</tr>)}
+              {MEDIDAS.map((r) => <tr key={r[0]}>{r.map((x, i) => <td key={i}>{x}</td>)}</tr>)}
             </tbody>
           </table>
-          <small>Medidas de exemplo em cm.</small><br /><br />
+          <small>Medidas em centímetros. Ficou em dúvida entre dois tamanhos? Fale com a gente no WhatsApp.</small><br /><br />
           <button className="btn o" onClick={() => setGuia(false)}>FECHAR</button>
         </div>
       </div>

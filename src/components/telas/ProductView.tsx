@@ -5,6 +5,7 @@ import { CL, cores, esgotado, estoqueDe, porId, tamanhoUnico, tamanhos } from "@
 import { CFG } from "@/lib/config";
 import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
+import { AviseMeForm } from "../AviseMe";
 import { CalcularFrete } from "../CalcularFrete";
 import { FavButton } from "../FavButton";
 import { Ph } from "../Ph";
@@ -42,7 +43,8 @@ export function ProductView({ id }: { id: number }) {
     });
     abrir("g");
   };
-  // Coming soon: em vez de comprar, avisa a atendente pelo WhatsApp.
+  const [avise, setAvise] = useState(false);
+  // Coming soon / esgotada: lista de espera (formulário) ou, se preferir, WhatsApp direto.
   const aviseMe = () => {
     const at = CFG.atendentes[0];
     const texto = `Olá! Quero ser avisada quando a peça ${p.nome}${tam ? ` (${CL[cor].nome}, tam. ${tam})` : ""} ${semEstoque ? "voltar ao estoque" : "chegar à Tramisse"}.`;
@@ -126,11 +128,11 @@ export function ProductView({ id }: { id: number }) {
         </div>
         {semEstoque ? (
           <p style={{ color: "var(--mut)", fontSize: 14, margin: "8px 0 20px" }}>
-            Esta peça está esgotada. Toque em &quot;Avise-me&quot; e a nossa atendente te avisa pelo WhatsApp se ela voltar.
+            Esta peça está esgotada. Deixe o seu WhatsApp e avisamos se ela voltar.
           </p>
         ) : p.emBreve ? (
           <p style={{ color: "var(--mut)", fontSize: 14, margin: "8px 0 20px" }}>
-            Esta peça ainda não chegou. Toque em &quot;Avise-me&quot; e a nossa atendente te avisa pelo WhatsApp quando estiver disponível.
+            Esta peça ainda não chegou. Deixe o seu WhatsApp e avisamos assim que ela estiver disponível.
           </p>
         ) : (
           <>
@@ -144,14 +146,17 @@ export function ProductView({ id }: { id: number }) {
         )}
         <div style={{ display: "flex", gap: 8 }}>
           {semEstoque ? (
-            <button className="btn" style={{ flex: 1 }} onClick={aviseMe}>ESGOTADO · AVISE-ME</button>
+            <button className="btn" style={{ flex: 1 }} onClick={() => setAvise((x) => !x)}>ESGOTADO · AVISE-ME</button>
           ) : p.emBreve ? (
-            <button className="btn" style={{ flex: 1 }} onClick={aviseMe}>AVISE-ME QUANDO CHEGAR</button>
+            <button className="btn" style={{ flex: 1 }} onClick={() => setAvise((x) => !x)}>AVISE-ME QUANDO CHEGAR</button>
           ) : (
             <button className="btn" style={{ flex: 1 }} onClick={adicionar}>ADICIONAR À SACOLA</button>
           )}
           <FavButton id={p.id} style={{ position: "static", border: "1px solid var(--ln)", width: 52 }} />
         </div>
+        {(p.emBreve || semEstoque) && avise ? (
+          <AviseMeForm produtoId={p.id} nomePeca={p.nome} tam={tam ?? undefined} chegou={!p.emBreve} onWhatsApp={aviseMe} />
+        ) : null}
         {p.emBreve || semEstoque ? null : <CalcularFrete id={p.id} q={q} />}
         <div style={{ marginTop: 32 }}>
           {acordeao.map(([t, c]) => (

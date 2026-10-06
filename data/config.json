@@ -158,5 +158,35 @@
     "NIGHT": 9,
     "WEEKEND": 16,
     "JEANS": 19
-  }
+  },
+  "medidas": {
+    "_comentario": "Guia de tamanhos (cm). GG proporcional (+4 cm).",
+    "tabela": [
+      [
+        "P",
+        90,
+        70,
+        99
+      ],
+      [
+        "M",
+        94,
+        74,
+        103
+      ],
+      [
+        "G",
+        98,
+        78,
+        107
+      ],
+      [
+        "GG",
+        102,
+        82,
+        111
+      ]
+    ]
+  },
+  "novoDias": 30
 }

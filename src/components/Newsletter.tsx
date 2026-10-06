@@ -8,7 +8,7 @@ export function Newsletter() {
   return (
     <section className="nl">
       <h2>Fique por perto</h2>
-      <p style={{ color: "var(--mut)" }}>Receba novidades, lançamentos e conteúdos da Tramisse.</p>
+      <p style={{ color: "var(--mut)" }}>Receba os lançamentos em primeira mão, com acesso antecipado às novidades da Tramisse.</p>
       <form
         noValidate
         onSubmit={(e) => {

@@ -86,3 +86,7 @@
 .adm-rv li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--ln);font-size:14px}
 .adm-rv li:last-child{border-bottom:0}.adm-rv li b{font-weight:500;white-space:nowrap}
 @media(max-width:700px){.adm-rv-num{grid-template-columns:1fr 1fr}.adm-rv-cols{grid-template-columns:1fr}.adm-rv-num b{font-size:20px}}
+.adm-abas{flex-wrap:wrap;row-gap:0}
+.adm-esp-peca{margin-bottom:24px}.adm-esp-peca h3{margin:24px 0 8px}.adm-esp-peca h3 small{color:var(--mut);font-weight:400;letter-spacing:.08em}
+.adm-esp .adm-ord a{font-size:11px;letter-spacing:.12em}
+@media(max-width:700px){.adm-abas{gap:16px}}

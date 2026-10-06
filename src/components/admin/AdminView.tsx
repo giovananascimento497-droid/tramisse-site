@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CFG } from "@/lib/config";
 import { brl, precoPix, precoVitrine } from "@/lib/payment/pricing";
 import type { Catalogo, Produto, Variante } from "@/lib/types";
+import { EsperaView } from "./EsperaView";
 import { InicioView } from "./InicioView";
 import { api, prepararFoto } from "./util";
 import { PedidosView } from "./PedidosView";
@@ -14,6 +15,13 @@ type Filtro = "todas" | "venda" | "esgotadas" | "embreve" | "semfoto";
 
 const slugify = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const hoje = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Belem" });
+// Último dia no New In (novoDias depois de chegar).
+const ateNovo = (d: string) => {
+  const x = new Date(`${d}T12:00:00-03:00`);
+  x.setDate(x.getDate() + (CFG.novoDias ?? 30));
+  return x.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", timeZone: "America/Belem" });
+};
 const total = (p: Produto) => p.variantes.reduce((a, v) => a + v.estoque, 0);
 const igual = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -32,7 +40,7 @@ export function AdminView() {
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todas");
   const [ocupado, setOcupado] = useState("");
-  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio">("pecas");
+  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio" | "espera">("pecas");
 
   const carregarSessao = () => api("/api/admin/sessao").then(setSessao).catch(() => setSessao({ configurado: false, github: false, logado: false }));
   useEffect(() => { carregarSessao(); }, []);
@@ -117,7 +125,7 @@ export function AdminView() {
     const id = -Date.now();
     const p: Produto = {
       id, slug: "", nome: "", descricao: "", tecido: "", preco: 0, precoDe: 0, categoria: "roupas", subcategoria: "Blusas",
-      estilo: "", colecao: "Coleção atual", flags: { novo: true, curadoria: false, maisVendida: false }, emBreve: false,
+      estilo: "", colecao: "Coleção atual", flags: { novo: true, curadoria: false, maisVendida: false }, novoDesde: hoje(), emBreve: false,
       variantes: [{ cor: "un", tamanho: "M", estoque: 1 }], imagens: [],
     };
     setEdits((e) => ({ ...e, [id]: p }));
@@ -212,7 +220,9 @@ export function AdminView() {
         <button className={aba === "pecas" ? "on" : ""} onClick={() => setAba("pecas")}>PEÇAS</button>
         <button className={aba === "pedidos" ? "on" : ""} onClick={() => { setAba("pedidos"); setSel(null); }}>PEDIDOS</button>
         <button className={aba === "inicio" ? "on" : ""} onClick={() => { setAba("inicio"); setSel(null); }}>INÍCIO</button>
+        <button className={aba === "espera" ? "on" : ""} onClick={() => { setAba("espera"); setSel(null); }}>AVISE-ME</button>
       </nav>
+      {aba === "espera" ? cat ? <EsperaView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
       {aba === "inicio" ? cat ? <InicioView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
       {aba === "pedidos" ? <PedidosView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "pecas" && aviso ? <p className="adm-ok">{aviso}</p> : null}
@@ -362,11 +372,14 @@ function Editor(props: {
           <input value={p.tecido} onChange={(e) => set({ tecido: e.target.value })} />
         </label>
         <div className="s adm-flags">
-          <label><input type="checkbox" checked={p.flags.novo} onChange={(e) => set({ flags: { ...p.flags, novo: e.target.checked } })} /> New In</label>
+          <label>
+            <input type="checkbox" checked={p.flags.novo} onChange={(e) => set({ flags: { ...p.flags, novo: e.target.checked }, novoDesde: e.target.checked ? hoje() : undefined })} />{" "}
+            New In{p.flags.novo && p.novoDesde ? <small style={{ color: "var(--mut)" }}>&nbsp;(até {ateNovo(p.novoDesde)})</small> : null}
+          </label>
           <label><input type="checkbox" checked={p.flags.curadoria} onChange={(e) => set({ flags: { ...p.flags, curadoria: e.target.checked } })} /> Curadoria</label>
           <label><input type="checkbox" checked={!!p.flags.jeans} onChange={(e) => set({ flags: { ...p.flags, jeans: e.target.checked } })} /> Jeans</label>
           <label><input type="checkbox" checked={p.flags.maisVendida} onChange={(e) => set({ flags: { ...p.flags, maisVendida: e.target.checked } })} /> Mais desejada</label>
-          <label><input type="checkbox" checked={!!p.emBreve} onChange={(e) => set({ emBreve: e.target.checked })} /> Coming soon (ainda não chegou)</label>
+          <label><input type="checkbox" checked={!!p.emBreve} onChange={(e) => set(e.target.checked ? { emBreve: true } : { emBreve: false, flags: { ...p.flags, novo: true }, novoDesde: hoje() })} /> Coming soon (ainda não chegou)</label>
         </div>
       </form>
 

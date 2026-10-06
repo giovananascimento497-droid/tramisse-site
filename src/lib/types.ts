@@ -21,6 +21,7 @@ export type Produto = {
   estilo: string;
   colecao: string;
   flags: { novo: boolean; curadoria: boolean; maisVendida: boolean; jeans?: boolean };
+  novoDesde?: string; // AAAA-MM-DD: data em que entrou no New In (sai sozinha depois de novoDias)
   emBreve?: boolean; // Coming soon: aparece só na vitrine Coming Soon, sem compra ("Avise-me")
   variantes: Variante[];
   imagens: string[];
@@ -71,6 +72,10 @@ export type Config = {
   atendentes: Atendente[];
   cupons: Cupom[];
   redes: { nome: string; url: string }[];
+  // Guia de tamanhos: [tamanho, busto, cintura, quadril] em cm.
+  medidas: { tabela: (string | number)[][] };
+  // Quantos dias uma peça fica no New In depois de chegar (novoDesde).
+  novoDias: number;
   // Primeira tela da home (imagem de início). imagem vazia = só as fotos das peças.
   // pecas: ids das peças do banner, na ordem (vazio = todas com foto e estoque). Editável no painel (aba Início).
   // video: vídeo que alterna com a imagem de entrada ("" = sem vídeo); semPecas: não mostra as peças no banner.

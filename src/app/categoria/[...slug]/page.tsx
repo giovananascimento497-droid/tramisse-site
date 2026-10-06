@@ -8,6 +8,8 @@ type Props = { params: Promise<{ slug: string[] }> };
 const valida = (s: string[]) => rotasCategorias().some((r) => r.join("/") === s.join("/"));
 
 export const dynamicParams = false;
+// Refaz uma vez por dia (etiqueta e lista do New In vencem sozinhas depois de 30 dias).
+export const revalidate = 86400;
 export function generateStaticParams() {
   return rotasCategorias().map((slug) => ({ slug }));
 }

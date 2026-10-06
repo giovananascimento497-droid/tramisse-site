@@ -8,6 +8,7 @@ import { Header } from "@/components/shell/Header";
 import { MenuDrawer } from "@/components/shell/MenuDrawer";
 import { Overlays } from "@/components/shell/Overlays";
 import { TopBar } from "@/components/shell/TopBar";
+import { WhatsFlutuante } from "@/components/shell/WhatsFlutuante";
 import { CFG } from "@/lib/config";
 import { StoreProvider } from "@/store/Store";
 import "@/styles/tramisse.css";
@@ -19,7 +20,8 @@ import "@/styles/loja.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: { default: "Tramisse — Threads of Identity", template: "%s — Tramisse" },
-  description: "Tramisse, moda feminina brasileira contemporânea. Essencial. Atemporal.",
+  description:
+    "Tramisse, moda feminina contemporânea de Belém/PA: conjuntos, alfaiataria feminina, blusas, calças e vestidos. Essencial. Atemporal. Envio para todo o Brasil.",
 };
 
 // Sempre no visual claro da marca (mesmo com o celular no modo escuro).
@@ -58,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Overlays />
           <Chrome />
           <HashRedirect />
+          <WhatsFlutuante />
           <CookieBanner />
         </StoreProvider>
       </body>
