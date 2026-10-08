@@ -1912,7 +1912,7 @@
       "nome": "Blusa Cassandra",
       "descricao": "Blusa Frente Única com Detalhe Metálico\n\nUma peça de silhueta fluida e elegante, com decote em V e modelagem frente única que valoriza os ombros.\n\nO destaque fica para a alça que contorna o pescoço e é finalizada por uma fivela metálica geométrica, trazendo um toque sofisticado e contemporâneo. O corpo possui caimento soltinho, com uma sobreposição assimétrica na parte frontal que cria movimento e deixa a peça ainda mais interessante.",
       "tecido": "Crepe",
-      "preco": 164.9,
+      "preco": 148.77,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
@@ -1952,7 +1952,7 @@
       "nome": "Blusa Victoria",
       "descricao": "Blusa Renda com Amarração Lateral\n\nDelicada e cheia de personalidade, a blusa é confeccionada em renda texturizada de trama aberta, com transparência sutil e toque artesanal.\n\nA modelagem apresenta gola alta arredondada e mangas curtas, criando uma silhueta limpa e elegante. O destaque fica para a amarração lateral na altura da cintura, finalizada por um detalhe ovalado em tom contrastante, que permite ajustar o caimento e cria um drapeado delicado na lateral.\n\nO comprimento alongado e o caimento levemente ajustado valorizam a silhueta sem perder a leveza característica da renda.",
       "tecido": "Poliamida",
-      "preco": 160,
+      "preco": 156.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
@@ -1964,8 +1964,8 @@
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-10-03",
       "emBreve": true,
+      "novoDesde": "2026-10-03",
       "variantes": [
         {
           "cor": "ma",
@@ -1995,10 +1995,10 @@
     {
       "id": 139,
       "slug": "blusa-napoleonica",
-      "nome": "Blusa Napoleônica",
+      "nome": "Blusa Napoleon",
       "descricao": "Blusa de Renda Estilo Napoleão\n\nInspirada na estética clássica das jaquetas Napoleão, esta blusa combina a delicadeza da renda com uma construção marcante e sofisticada.\n\nConfeccionada em renda branca de trama delicada e desenho floral, apresenta gola alta estruturada e mangas curtas levemente amplas, criando uma silhueta elegante. O fechamento frontal é o grande destaque: seis fechos de inspiração oriental, formados por cordões delicados e pequenos botões revestidos, percorrem toda a extensão da peça.",
       "tecido": "Renda de poliamida",
-      "preco": 169,
+      "preco": 156.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
@@ -2010,23 +2010,28 @@
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-10-03",
       "emBreve": true,
+      "novoDesde": "2026-10-03",
       "variantes": [
         {
           "cor": "br",
+          "tamanho": "PP",
+          "estoque": 1
+        },
+        {
+          "cor": "br",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "br",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         },
         {
-          "cor": "br",
-          "tamanho": "G",
-          "estoque": 0
+          "cor": "mf",
+          "tamanho": "M",
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -2041,7 +2046,7 @@
       "nome": "Blusa Flora",
       "descricao": "Delicada e atemporal, a peça é confeccionada em renda branca de trama fina, leve e semitransparente, com desenho floral delicado e textura artesanal.",
       "tecido": "Renda de poliamida",
-      "preco": 123,
+      "preco": 138,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
@@ -2053,8 +2058,8 @@
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-10-03",
       "emBreve": true,
+      "novoDesde": "2026-10-03",
       "variantes": [
         {
           "cor": "am",
