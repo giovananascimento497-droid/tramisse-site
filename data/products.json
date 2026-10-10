@@ -152,12 +152,11 @@
       "estilo": "Casual",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
-        "maisVendida": true,
+        "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -185,12 +184,11 @@
       "estilo": "Night",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": true,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -218,12 +216,11 @@
       "estilo": "Night",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": true,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -282,12 +279,11 @@
       "estilo": "Casual",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -743,12 +739,11 @@
       "estilo": "Office",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -910,12 +905,11 @@
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -978,12 +972,11 @@
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -1012,7 +1005,7 @@
       "slug": "blusa-geovana",
       "nome": "Blusa Geovana",
       "descricao": "Blusa de alças finas, estampada, com franzido e amarração na cintura.",
-      "tecido": "Silky cristal",
+      "tecido": "Silky cristal, 100% viscose.",
       "preco": 139.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1020,12 +1013,11 @@
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -1360,12 +1352,11 @@
       "estilo": "Casual",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": true,
         "jeans": true
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -1541,8 +1532,8 @@
       "id": 124,
       "slug": "colete-nicole",
       "nome": "Colete Nicole",
-      "descricao": "",
-      "tecido": "",
+      "descricao": "Colete confeccionado em alfaiataria, possui ganchos de segurança internos proporcionando um fechamento elegante.",
+      "tecido": "Crepe de alfaiataria",
       "preco": 154.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1550,22 +1541,23 @@
       "estilo": "",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
-        "maisVendida": false,
+        "maisVendida": true,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "un",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "un",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1581,24 +1573,25 @@
       "nome": "T-Shirt Nina",
       "descricao": "Aquele básico atemporal, uma t-shit confeccionada em tecido 100% algodão e modelagem clássica.",
       "tecido": "100% algodão",
-      "preco": 70.9,
+      "preco": 60.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "T-shirts",
       "estilo": "Básico",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": true,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "ma",
           "tamanho": "G",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1614,24 +1607,25 @@
       "nome": "T-Shirt Nai",
       "descricao": "Aquele básico atemporal, uma t-shit confeccionada em tecido 100% algodão e modelagem clássica.",
       "tecido": "",
-      "preco": 70.9,
+      "preco": 60.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "T-shirts",
       "estilo": "Basico",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "vi",
           "tamanho": "G",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1654,17 +1648,18 @@
       "estilo": "",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "of",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1685,12 +1680,13 @@
       "estilo": "Casual",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
-        "maisVendida": false,
+        "maisVendida": true,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "un",
@@ -1700,7 +1696,7 @@
         {
           "cor": "un",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1723,22 +1719,23 @@
       "estilo": "",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "un",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "un",
           "tamanho": "G",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1760,17 +1757,18 @@
       "estilo": "Casual chic",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "un",
           "tamanho": "G",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1792,32 +1790,33 @@
       "estilo": "Sofisticado",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "am",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "am",
           "tamanho": "G",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "mf",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "ma",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1842,22 +1841,23 @@
       "estilo": "Office, Casual, Elegante",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
-        "curadoria": false,
+        "novo": true,
+        "curadoria": true,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "az",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "az",
           "tamanho": "G",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1879,27 +1879,28 @@
       "estilo": "Daily",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
-          "cor": "un",
+          "cor": "ro",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         },
         {
-          "cor": "un",
+          "cor": "ro",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         },
         {
-          "cor": "un",
+          "cor": "ro",
           "tamanho": "G",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1919,28 +1920,29 @@
       "estilo": "",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "ma",
           "tamanho": "G",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "am",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
+        "/assets/products/blusa-cassandra-musfiftp.jpg",
         "/assets/products/blusa-cassandra-musfied4.jpg",
         "/assets/products/blusa-cassandra-musfieyn.jpg",
-        "/assets/products/blusa-cassandra-musfiftp.jpg",
         "/assets/products/blusa-cassandra-musfiglc.jpg",
         "/assets/products/blusa-cassandra-musfihg3.jpg",
         "/assets/products/blusa-cassandra-musfii2y.jpg"
@@ -1960,27 +1962,32 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": true,
-        "curadoria": false,
+        "curadoria": true,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
-      "novoDesde": "2026-10-03",
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "ma",
-          "tamanho": "G",
-          "estoque": 0
+          "tamanho": "M",
+          "estoque": 1
         },
         {
           "cor": "ma",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         },
         {
-          "cor": "ma",
+          "cor": "pr",
+          "tamanho": "P",
+          "estoque": 1
+        },
+        {
+          "cor": "pr",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -2006,12 +2013,12 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": true,
-        "curadoria": false,
+        "curadoria": true,
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
-      "novoDesde": "2026-10-03",
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "br",
@@ -2046,7 +2053,7 @@
       "nome": "Blusa Flora",
       "descricao": "Delicada e atemporal, a peça é confeccionada em renda branca de trama fina, leve e semitransparente, com desenho floral delicado e textura artesanal.",
       "tecido": "Renda de poliamida",
-      "preco": 138,
+      "preco": 129.9,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Blusas",
@@ -2058,28 +2065,28 @@
         "maisVendida": false,
         "jeans": false
       },
-      "emBreve": true,
-      "novoDesde": "2026-10-03",
+      "emBreve": false,
+      "novoDesde": "2026-10-09",
       "variantes": [
         {
           "cor": "am",
           "tamanho": "U",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "az",
           "tamanho": "U",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "ro",
           "tamanho": "U",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "br",
           "tamanho": "U",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
