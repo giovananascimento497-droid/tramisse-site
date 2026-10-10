@@ -1354,7 +1354,7 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": true,
+        "maisVendida": false,
         "jeans": true
       },
       "emBreve": false,
@@ -1362,7 +1362,7 @@
         {
           "cor": "je",
           "tamanho": "36",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
