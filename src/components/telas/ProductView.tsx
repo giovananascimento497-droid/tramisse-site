@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type CSSProperties, type MouseEvent } from "react";
+import { registrar } from "@/lib/estatisticas";
+import { useEffect, useState, type CSSProperties, type MouseEvent } from "react";
 import { CL, cores, esgotado, estoqueDe, porId, tamanhoUnico, tamanhos } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
@@ -16,6 +17,7 @@ export function ProductView({ id }: { id: number }) {
   const tams = tamanhos(p);
   const semEstoque = esgotado(p);
   const { bag, setBag, abrir, setGuia } = useLoja();
+  useEffect(() => { registrar("peca", { p: id }); }, [id]);
   const [cor, setCor] = useState(cs[0]);
   const [tam, setTam] = useState<string | null>(tamanhoUnico(p, cs[0]));
   const [q, setQ] = useState(1);
@@ -41,6 +43,7 @@ export function ProductView({ id }: { id: number }) {
       const k = b.find((l) => l.id === p.id && l.tam === tam && l.cor === cor);
       return k ? b.map((l) => (l === k ? { ...l, q: l.q + q } : l)) : [...b, { id: p.id, tam, cor, q }];
     });
+    registrar("sacola", { p: p.id, q });
     abrir("g");
   };
   const [avise, setAvise] = useState(false);

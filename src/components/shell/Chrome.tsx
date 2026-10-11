@@ -1,5 +1,6 @@
 "use client";
 
+import { registrar } from "@/lib/estatisticas";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { CFG } from "@/lib/config";
@@ -11,6 +12,9 @@ import { useLoja } from "@/store/Store";
 export function Chrome() {
   const home = usePathname() === "/";
   const { gaveta, abrir, setGuia } = useLoja();
+
+  // Estatísticas: conta a visita (uma vez por aba aberta).
+  useEffect(() => { registrar("visita"); }, []);
 
   useEffect(() => {
     const b = document.body;

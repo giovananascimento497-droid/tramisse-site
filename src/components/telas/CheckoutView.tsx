@@ -1,5 +1,6 @@
 "use client";
 
+import { registrar } from "@/lib/estatisticas";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CL, porId } from "@/lib/catalog";
@@ -50,6 +51,8 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   const [faltando, setFaltando] = useState<string[]>([]);
   const [enviado, setEnviado] = useState<{ at: string; wa: string } | null>(null);
   const [pix, setPix] = useState<{ at: string; wa: string; codigo: string; total: number; id: string } | null>(null);
+  // Estatísticas: começou o checkout (uma vez por aba), só com peça na sacola.
+  useEffect(() => { if (pronto && bag.length) registrar("checkout"); }, [pronto, bag.length]);
   const [gerando, setGerando] = useState(false);
 
   const t = calcularTotais(CFG, linhasSacola(bag), step >= 3 ? pay : null, cupom);
@@ -148,6 +151,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     if (r.tipo !== "redirecionar") return;
     const id = novoId();
     avisarPedido(pedido, { id, canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: atendente.nome });
+    registrar("pedido");
     registrarPedido({ id, canal: "whatsapp", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete });
     setEnviado({ at: atendente.nome, wa: r.url });
     setBag(() => []);
@@ -164,6 +168,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     const codigo = codigoPix({ ...CFG.pagamento.pix, valor: pedido.total, txid: id });
     const texto = resumoPedido({ ...pedido, pagamentoOnline: { provedor: "Pix", id, status: "aguardando comprovante" } });
     avisarPedido(pedido, { id, canal: "Site (Pix)", situacao: "Aguardando Pix (conferir comprovante)", atendente: atendente.nome });
+    registrar("pedido");
     registrarPedido({ id, canal: "pix", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete });
     setPix({ at: atendente.nome, wa: `https://wa.me/${atendente.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, id });
     setBag(() => []);

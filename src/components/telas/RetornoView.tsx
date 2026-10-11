@@ -1,5 +1,6 @@
 "use client";
 
+import { registrar } from "@/lib/estatisticas";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -42,6 +43,7 @@ export function RetornoView() {
             situacao: `Pagamento ${sit} no Mercado Pago (nº ${id})`,
             atendente: p!.atendente,
           });
+          if (sit === "aprovado") registrar("pedido");
           try { localStorage.setItem("tp", JSON.stringify({ ...p!, avisado: sit })); } catch {}
         }
         if (r.status === "approved") {
