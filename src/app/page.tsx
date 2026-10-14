@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Beneficios } from "@/components/Beneficios";
 import { CarouselButtons } from "@/components/Carousel";
@@ -38,6 +39,8 @@ function pecasBanner() {
   const escolhidas = (CFG.hero.pecas ?? []).map(porId).filter(ok);
   return escolhidas.length ? escolhidas : PRODS.filter(ok);
 }
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 // Refaz a página uma vez por dia (New In vence sozinho depois de 30 dias).
 export const revalidate = 86400;

@@ -3,6 +3,7 @@
 // com o domínio verificado no Resend). Opcional: EMAIL_RESPOSTA (para onde vão as respostas).
 // Sem essas variáveis, nada é enviado (o resto funciona normalmente).
 import { CFG } from "./config";
+import { SITE } from "./site";
 import { linkRastreio, textoAviso, type TipoAviso } from "./pedidos/mensagens";
 import type { PedidoSalvo } from "./pedidos/tipos";
 
@@ -13,7 +14,7 @@ export const emailAtivo = () => Boolean(chave() && remetente());
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 function html(linhas: string[], rastreio?: string) {
-  const site = process.env.NEXT_PUBLIC_SITE_URL || "https://tramisse.com.br";
+  const site = SITE;
   const corpo = linhas
     .map((l) => (l ? `<p style="margin:0 0 10px">${esc(l).replace(/(https:\/\/\S+)/g, '<a href="$1" style="color:#1E1D1B">$1</a>')}</p>` : '<div style="height:8px"></div>'))
     .join("");

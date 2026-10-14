@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Tile } from "@/components/Tile";
 
-export const metadata: Metadata = { title: "Sobre" };
+export const metadata: Metadata = {
+  title: "Sobre",
+  description: "Conheça a Tramisse, marca de moda feminina contemporânea de Belém/PA. Essencial. Atemporal.",
+  alternates: { canonical: "/sobre" },
+};
 
 export default function Sobre() {
   return (

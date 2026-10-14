@@ -10,6 +10,7 @@ import { Overlays } from "@/components/shell/Overlays";
 import { TopBar } from "@/components/shell/TopBar";
 import { WhatsFlutuante } from "@/components/shell/WhatsFlutuante";
 import { CFG } from "@/lib/config";
+import { SITE } from "@/lib/site";
 import { StoreProvider } from "@/store/Store";
 import "@/styles/tramisse.css";
 import "@/styles/logo.css";
@@ -18,23 +19,39 @@ import "@/styles/hero.css";
 import "@/styles/loja.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: { default: "Tramisse — Threads of Identity", template: "%s — Tramisse" },
+  metadataBase: new URL(SITE),
+  title: { default: "Tramisse — Moda feminina contemporânea de Belém", template: "%s — Tramisse" },
   description:
     "Tramisse, moda feminina contemporânea de Belém/PA: conjuntos, alfaiataria feminina, blusas, calças e vestidos. Essencial. Atemporal. Envio para todo o Brasil.",
+  // Prévia ao compartilhar o link (WhatsApp, Instagram, Facebook).
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: "Tramisse",
+    url: "/",
+    images: [{ url: "/assets/brand/inicio.jpg", alt: "Tramisse" }],
+  },
+  twitter: { card: "summary_large_image" },
+  // Google Search Console: código de verificação (Netlify → NEXT_PUBLIC_GOOGLE_VERIFICACAO).
+  ...(process.env.NEXT_PUBLIC_GOOGLE_VERIFICACAO ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICACAO } } : {}),
 };
 
 // Sempre no visual claro da marca (mesmo com o celular no modo escuro).
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", colorScheme: "only light", themeColor: "#F7F5F1" };
 
 // Dados estruturados da marca (Google): nome, site, logo e perfis oficiais (Instagram etc.).
-const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tramisse.com.br";
 const ORGANIZACAO = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "ClothingStore",
   name: CFG.marca,
   url: SITE,
   logo: `${SITE}/assets/brand/logo.png`,
+  image: `${SITE}/assets/brand/inicio.jpg`,
+  description: "Moda feminina contemporânea de Belém/PA: conjuntos, alfaiataria feminina, blusas, calças e vestidos.",
+  slogan: CFG.assinatura,
+  telephone: `+${CFG.atendentes[0].whatsapp}`,
+  address: { "@type": "PostalAddress", addressLocality: "Belém", addressRegion: "PA", addressCountry: "BR" },
+  areaServed: "BR",
   sameAs: CFG.redes.map((r) => r.url).filter(Boolean),
 };
 

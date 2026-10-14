@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CategoryView } from "@/components/telas/CategoryView";
-import { INFO, rotasCategorias } from "@/lib/catalog";
+import { INFO, rotasCategorias, slug, TREE } from "@/lib/catalog";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
@@ -15,9 +15,17 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const [k] = (await params).slug;
+  const s = (await params).slug;
+  const [k] = s;
   const I = INFO[k] || INFO.todos;
-  return { title: I.titulo, description: I.texto };
+  // Subcategoria (ex.: roupas/blusas) ou estilo (estilo/office): o título usa o nome dela.
+  const sub = s[1] ? Object.values(TREE[k]?.grupos ?? {}).flat().find((x) => slug(x) === s[1]) ?? s[1].replace(/-/g, " ") : "";
+  const nome = sub ? sub.charAt(0).toUpperCase() + sub.slice(1) : I.titulo;
+  return {
+    title: k === "estilo" ? `Estilo ${nome}` : nome,
+    description: `${nome} da Tramisse, moda feminina contemporânea de Belém/PA. ${I.texto} Envio para todo o Brasil.`,
+    alternates: { canonical: `/categoria/${s.join("/")}` },
+  };
 }
 
 export default async function CategoriaPage({ params }: Props) {

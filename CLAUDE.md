@@ -25,6 +25,9 @@ Premium sem parecer inacessível. Não parecer marketplace nem home cheia de car
 - **Atendimento (WhatsApp):** Giovana (91) 99965-4699 · Victoria (91) 99963-1582. Instagram: @tramissebrasil.
 - Checkout: cartão → **Mercado Pago** (Checkout Pro, redireciona); Pix → **QR Code/copia e cola** gerado no site com a chave da loja; sempre dá para **enviar pelo WhatsApp**. Em todos os casos o resumo vai para a atendente pelo WhatsApp. Não coletar dados de cartão no site. O frete dos Correios entra no valor pago online; a entrega por aplicativo não.
 
+## Google (SEO)
+- Endereço oficial em `src/lib/site.ts` (`NEXT_PUBLIC_SITE_URL` ou `https://tramisse.com.br`). `robots.txt` e `sitemap.xml` (com fotos) usam ele. Cada página tem `canonical`; peça tem dados estruturados `Product` (preço, disponibilidade, trocas 7 dias); layout tem `ClothingStore` (Belém/PA) e prévia de compartilhamento (Open Graph com `inicio.jpg`). Verificação do Google Search Console pela variável `NEXT_PUBLIC_GOOGLE_VERIFICACAO` (ou TXT no DNS do registro.br).
+
 ## Hospedagem
 - **Netlify** (`netlify.toml`; adaptador oficial de Next.js). Domínio `tramisse.com.br` (DNS no registro.br). Segredos só nas variáveis de ambiente da Netlify. GitHub Pages foi descartado (estático e proibido para loja).
 
