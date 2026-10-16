@@ -531,12 +531,11 @@
       "estilo": "Weekend",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -673,12 +672,11 @@
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -707,12 +705,11 @@
       "estilo": "Office",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": true,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -771,12 +768,11 @@
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -874,11 +870,11 @@
       "flags": {
         "novo": true,
         "curadoria": true,
-        "maisVendida": false,
+        "maisVendida": true,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
+      "novoDesde": "2026-09-30",
       "variantes": [
         {
           "cor": "un",
@@ -938,12 +934,11 @@
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": true,
-        "maisVendida": false,
+        "maisVendida": true,
         "jeans": false
       },
-      "novoDesde": "2026-10-01",
       "emBreve": false,
       "variantes": [
         {
@@ -973,8 +968,8 @@
       "colecao": "Coleção atual",
       "flags": {
         "novo": false,
-        "curadoria": false,
-        "maisVendida": false,
+        "curadoria": true,
+        "maisVendida": true,
         "jeans": false
       },
       "emBreve": false,
@@ -1320,12 +1315,11 @@
       "estilo": "Weekend",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": true
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -1416,22 +1410,23 @@
       "estilo": "",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": true
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-16",
       "variantes": [
         {
           "cor": "un",
           "tamanho": "40",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "un",
           "tamanho": "44",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1454,12 +1449,13 @@
       "estilo": "",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
-        "maisVendida": false,
+        "maisVendida": true,
         "jeans": true
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-16",
       "variantes": [
         {
           "cor": "un",
@@ -1469,17 +1465,17 @@
         {
           "cor": "un",
           "tamanho": "38",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "un",
           "tamanho": "40",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "un",
           "tamanho": "42",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
@@ -1502,22 +1498,23 @@
       "estilo": "",
       "colecao": "Coming soon",
       "flags": {
-        "novo": false,
+        "novo": true,
         "curadoria": false,
         "maisVendida": false,
         "jeans": true
       },
-      "emBreve": true,
+      "emBreve": false,
+      "novoDesde": "2026-10-16",
       "variantes": [
         {
           "cor": "un",
           "tamanho": "40",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "un",
           "tamanho": "44",
-          "estoque": 0
+          "estoque": 1
         }
       ],
       "imagens": [
