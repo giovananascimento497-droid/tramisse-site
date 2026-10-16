@@ -424,8 +424,8 @@
         "maisVendida": true,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
+      "novoDesde": "2026-09-30",
       "variantes": [
         {
           "cor": "am",
@@ -435,7 +435,7 @@
         {
           "cor": "am",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "am",
@@ -1625,7 +1625,7 @@
         {
           "cor": "vi",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
