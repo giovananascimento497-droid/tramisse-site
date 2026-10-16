@@ -1659,7 +1659,7 @@
         {
           "cor": "of",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1900,7 +1900,7 @@
         {
           "cor": "ro",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1977,7 +1977,7 @@
         {
           "cor": "ma",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "pr",
@@ -2023,7 +2023,7 @@
         {
           "cor": "br",
           "tamanho": "PP",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "br",
@@ -2033,7 +2033,7 @@
         {
           "cor": "br",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "mf",
