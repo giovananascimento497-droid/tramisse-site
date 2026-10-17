@@ -133,9 +133,10 @@
     "video": "/assets/videos/video-1.mp4",
     "semPecas": false,
     "pecas": [
-      136,
-      137,
-      2
+      134,
+      124,
+      131,
+      136
     ]
   },
   "imagensMarca": {
@@ -147,10 +148,10 @@
     "CURADORIA ESPECIAL": 33,
     "ROUPAS": 25,
     "ACESSÓRIOS": "cover",
-    "BLUSAS": 116,
-    "CALÇAS": 22,
+    "BLUSAS": 134,
+    "CALÇAS": 122,
     "VESTIDOS": 9,
-    "CONJUNTOS": 11,
+    "CONJUNTOS": 136,
     "SAIAS": 36,
     "MACACÕES": 33,
     "CASUAL": 10,
