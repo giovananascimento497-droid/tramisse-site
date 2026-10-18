@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { CFG } from "@/lib/config";
 import { brl } from "@/lib/payment/pricing";
 import type { Produto } from "@/lib/types";
 
@@ -73,7 +74,7 @@ export function HeroShop({ fotos, banner }: { fotos: Foto[]; banner?: Banner }) 
       {video ? (
         <div className={`hs-pg hs-um hs-vd${pag === iVideo ? " on" : ""}`} aria-hidden={pag !== iVideo}>
           <Link className="hs-it" href="/categoria/new-in" tabIndex={pag === iVideo ? 0 : -1}>
-            <video ref={videoRef} src={video} poster={video.replace(/\.mp4$/, ".jpg")} muted playsInline preload="metadata" />
+            <video ref={videoRef} src={video} poster={CFG.videos.find((x) => x.src === video)?.poster ?? video.replace(/\.(mp4|webm)$/, ".jpg")} muted playsInline preload="metadata" />
             <div className="hs-txt">
               <small>TRAMISSE</small>
               <b>Essencial. Atemporal.</b>

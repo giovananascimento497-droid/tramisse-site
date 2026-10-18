@@ -114,3 +114,15 @@
 .est-eixo{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--mut);margin-top:6px}
 .est-foco{text-align:center;color:var(--car)}.est-foco b{font-weight:600}
 @media(max-width:700px){.est-2{grid-template-columns:1fr}.est-barras li{grid-template-columns:minmax(0,1fr) 64px 84px}.est-topo{flex-wrap:wrap}}
+/* Vídeos (aba Início) */
+.adm-vid{display:flex;flex-direction:column;gap:6px;width:150px;font-size:13px}
+.adm-vid video{width:150px;aspect-ratio:9/16;object-fit:cover;background:var(--mar);border:2px solid transparent}
+.adm-vid.on video{border-color:var(--ink)}
+.adm-vid label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.adm-vid .adm-vid-tit,.adm-vid select{width:100%;border:1px solid var(--ln);background:var(--bg);padding:6px 8px;font:inherit;font-size:13px}
+.adm-vid .adm-ord{justify-content:space-between}
+.adm-vid-add{width:150px;aspect-ratio:9/16}
+.adm-vid-add.ocupado{cursor:progress;color:var(--ink)}
+.adm-vids>label:first-child{width:110px}
+.adm-vids .adm-vid label{flex-direction:row;width:auto;align-items:center}
+.adm-vids>label:first-child>span:last-child{display:flex;align-items:center;gap:4px}

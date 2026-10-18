@@ -4,9 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import { CFG } from "@/lib/config";
 import { brl, precoVitrine } from "@/lib/payment/pricing";
 import type { Catalogo, Produto } from "@/lib/types";
-import { api, prepararFoto } from "./util";
+import { api, enviarVideo, MAX_SEGUNDOS_VIDEO, prepararFoto, prepararVideo } from "./util";
 
-type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number> };
+type VideoHome = { src: string; poster?: string; titulo?: string; produtoId?: number };
+type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number>; videos: VideoHome[] };
 type FotoNova = { caminho: string; blob: string; preview: string };
 
 const ORIGINAL = "/assets/brand/inicio.jpg";
@@ -25,6 +26,10 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
   const [aviso, setAviso] = useState("");
   const [ocupado, setOcupado] = useState("");
   const [add, setAdd] = useState("");
+  // Vídeos enviados agora (ainda não publicados) e a prévia local deles.
+  const [novos, setNovos] = useState<{ caminho: string; blob: string }[]>([]);
+  const [previas, setPrevias] = useState<Record<string, string>>({});
+  const [envioVideo, setEnvioVideo] = useState("");
 
   const carregar = async () => {
     setErro("");
@@ -76,15 +81,47 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
     set({ pecas: l });
   };
 
+  const moverVideo = (i: number, d: number) => {
+    const l = [...ed.videos];
+    const j = i + d;
+    if (j < 0 || j >= l.length) return;
+    [l[i], l[j]] = [l[j], l[i]];
+    set({ videos: l });
+  };
+  const tirarVideo = (i: number) => {
+    const v = ed.videos[i];
+    if (!confirm("Tirar este vídeo do site?")) return;
+    set({ videos: ed.videos.filter((_, k) => k !== i), ...(ed.video === v.src ? { video: "" } : {}) });
+  };
+  const adicionarVideo = async (arquivo?: File) => {
+    if (!arquivo) return;
+    setErro("");
+    try {
+      setEnvioVideo("Preparando o vídeo… 0%");
+      const pronto = await prepararVideo(arquivo, (p) => setEnvioVideo(`Preparando o vídeo… ${Math.round(p * 100)}%`));
+      setEnvioVideo("Enviando… 0%");
+      const r = await enviarVideo(pronto, (p) => setEnvioVideo(`Enviando… ${Math.round(p * 100)}%`));
+      setNovos((n) => [...n, ...r.novos]);
+      setPrevias((x) => ({ ...x, [r.src]: URL.createObjectURL(pronto.video) }));
+      setEd((e) => e && { ...e, videos: [...e.videos, { src: r.src, poster: r.poster, titulo: "Tramisse" }] });
+      setAviso("");
+    } catch (e) {
+      setErro((e as Error).message);
+    } finally {
+      setEnvioVideo("");
+    }
+  };
+
   const publicar = async () => {
     setErro("");
     setOcupado("Publicando…");
     try {
       await api("/api/admin/inicio", {
         method: "POST",
-        body: JSON.stringify({ inicio: ed, foto: foto && ed.imagem === foto.caminho ? { caminho: foto.caminho, blob: foto.blob } : null }),
+        body: JSON.stringify({ inicio: ed, foto: foto && ed.imagem === foto.caminho ? { caminho: foto.caminho, blob: foto.blob } : null, novos }),
       });
       setOrig(ed);
+      setNovos([]);
       setAviso("Publicado! O site atualiza em uns 3 minutos.");
       scrollTo(0, 0);
     } catch (e) {
@@ -132,20 +169,49 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
         )}
       </div>
 
-      <h3>Vídeo da entrada</h3>
-      <p className="adm-dica">A entrada alterna entre a imagem e o vídeo: a imagem fica 6 segundos, o vídeo passa inteiro (sem som) e volta para a imagem.</p>
+      <h3>Vídeos</h3>
+      <p className="adm-dica">
+        Os vídeos aparecem na seção &quot;Em movimento&quot; da home. Marque <b>Na entrada</b> no vídeo que deve passar na primeira tela,
+        alternando com a imagem (ela fica 6 segundos, o vídeo passa inteiro e sem som). Vídeos de até {MAX_SEGUNDOS_VIDEO} segundos;
+        de preferência na vertical.
+      </p>
       <div className="adm-vids">
         <label className={!ed.video ? "on" : ""}>
-          <span className="adm-vid-sem">Sem vídeo</span>
-          <span><input type="radio" checked={!ed.video} onChange={() => set({ video: "" })} /> Nenhum</span>
+          <span className="adm-vid-sem">Sem vídeo na entrada</span>
+          <span><input type="radio" checked={!ed.video} onChange={() => set({ video: "" })} /> Só a imagem</span>
         </label>
-        {CFG.videos.filter((v) => v.src).map((v, i) => (
-          <label key={v.src} className={ed.video === v.src ? "on" : ""}>
-            <video src={v.src} poster={v.poster} muted loop playsInline autoPlay preload="metadata" />
-            <span><input type="radio" checked={ed.video === v.src} onChange={() => set({ video: v.src })} /> Vídeo {i + 1}</span>
-          </label>
+        {ed.videos.map((v, i) => (
+          <div key={v.src} className={`adm-vid${ed.video === v.src ? " on" : ""}`}>
+            <video src={previas[v.src] ?? v.src} poster={previas[v.src] ? undefined : v.poster} muted loop playsInline autoPlay preload="metadata" />
+            <label><input type="radio" checked={ed.video === v.src} onChange={() => set({ video: v.src })} /> Na entrada</label>
+            <input
+              className="adm-vid-tit"
+              value={v.titulo ?? ""}
+              placeholder="Texto embaixo"
+              aria-label="Texto embaixo do vídeo"
+              onChange={(e) => set({ videos: ed.videos.map((x, k) => (k === i ? { ...x, titulo: e.target.value } : x)) })}
+            />
+            <select
+              value={v.produtoId ?? ""}
+              aria-label="Peça do vídeo"
+              onChange={(e) => set({ videos: ed.videos.map((x, k) => (k === i ? { ...x, produtoId: e.target.value ? Number(e.target.value) : undefined } : x)) })}
+            >
+              <option value="">Sem link de peça</option>
+              {cat.produtos.filter((p) => !p.emBreve).sort((a, b) => a.nome.localeCompare(b.nome)).map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
+            </select>
+            <span className="adm-ord">
+              <button type="button" onClick={() => moverVideo(i, -1)} disabled={i === 0} aria-label="Mover para a esquerda">←</button>
+              <button type="button" onClick={() => tirarVideo(i)} aria-label="Tirar vídeo">×</button>
+              <button type="button" onClick={() => moverVideo(i, 1)} disabled={i === ed.videos.length - 1} aria-label="Mover para a direita">→</button>
+            </span>
+          </div>
         ))}
+        <label className={`adm-add adm-vid-add${envioVideo ? " ocupado" : ""}`}>
+          {envioVideo || "+ Adicionar vídeo"}
+          <input type="file" accept="video/*" hidden disabled={!!envioVideo} onChange={(e) => { adicionarVideo(e.target.files?.[0]); e.target.value = ""; }} />
+        </label>
       </div>
+      {envioVideo ? <p className="adm-dica" style={{ marginTop: 8 }}>Deixe esta tela aberta até terminar.</p> : null}
 
       <h3>Peças do banner</h3>
       <p className="adm-dica">Depois da imagem e do vídeo, as peças podem se revezar uma por vez (a cada 5 segundos), com a primeira foto de cada uma. Peça esgotada sai do banner sozinha.</p>
@@ -215,8 +281,8 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
         <div className="adm-pub">
           <span>Imagens da home alteradas (ainda não publicado)</span>
           <span style={{ display: "flex", gap: 8 }}>
-            <button className="btn o" onClick={() => { setEd(orig); setFoto(null); }} disabled={!!ocupado}>DESFAZER</button>
-            <button className="btn" onClick={publicar} disabled={!!ocupado}>{ocupado === "Publicando…" ? ocupado : "PUBLICAR"}</button>
+            <button className="btn o" onClick={() => { setEd(orig); setFoto(null); setNovos([]); }} disabled={!!ocupado || !!envioVideo}>DESFAZER</button>
+            <button className="btn" onClick={publicar} disabled={!!ocupado || !!envioVideo}>{ocupado === "Publicando…" ? ocupado : "PUBLICAR"}</button>
           </span>
         </div>
       ) : null}

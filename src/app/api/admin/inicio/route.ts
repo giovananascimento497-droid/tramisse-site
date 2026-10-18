@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { lerInicio, publicarInicio } from "@/lib/admin/inicio";
+import { ARQUIVO_NOVO, lerInicio, publicarInicio } from "@/lib/admin/inicio";
 import { exigirLogin } from "@/lib/admin/rota";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,11 @@ export async function POST(req: Request) {
   const f = d.foto;
   const foto = f && /^\/assets\/inicio\/[a-z0-9-]+\.jpg$/.test(String(f.caminho)) && /^[0-9a-f]{40}$/.test(String(f.blob)) ? { caminho: String(f.caminho), blob: String(f.blob) } : null;
   try {
-    await publicarInicio(d.inicio, foto);
+    const novos = (Array.isArray(d.novos) ? d.novos : [])
+      .filter((n: { caminho?: string; blob?: string }) => ARQUIVO_NOVO.test(String(n?.caminho)) && /^[0-9a-f]{40}$/.test(String(n?.blob)))
+      .map((n: { caminho: string; blob: string }) => ({ caminho: String(n.caminho), blob: String(n.blob) }))
+      .slice(0, 30);
+    await publicarInicio(d.inicio, foto, novos);
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error(e);
