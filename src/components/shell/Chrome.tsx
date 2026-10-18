@@ -37,6 +37,8 @@ export function Chrome() {
       const q = new URLSearchParams(location.search).get("visual");
       if (q === "loja" || q === "editorial") sessionStorage.setItem("tv", q);
       v = sessionStorage.getItem("tv");
+      // Só vale "loja" ou "editorial" (qualquer outro valor é ignorado).
+      if (v !== "loja" && v !== "editorial") v = null;
     } catch {}
     document.body.classList.toggle("loja", (v ?? CFG.aparencia) === "loja");
   }, [home]);

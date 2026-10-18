@@ -26,8 +26,10 @@ body.loja .btn{font-weight:500;letter-spacing:.14em;padding:15px 30px}/* -------
 
 
 
-body.loja header,body.loja.home:not(.sol) header{background:var(--bg);border-bottom:1px solid var(--ln);color:var(--hc)}
-body.loja.sol header{background:var(--bg);backdrop-filter:none}
+/* Cabeçalho em greige (a pedido da cliente), para o logo não se misturar com a página. */
+body.loja{--hbg:#E3DACC}
+body.loja header,body.loja.home:not(.sol) header{background:var(--hbg);border-bottom:1px solid #D2C7B7;color:var(--hc)}
+body.loja.sol header{background:var(--hbg);backdrop-filter:none}
 body.loja #app,body.loja.home #app,body.loja:not(.home) #app{padding-top:var(--hh)}
 body.loja .hero.hs::before{display:none}
 body.loja .hd{height:var(--hh)}

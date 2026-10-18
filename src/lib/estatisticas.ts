@@ -28,8 +28,8 @@ function primeiraVez(chave: string) {
 export function registrar(t: TipoEvento, dados: { p?: number; q?: number } = {}) {
   try {
     if (location.pathname.startsWith("/admin")) return;
-    if (t === "visita" && !primeiraVez("tv")) return;
-    if (t === "checkout" && !primeiraVez("tk")) return;
+    if (t === "visita" && !primeiraVez("est-visita")) return;
+    if (t === "checkout" && !primeiraVez("est-checkout")) return;
     const corpo = JSON.stringify({ t, ...dados, ...(t === "visita" ? { o: origem() } : {}) });
     if (navigator.sendBeacon) navigator.sendBeacon("/api/evento", new Blob([corpo], { type: "text/plain" }));
     else fetch("/api/evento", { method: "POST", headers: { "Content-Type": "application/json" }, body: corpo, keepalive: true }).catch(() => {});
