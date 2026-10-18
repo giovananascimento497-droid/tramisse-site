@@ -160,3 +160,8 @@ body.loja .fg .opc input{width:auto;flex:none;margin:0;accent-color:var(--ink)}
 .av-wa{margin:0;font-size:13px;color:var(--mut)}.av-wa a{text-decoration:underline}
 .av-ok{margin-top:16px;padding:16px 18px;background:var(--mar);font-size:14px}
 body.m .wf,body.g .wf{display:none}
+/* Página da peça: frete de Belém por bairro (junto do cálculo por CEP) */
+.cf-bel{margin-top:12px;padding:12px 14px;background:var(--mar);display:flex;flex-direction:column;gap:8px}
+.cf-bel label{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.cf-bel select{border:1px solid var(--ln);background:var(--bg);padding:10px 12px;font:inherit;font-size:14px}
+.cf-bel .tt{margin:0}
