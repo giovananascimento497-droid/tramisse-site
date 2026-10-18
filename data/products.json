@@ -800,12 +800,11 @@
       "estilo": "Night",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -861,20 +860,19 @@
       "nome": "Calça Leila",
       "descricao": "Calça de alfaiataria pantalona, risca de giz.",
       "tecido": "Alfaiataria risca de giz",
-      "preco": 199.9,
+      "preco": 165,
       "precoDe": 0,
       "categoria": "roupas",
       "subcategoria": "Calças",
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": true,
         "maisVendida": true,
         "jeans": false
       },
       "emBreve": false,
-      "novoDesde": "2026-09-30",
       "variantes": [
         {
           "cor": "un",
@@ -883,8 +881,8 @@
         }
       ],
       "imagens": [
-        "/assets/products/calca-leila-musbh7d6.jpg",
         "/assets/products/calca-leila-musbh6p8.jpg",
+        "/assets/products/calca-leila-musbh7d6.jpg",
         "/assets/products/calca-leila-musbh80g.jpg"
       ]
     },
@@ -1010,7 +1008,7 @@
       "flags": {
         "novo": false,
         "curadoria": false,
-        "maisVendida": false,
+        "maisVendida": true,
         "jeans": false
       },
       "emBreve": false,
@@ -1073,12 +1071,11 @@
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -1139,12 +1136,11 @@
       "estilo": "",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -1213,12 +1209,11 @@
       "estilo": "Casual",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": true
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -1251,12 +1246,11 @@
       "estilo": "Weekend",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": true
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
@@ -1284,12 +1278,11 @@
       "estilo": "Casual",
       "colecao": "Coleção atual",
       "flags": {
-        "novo": true,
+        "novo": false,
         "curadoria": false,
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
       "variantes": [
         {
