@@ -70,6 +70,88 @@
         "Conjuntos": 0.8,
         "padrao": 0.4
       }
+    },
+    "belem": {
+      "_comentario": "Entrega própria em Belém por bairro, em rota única aos sábados. Valor por faixa de distância (a partir do Mangueirão). Bairro fora da lista: a cliente fala no WhatsApp ou escolhe Correios. Editável no painel (aba ENTREGA).",
+      "ativo": true,
+      "nome": "Entrega em Belém (sábado)",
+      "aviso": "Entregas em rota única aos sábados. Pedidos pagos até sexta-feira às 18h saem no sábado seguinte.",
+      "faixas": [
+        {
+          "nome": "Perto",
+          "valor": 10,
+          "bairros": [
+            "Mangueirão",
+            "Castanheira",
+            "Marambaia",
+            "Parque Verde",
+            "Cabanagem",
+            "Benguí",
+            "Una",
+            "Souza",
+            "Val-de-Cães",
+            "Coqueiro",
+            "São Clemente"
+          ]
+        },
+        {
+          "nome": "Médio",
+          "valor": 15,
+          "bairros": [
+            "Marco",
+            "Pedreira",
+            "Sacramenta",
+            "Barreiro",
+            "Maracangalha",
+            "Telégrafo",
+            "Curió-Utinga",
+            "Tapanã",
+            "Pratinha",
+            "Mangueiras",
+            "Miramar"
+          ]
+        },
+        {
+          "nome": "Longe",
+          "valor": 20,
+          "bairros": [
+            "Umarizal",
+            "Fátima",
+            "São Brás",
+            "Nazaré",
+            "Canudos",
+            "Terra Firme (Montese)",
+            "Guamá",
+            "Cremação",
+            "Batista Campos",
+            "Reduto",
+            "Campina",
+            "Universitário",
+            "Tenoné",
+            "Parque Guajará",
+            "Águas Negras",
+            "Maracacuera",
+            "Agulha",
+            "Ponta Grossa",
+            "Campina de Icoaraci",
+            "Cruzeiro",
+            "Paracuri"
+          ]
+        },
+        {
+          "nome": "Muito longe",
+          "valor": 30,
+          "bairros": [
+            "Cidade Velha",
+            "Jurunas",
+            "Condor",
+            "São João do Outeiro",
+            "Itaiteua",
+            "Água Boa",
+            "Brasília (Outeiro)"
+          ]
+        }
+      ]
     }
   },
   "trocas": {

@@ -7,6 +7,7 @@ import { CFG } from "@/lib/config";
 import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
 import { AviseMeForm } from "../AviseMe";
+import { faixaBelem } from "@/lib/frete/belem";
 import { CalcularFrete } from "../CalcularFrete";
 import { FavButton } from "../FavButton";
 import { Ph } from "../Ph";
@@ -58,7 +59,7 @@ export function ProductView({ id }: { id: number }) {
     ["COMPOSIÇÃO", p.tecido ? `Tecido: ${p.tecido}.` : "Sob consulta no atendimento."],
     ["DETALHES", `Tamanhos da peça: ${tams.join(", ")}.`],
     ["CUIDADOS", "Siga as instruções da etiqueta da peça."],
-    ["ENTREGA", `Envio para todo o Brasil pelos Correios (PAC ou SEDEX), com o frete calculado pelo CEP${CFG.entrega.correios.freteGratisAcima ? ` e grátis acima de ${brl(CFG.entrega.correios.freteGratisAcima)}` : ""}. Em Belém, também há entrega por aplicativo (valor informado na compra) ou retirada.`],
+    ["ENTREGA", `Envio para todo o Brasil pelos Correios (PAC ou SEDEX), com o frete calculado pelo CEP${CFG.entrega.correios.freteGratisAcima ? ` e grátis acima de ${brl(CFG.entrega.correios.freteGratisAcima)}` : ""}. ${faixaBelem(CFG) ? `Em Belém, entrega aos sábados por bairro (${faixaBelem(CFG)}) ou retirada.` : "Em Belém, também há entrega por aplicativo (valor informado na compra) ou retirada."}`],
     ["TROCAS E DEVOLUÇÕES", "Em até 7 dias, com a etiqueta fixada na peça e mediante disponibilidade de estoque. Solicite pelo nosso atendimento."],
   ];
 

@@ -126,3 +126,12 @@
 .adm-vids>label:first-child{width:110px}
 .adm-vids .adm-vid label{flex-direction:row;width:auto;align-items:center}
 .adm-vids>label:first-child>span:last-child{display:flex;align-items:center;gap:4px}
+/* Aba Entrega (Belém por bairro) */
+.ent-ck{display:flex;align-items:center;gap:8px;margin:8px 0 16px}.ent-ck input{width:auto}
+.ent-campo{display:flex;flex-direction:column;gap:6px;font-size:13px;margin-bottom:16px}
+.ent textarea,.ent-top input{border:1px solid var(--ln);background:var(--bg);padding:8px 10px;font:inherit;font-size:14px;resize:vertical;width:100%}
+.ent-faixas{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.ent-faixa{background:var(--mar);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ent-top{display:flex;gap:6px;align-items:center}.ent-top>input{flex:1;min-width:0;font-weight:500}
+.ent-rs{display:flex;align-items:center;gap:4px;font-size:13px}.ent-rs input{width:64px}
+.ent-faixa small{color:var(--mut);font-size:12px}

@@ -48,7 +48,7 @@ export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: str
     })).concat(
       // Frete dos Correios como mais um item (frete grátis não entra).
       pedido.frete && pedido.frete.valor > 0
-        ? [{ id: `frete-${pedido.frete.servico}`, title: `Frete Correios ${pedido.frete.nome}`, quantity: 1, currency_id: "BRL", unit_price: pedido.frete.valor }]
+        ? [{ id: `frete-${pedido.frete.servico}`, title: pedido.entrega === "belem" ? `Frete ${pedido.frete.nome}` : `Frete Correios ${pedido.frete.nome}`, quantity: 1, currency_id: "BRL", unit_price: pedido.frete.valor }]
         : [],
     ),
     payer: { name: c.n, surname: c.sn, email: c.e },

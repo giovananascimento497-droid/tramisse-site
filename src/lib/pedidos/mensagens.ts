@@ -46,6 +46,8 @@ export function textoAviso(tipo: TipoAviso, p: PedidoSalvo): { assunto: string; 
         "",
         ped.entrega === "correios" && ped.frete
           ? `Ele vai pelos Correios (${ped.frete.nome}, ${textoPrazo(ped.frete.prazo)}). Mandamos o código de rastreio assim que for postado.`
+          : ped.entrega === "belem"
+            ? "Ele vai na nossa rota de entregas em Belém, no sábado. Avisamos pelo WhatsApp quando sair para entrega."
           : ped.entrega === "retirada"
             ? "Vamos combinar a retirada com você pelo WhatsApp."
             : "Vamos combinar a entrega com você pelo WhatsApp.",

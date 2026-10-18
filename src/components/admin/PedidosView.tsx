@@ -11,7 +11,7 @@ import { NOMES_CANAL, NOMES_SITUACAO, SITUACOES, type PedidoSalvo, type Situacao
 
 const PAGAMENTO = nomesPagamento(CFG);
 const NOMES_AVISO: Record<string, string> = { recebido: "Pedido recebido", pago: "Pagamento confirmado", enviado: "Pedido enviado" };
-type Filtro = "abertos" | "todos" | Situacao;
+type Filtro = "abertos" | "todos" | "rota" | Situacao;
 
 const data = (iso: string) =>
   new Date(iso).toLocaleString("pt-BR", { timeZone: "America/Belem", day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" });
@@ -62,12 +62,16 @@ export function PedidosView({ onSair }: { onSair: () => void }) {
 
   const lista = useMemo(() => {
     const q = so(busca.trim());
-    return (pedidos ?? []).filter((p) => {
+    const l = (pedidos ?? []).filter((p) => {
+      // Rota de sábado: pedidos de Belém já pagos e ainda não entregues.
+      if (filtro === "rota") return p.pedido.entrega === "belem" && ["pago", "separacao", "enviado"].includes(p.situacao);
       if (filtro === "abertos" && (p.situacao === "entregue" || p.situacao === "cancelado")) return false;
       if (filtro !== "abertos" && filtro !== "todos" && p.situacao !== filtro) return false;
       if (q && !so(`${nome(p)} ${p.id} ${p.pedido.cliente.tel || ""} ${p.pedido.itens.map((i) => i.nome).join(" ")}`).includes(q)) return false;
       return true;
     });
+    // Na rota, por bairro (para montar o caminho).
+    return filtro === "rota" ? l.sort((a, b) => (a.pedido.cliente.bai || "").localeCompare(b.pedido.cliente.bai || "", "pt-BR")) : l;
   }, [pedidos, filtro, busca]);
 
   const contagem = useMemo(() => {
@@ -99,6 +103,7 @@ export function PedidosView({ onSair }: { onSair: () => void }) {
         <select value={filtro} onChange={(e) => setFiltro(e.target.value as Filtro)} aria-label="Filtrar">
           <option value="abertos">Em aberto</option>
           <option value="todos">Todos</option>
+          <option value="rota">Rota de sábado (Belém)</option>
           {SITUACOES.map((s) => <option key={s} value={s}>{NOMES_SITUACAO[s]}</option>)}
         </select>
         <button className="btn o" onClick={carregar} aria-label="Atualizar lista">↻</button>
@@ -115,6 +120,7 @@ export function PedidosView({ onSair }: { onSair: () => void }) {
               <span className="adm-nm">
                 <b>{nome(p)} · {brl(p.pedido.total)}</b>
                 <small>
+                  {p.pedido.entrega === "belem" ? <b>{p.pedido.cliente.bai} · </b> : null}
                   {data(p.criadoEm)} · {NOMES_CANAL[p.canal]} · {p.pedido.itens.reduce((a, i) => a + i.q, 0)} peça(s):{" "}
                   {p.pedido.itens.map((i) => i.nome).join(", ")}
                 </small>

@@ -1,10 +1,11 @@
 import { CL, estoqueDe, porId } from "../catalog";
 import { CFG } from "../config";
 import type { DadosCliente, FormaEntrega, FormaPagamento, ItemSacola, OpcaoFrete, Pedido } from "../types";
+import { freteBelem } from "../frete/belem";
 import { acharCupom, calcularTotais, r2 } from "./pricing";
 
 const PAGAMENTOS: FormaPagamento[] = ["pix", "debito", "credito"];
-const ENTREGAS: FormaEntrega[] = ["aplicativo", "retirada", "correios"];
+const ENTREGAS: FormaEntrega[] = ["aplicativo", "retirada", "correios", "belem"];
 
 // Monta o pedido a partir do catálogo (preços oficiais), nunca de valores vindos do navegador.
 // Usado no checkout e na API de pagamento. Retorna null se algo for inválido.
@@ -18,7 +19,7 @@ export function montarPedido(dados: {
   frete?: OpcaoFrete | null;
 }): Pedido | null {
   if (!PAGAMENTOS.includes(dados.pagamento) || !ENTREGAS.includes(dados.entrega)) return null;
-  const frete = dados.entrega === "correios" ? dados.frete : undefined;
+  let frete = dados.entrega === "correios" ? dados.frete : undefined;
   if (dados.entrega === "correios" && !(frete && frete.valor >= 0)) return null;
   if (!Array.isArray(dados.bag) || !dados.bag.length) return null;
   const linhas = [];
@@ -33,6 +34,11 @@ export function montarPedido(dados: {
   }
   const cupom = acharCupom(CFG, dados.cupom)?.codigo;
   const t = calcularTotais(CFG, linhas.map((l) => ({ preco: l.p.preco, q: l.q })), dados.pagamento, cupom);
+  // Belém: o frete sai sempre da tabela de bairros (nunca do valor vindo do navegador).
+  if (dados.entrega === "belem") {
+    frete = freteBelem(CFG, dados.cliente?.bai, t.subtotal - t.desconto);
+    if (!frete) return null;
+  }
   return {
     itens: linhas.map((l, i) => ({
       id: l.p.id,

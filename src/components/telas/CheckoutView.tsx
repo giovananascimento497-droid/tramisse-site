@@ -7,6 +7,7 @@ import { CL, porId } from "@/lib/catalog";
 import { avisarPedido, registrarPedido } from "@/lib/avisoPedido";
 import { montarPedido } from "@/lib/payment/pedido";
 import { CFG } from "@/lib/config";
+import { bairrosBelem, belemAtivo, freteBelem } from "@/lib/frete/belem";
 import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
 import { codigoPix } from "@/lib/payment/pix";
 import { brl, calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
@@ -27,10 +28,16 @@ const PAGAMENTOS: [FormaPagamento, string, string][] = [
 ];
 const PIX_ATIVO = Boolean(CFG.pagamento.pix.chave);
 const GRATIS_ACIMA = CFG.entrega.correios.freteGratisAcima;
+// Belém: entrega própria por bairro aos sábados (quando ligada); senão, a entrega por aplicativo de antes.
+const BELEM = belemAtivo(CFG);
+const BAIRROS = bairrosBelem(CFG);
+const valoresBelem = BAIRROS.map((b) => b.valor);
 const ENTREGAS: [FormaEntrega, string, string][] = [
   ["correios", "Correios (PAC ou SEDEX)",
     `Para todo o Brasil. Frete calculado pelo CEP${GRATIS_ACIMA ? `; grátis acima de ${brl(GRATIS_ACIMA)} em peças` : ""}.`],
-  ["aplicativo", "Entrega por aplicativo (Belém)", "Valor informado no momento da compra, por conta da cliente."],
+  BELEM
+    ? ["belem", CFG.entrega.belem!.nome, `Por bairro, de ${brl(Math.min(...valoresBelem))} a ${brl(Math.max(...valoresBelem))}. ${CFG.entrega.belem!.aviso}`]
+    : ["aplicativo", "Entrega por aplicativo (Belém)", "Valor informado no momento da compra, por conta da cliente."],
   ["retirada", "Retirada", "O endereço é enviado após a confirmação da compra."],
 ];
 const novoId = () => `T${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
@@ -42,7 +49,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   const { bag, setBag, cupom, setCupom, pronto } = useLoja();
   const [step, setStep] = useState(0);
   const [ck, setCk] = useState<DadosCliente>({});
-  const [ship, setShip] = useState<FormaEntrega>(correios ? "correios" : "aplicativo");
+  const [ship, setShip] = useState<FormaEntrega>(correios ? "correios" : BELEM ? "belem" : "aplicativo");
   const [fretes, setFretes] = useState<OpcaoFrete[] | null>(null);
   const [frete, setFrete] = useState<OpcaoFrete | null>(null);
   const [cotando, setCotando] = useState(false);
@@ -56,7 +63,9 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   const [gerando, setGerando] = useState(false);
 
   const t = calcularTotais(CFG, linhasSacola(bag), step >= 3 ? pay : null, cupom);
-  const valorFrete = ship === "correios" && frete ? frete.valor : 0;
+  // Frete em uso: Correios (cotado pelo CEP) ou Belém (tabela de bairros).
+  const freteEf = ship === "correios" ? frete : ship === "belem" ? freteBelem(CFG, ck.bai, t.subtotal - t.desconto) : null;
+  const valorFrete = freteEf ? freteEf.valor : 0;
   const total = t.total + valorFrete;
   // Parcelas sem juros liberadas para esta sacola (parcela mínima e taxa coberta pelo pedido).
   const tCartao = calcularTotais(CFG, linhasSacola(bag), "credito", cupom);
@@ -117,7 +126,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   };
   const ir = (s: number) => { setErro(""); setFaltando([]); setStep(s); };
 
-  const pedidoAtual = () => montarPedido({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete });
+  const pedidoAtual = () => montarPedido({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
 
   // Cota PAC e SEDEX no servidor (Melhor Envio) para o CEP digitado.
   const cotar = async (cep: string) => {
@@ -152,7 +161,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     const id = novoId();
     avisarPedido(pedido, { id, canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: atendente.nome });
     registrar("pedido");
-    registrarPedido({ id, canal: "whatsapp", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete });
+    registrarPedido({ id, canal: "whatsapp", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
     setEnviado({ at: atendente.nome, wa: r.url });
     setBag(() => []);
     setCupom(null);
@@ -169,7 +178,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     const texto = resumoPedido({ ...pedido, pagamentoOnline: { provedor: "Pix", id, status: "aguardando comprovante" } });
     avisarPedido(pedido, { id, canal: "Site (Pix)", situacao: "Aguardando Pix (conferir comprovante)", atendente: atendente.nome });
     registrar("pedido");
-    registrarPedido({ id, canal: "pix", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete });
+    registrarPedido({ id, canal: "pix", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
     setPix({ at: atendente.nome, wa: `https://wa.me/${atendente.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, id });
     setBag(() => []);
     setCupom(null);
@@ -214,12 +223,14 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
       {t.desconto ? <div className="tt"><span>Desconto ({t.cupom?.codigo})</span><span>-{brl(t.desconto)}</span></div> : null}
       {t.descontoPix ? <div className="tt"><span>Desconto Pix ({Math.round(CFG.pagamento.descontoPix * 100)}%)</span><span>-{brl(t.descontoPix)}</span></div> : null}
       <div className="tt">
-        <span>{ship === "correios" ? `Frete${frete ? ` Correios ${frete.nome}` : ""}` : "Entrega"}</span>
-        <span>{ship === "retirada" ? "Retirada" : ship === "aplicativo" ? "Por aplicativo" : frete ? (frete.gratis ? "Grátis" : brl(frete.valor)) : "Calcule pelo CEP"}</span>
+        <span>{ship === "correios" ? `Frete${frete ? ` Correios ${frete.nome}` : ""}` : ship === "belem" ? "Entrega em Belém (sábado)" : "Entrega"}</span>
+        <span>
+          {ship === "retirada" ? "Retirada" : ship === "aplicativo" ? "Por aplicativo" : freteEf ? (freteEf.gratis ? "Grátis" : brl(freteEf.valor)) : ship === "belem" ? "Escolha o bairro" : "Calcule pelo CEP"}
+        </span>
       </div>
       <div className="tt big"><span>Total</span><span>{brl(total)}</span></div>
       {ship === "aplicativo" ? <small style={{ color: "var(--mut)" }}>O valor da entrega por aplicativo é informado no atendimento.</small> : null}
-      {ship === "correios" && falta ? <small style={{ color: "var(--mut)" }}>Faltam {brl(falta)} em peças para o frete grátis (acima de {brl(GRATIS_ACIMA)}).</small> : null}
+      {(ship === "correios" || ship === "belem") && falta ? <small style={{ color: "var(--mut)" }}>Faltam {brl(falta)} em peças para o frete grátis (acima de {brl(GRATIS_ACIMA)}).</small> : null}
     </details>
   );
 
@@ -259,6 +270,10 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
             const d = ler(e.currentTarget);
             if (ship !== "retirada" && !validar(d, OBRIG_END)) return;
             if (ship === "correios" && !frete) return setErro(cotando ? "Aguarde o cálculo do frete." : "Calcule o frete e escolha PAC ou SEDEX.");
+            if (ship === "belem" && !freteBelem(CFG, d.bai, t.subtotal - t.desconto)) {
+              setFaltando(["bai"]);
+              return setErro("Escolha o seu bairro. Se ele não estiver na lista, escolha Correios ou fale com a gente no WhatsApp.");
+            }
             if (ship === "correios" && (d.cpf || "").replace(/\D/g, "").length !== 11) {
               setFaltando(["cpf"]);
               return setErro("Informe o CPF (11 números): os Correios pedem para a etiqueta.");
@@ -317,7 +332,32 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
                 </>
               ) : fld("cep", "CEP", "00000-000")}
               {fld("end", "Endereço")}{fld("num", "Número")}{fld("cmp", "Complemento")}
-              {fld("bai", "Bairro")}{fld("cid", "Cidade")}{fld("uf", "Estado")}{fld("dest", "Destinatário", "", "s")}
+              {ship === "belem" ? (
+                <>
+                  <label>
+                    Bairro
+                    <select
+                      name="bai"
+                      value={ck.bai || ""}
+                      onChange={(e) => setCk((c) => ({ ...c, bai: e.target.value, cid: "Belém", uf: "PA" }))}
+                      className={faltando.includes("bai") ? "bad" : undefined}
+                    >
+                      <option value="">Escolha o bairro…</option>
+                      {BAIRROS.map((b) => (
+                        <option key={b.bairro} value={b.bairro}>{b.bairro} · {brl(b.valor)}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <input type="hidden" name="cid" value="Belém" />
+                  <input type="hidden" name="uf" value="PA" />
+                  <p className="s" style={{ margin: 0, fontSize: 13, color: "var(--mut)" }}>
+                    {CFG.entrega.belem!.aviso} Seu bairro não está na lista? Escolha Correios ou fale com a gente no WhatsApp.
+                  </p>
+                </>
+              ) : (
+                <>{fld("bai", "Bairro")}{fld("cid", "Cidade")}{fld("uf", "Estado")}</>
+              )}
+              {fld("dest", "Destinatário", "", "s")}
               {ship === "correios" ? fld("cpf", "CPF (os Correios pedem para a etiqueta)", "000.000.000-00", "s") : null}
             </>
           )}

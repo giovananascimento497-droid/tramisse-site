@@ -1,5 +1,6 @@
 "use client";
 
+import { faixaBelem } from "@/lib/frete/belem";
 import { useState } from "react";
 import { CFG } from "@/lib/config";
 import { cepValido, textoPrazo } from "@/lib/frete/regras";
@@ -57,7 +58,7 @@ export function CalcularFrete({ id, q }: { id: number; q: number }) {
           <span>{o.gratis ? "Grátis" : brl(o.valor)}</span>
         </div>
       ))}
-      {GRATIS_ACIMA ? <small style={{ color: "var(--mut)" }}>Frete grátis em compras acima de {brl(GRATIS_ACIMA)}. Em Belém, também há entrega por aplicativo ou retirada.</small> : null}
+      {GRATIS_ACIMA ? <small style={{ color: "var(--mut)" }}>Frete grátis em compras acima de {brl(GRATIS_ACIMA)}. {faixaBelem(CFG) ? `Em Belém, entrega aos sábados por bairro (${faixaBelem(CFG)}) ou retirada.` : "Em Belém, também há entrega por aplicativo ou retirada."}</small> : null}
     </div>
   );
 }

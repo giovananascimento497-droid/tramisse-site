@@ -67,6 +67,8 @@ export type Config = {
       embalagem: { nome: string; largura: number; comprimento: number; alturaPorPeca: number; alturaMinima: number; peso: number };
       pesoPorPeca: Record<string, number>; // kg por subcategoria; "padrao" para as demais
     };
+    // Entrega própria em Belém por bairro, em rota aos sábados (src/lib/frete/belem.ts).
+    belem?: { ativo: boolean; nome: string; aviso: string; faixas: { nome: string; valor: number; bairros: string[] }[] };
   };
   trocas: { prazoDias: number };
   atendentes: Atendente[];
@@ -89,7 +91,7 @@ export type Config = {
 export type ItemSacola = { id: number; cor: string; tam: string; q: number };
 
 export type FormaPagamento = "pix" | "debito" | "credito";
-export type FormaEntrega = "aplicativo" | "retirada" | "correios";
+export type FormaEntrega = "aplicativo" | "retirada" | "correios" | "belem";
 
 // Opção de frete (Correios) já com a regra de frete grátis aplicada.
 export type OpcaoFrete = { servico: number; nome: string; valor: number; valorOriginal: number; prazo: number; gratis: boolean };

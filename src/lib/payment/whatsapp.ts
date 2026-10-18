@@ -14,6 +14,7 @@ export function textoEntrega(p: Pedido): string {
   const endereco = `${[c.end, c.num, c.cmp, c.bai, c.cid, c.uf, c.cep].filter(Boolean).join(", ")} (destinatário: ${c.dest})`;
   if (p.entrega === "correios" && p.frete)
     return `Correios ${p.frete.nome} (${textoPrazo(p.frete.prazo)}): ${endereco}`;
+  if (p.entrega === "belem") return `Entrega em Belém, sábado (rota única): ${endereco}`;
   return `Entrega por aplicativo: ${endereco}`;
 }
 
@@ -26,7 +27,7 @@ export function resumoPedido(p: Pedido): string {
     `\n\nSubtotal: ${brl(p.subtotal)}` +
     (p.desconto ? `\nDesconto (${p.cupom}): -${brl(p.desconto)}` : "") +
     (p.descontoPix ? `\nDesconto Pix (${pctPix(CFG)}): -${brl(p.descontoPix)}` : "") +
-    (p.frete ? `\nFrete Correios ${p.frete.nome}: ${p.frete.gratis ? "grátis" : brl(p.frete.valor)}` : "") +
+    (p.frete ? `\n${p.entrega === "belem" ? `Frete (${p.frete.nome})` : `Frete Correios ${p.frete.nome}`}: ${p.frete.gratis ? "grátis" : brl(p.frete.valor)}` : "") +
     `\n${p.entrega === "aplicativo" ? "Total (sem entrega)" : "Total"}: ${brl(p.total)}\nPagamento: ${NOMES_PAGAMENTO[p.pagamento]}` +
     (p.pagamentoOnline && p.pagamentoOnline.provedor !== "Pix"
       ? ` — ${p.pagamentoOnline.status === "aprovado" ? "pago" : "em processamento"} pelo ${p.pagamentoOnline.provedor} (pagamento nº ${p.pagamentoOnline.id})`
