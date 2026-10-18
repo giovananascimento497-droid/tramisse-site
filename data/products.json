@@ -1453,7 +1453,7 @@
         {
           "cor": "un",
           "tamanho": "36",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "un",
@@ -1681,7 +1681,7 @@
         {
           "cor": "un",
           "tamanho": "PP",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "un",
@@ -2028,7 +2028,7 @@
         {
           "cor": "mf",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
