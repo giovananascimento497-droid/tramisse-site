@@ -430,7 +430,7 @@
         {
           "cor": "am",
           "tamanho": "P",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "am",
@@ -440,7 +440,7 @@
         {
           "cor": "am",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -746,7 +746,7 @@
         {
           "cor": "be",
           "tamanho": "GG",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1581,7 +1581,7 @@
         {
           "cor": "ma",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
