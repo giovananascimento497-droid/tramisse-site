@@ -135,3 +135,4 @@
 .ent-top{display:flex;gap:6px;align-items:center}.ent-top>input{flex:1;min-width:0;font-weight:500}
 .ent-rs{display:flex;align-items:center;gap:4px;font-size:13px}.ent-rs input{width:64px}
 .ent-faixa small{color:var(--mut);font-size:12px}
+.carr-ln .adm-nm small{display:block;white-space:normal}.carr .adm-resumo button:last-child{min-width:44px}

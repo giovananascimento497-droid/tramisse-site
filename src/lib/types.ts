@@ -76,6 +76,8 @@ export type Config = {
   redes: { nome: string; url: string }[];
   // Guia de tamanhos: [tamanho, busto, cintura, quadril] em cm.
   medidas: { tabela: (string | number)[][] };
+  // Lembrete de compra não concluída (carrinho abandonado) com cupom.
+  recuperacao?: { ativo: boolean; horas: number; cupom: string };
   // Quantos dias uma peça fica no New In depois de chegar (novoDesde).
   novoDias: number;
   // Primeira tela da home (imagem de início). imagem vazia = só as fotos das peças.

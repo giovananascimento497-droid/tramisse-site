@@ -39,3 +39,14 @@
 /* Vídeo da marca (alterna com a imagem de entrada): mesmo layout das peças. */
 .hs-it video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
 @media(min-width:701px){.hs-um .hs-it video{position:relative;inset:auto;grid-column:2;grid-row:1;width:100%;height:100%;object-fit:cover;min-height:0}}
+/* Entrada "estabilizando": a cada troca, a imagem (ou vídeo) chega um pouco ampliada e assenta
+   devagar; o logo, a frase e os textos sobem de leve. Só na página que está aparecendo. */
+@keyframes hs-assenta{from{transform:scale(1.14);filter:brightness(1.06)}to{transform:scale(1);filter:none}}
+@keyframes hs-sobe{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.hs-pg.on .hs-bg,.hs-pg.on .hs-it img,.hs-pg.on .hs-it video{animation:hs-assenta 2.6s cubic-bezier(.16,.8,.24,1) both;transition:none}
+.hs-pg.on .hs-bn-in .logo{animation:hs-sobe 1.4s .5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes hs-sobe-frase{from{opacity:0;transform:translate(-50%,18px)}to{opacity:1;transform:translateX(-50%)}}
+.hs-pg.on .hs-frase{animation:hs-sobe-frase 1.4s .9s cubic-bezier(.2,.7,.2,1) both}
+.hs-pg.on .hs-txt>*{animation:hs-sobe 1s cubic-bezier(.2,.7,.2,1) both}
+.hs-pg.on .hs-txt>:nth-child(2){animation-delay:.15s}.hs-pg.on .hs-txt>:nth-child(3){animation-delay:.3s}.hs-pg.on .hs-txt>:nth-child(4){animation-delay:.45s}
+@media(prefers-reduced-motion:reduce){.hs-pg.on .hs-bg,.hs-pg.on .hs-it img,.hs-pg.on .hs-it video,.hs-pg.on .hs-bn-in .logo,.hs-pg.on .hs-frase,.hs-pg.on .hs-txt>*{animation:none}}

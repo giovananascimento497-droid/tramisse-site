@@ -13,25 +13,29 @@ export const emailAtivo = () => Boolean(chave() && remetente());
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-function html(linhas: string[], rastreio?: string) {
+type Botao = { texto: string; url: string };
+
+function html(linhas: string[], rastreio?: string, extra?: Botao, rodape?: string) {
   const site = SITE;
   const corpo = linhas
     .map((l) => (l ? `<p style="margin:0 0 10px">${esc(l).replace(/(https:\/\/\S+)/g, '<a href="$1" style="color:#1E1D1B">$1</a>')}</p>` : '<div style="height:8px"></div>'))
     .join("");
-  const botao = rastreio
-    ? `<p style="margin:20px 0"><a href="${esc(linkRastreio(rastreio))}" style="display:inline-block;background:#1E1D1B;color:#F7F5F1;padding:14px 28px;text-decoration:none;letter-spacing:.16em;font-size:12px">ACOMPANHAR ENTREGA</a></p>`
+  const b = rastreio ? { texto: "ACOMPANHAR ENTREGA", url: linkRastreio(rastreio) } : extra;
+  const botao = b
+    ? `<p style="margin:20px 0"><a href="${esc(b.url)}" style="display:inline-block;background:#1E1D1B;color:#F7F5F1;padding:14px 28px;text-decoration:none;letter-spacing:.16em;font-size:12px">${esc(b.texto)}</a></p>`
     : "";
+  const extraRodape = rodape ? `<br><span style="font-size:11px">${rodape}</span>` : "";
   return `<!doctype html><html><body style="margin:0;background:#EFE8DA;font-family:Helvetica,Arial,sans-serif;color:#1E1D1B">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#EFE8DA;padding:32px 12px"><tr><td align="center">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#F7F5F1;padding:36px 32px;font-size:15px;line-height:1.6">
 <tr><td style="text-align:center;letter-spacing:.5em;font-size:20px;padding-bottom:28px">TRAMISSE</td></tr>
 <tr><td>${corpo}${botao}</td></tr>
 <tr><td style="border-top:1px solid #DDD6CA;padding-top:18px;font-size:12px;color:#77726B">${esc(CFG.assinatura)}<br>
-<a href="${esc(site)}" style="color:#77726B">${esc(site.replace(/^https?:\/\//, ""))}</a> · Instagram @tramissebrasil</td></tr>
+<a href="${esc(site)}" style="color:#77726B">${esc(site.replace(/^https?:\/\//, ""))}</a> · Instagram @tramissebrasil${extraRodape}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 
-export async function enviarEmail(para: string, assunto: string, linhas: string[], rastreio?: string) {
+export async function enviarEmail(para: string, assunto: string, linhas: string[], rastreio?: string, botao?: Botao, rodape?: string) {
   const r = await fetch((process.env.RESEND_API_URL || "https://api.resend.com") + "/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${chave()}`, "Content-Type": "application/json" },
@@ -39,7 +43,7 @@ export async function enviarEmail(para: string, assunto: string, linhas: string[
       from: remetente(),
       to: [para],
       subject: assunto,
-      html: html(linhas, rastreio),
+      html: html(linhas, rastreio, botao, rodape),
       text: linhas.join("\n"),
       ...(process.env.EMAIL_RESPOSTA ? { reply_to: process.env.EMAIL_RESPOSTA } : {}),
     }),

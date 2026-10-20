@@ -167,3 +167,7 @@ body.m .wf,body.g .wf{display:none}
 .cf-bel label{display:flex;flex-direction:column;gap:6px;font-size:13px}
 .cf-bel select{border:1px solid var(--ln);background:var(--bg);padding:10px 12px;font:inherit;font-size:14px}
 .cf-bel .tt{margin:0}
+/* Checkout: aviso do lembrete de compra não concluída */
+.ck-lemb{margin:0;font-size:13px;color:var(--mut);line-height:1.6}
+.ck-lemb label{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:6px;color:var(--car);white-space:nowrap}
+.ck-lemb input{width:auto!important;margin:0}

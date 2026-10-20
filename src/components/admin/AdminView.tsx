@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CFG } from "@/lib/config";
 import { brl, precoPix, precoVitrine } from "@/lib/payment/pricing";
 import type { Catalogo, Produto, Variante } from "@/lib/types";
+import { CarrinhosView } from "./CarrinhosView";
 import { EntregaView } from "./EntregaView";
 import { EsperaView } from "./EsperaView";
 import { EstatisticasView } from "./EstatisticasView";
@@ -42,7 +43,7 @@ export function AdminView() {
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todas");
   const [ocupado, setOcupado] = useState("");
-  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio" | "espera" | "estat" | "entrega">("pecas");
+  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio" | "espera" | "estat" | "entrega" | "carrinhos">("pecas");
 
   const carregarSessao = () => api("/api/admin/sessao").then(setSessao).catch(() => setSessao({ configurado: false, github: false, logado: false }));
   useEffect(() => { carregarSessao(); }, []);
@@ -221,11 +222,13 @@ export function AdminView() {
       <nav className="adm-abas">
         <button className={aba === "pecas" ? "on" : ""} onClick={() => setAba("pecas")}>PEÇAS</button>
         <button className={aba === "pedidos" ? "on" : ""} onClick={() => { setAba("pedidos"); setSel(null); }}>PEDIDOS</button>
+        <button className={aba === "carrinhos" ? "on" : ""} onClick={() => { setAba("carrinhos"); setSel(null); }}>CARRINHOS</button>
         <button className={aba === "inicio" ? "on" : ""} onClick={() => { setAba("inicio"); setSel(null); }}>INÍCIO</button>
         <button className={aba === "espera" ? "on" : ""} onClick={() => { setAba("espera"); setSel(null); }}>AVISE-ME</button>
         <button className={aba === "estat" ? "on" : ""} onClick={() => { setAba("estat"); setSel(null); }}>ESTATÍSTICAS</button>
         <button className={aba === "entrega" ? "on" : ""} onClick={() => { setAba("entrega"); setSel(null); }}>ENTREGA</button>
       </nav>
+      {aba === "carrinhos" ? <CarrinhosView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "entrega" ? <EntregaView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "estat" ? cat ? <EstatisticasView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
       {aba === "espera" ? cat ? <EsperaView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}

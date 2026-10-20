@@ -175,6 +175,11 @@
       "codigo": "TRAMISSE10",
       "tipo": "percentual",
       "valor": 0.1
+    },
+    {
+      "codigo": "VOLTEI5",
+      "tipo": "percentual",
+      "valor": 0.05
     }
   ],
   "redes": [
@@ -272,5 +277,11 @@
       ]
     ]
   },
-  "novoDias": 30
+  "novoDias": 30,
+  "recuperacao": {
+    "_comentario": "Lembrete de compra não concluída: depois de 'horas' sem finalizar, a cliente recebe e-mail (Resend) com o cupom; no painel (aba CARRINHOS) dá para mandar por WhatsApp com um toque. Um cupom por pedido (não cumulativo com outro cupom).",
+    "ativo": true,
+    "horas": 2,
+    "cupom": "VOLTEI5"
+  }
 }

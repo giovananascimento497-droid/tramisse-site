@@ -40,13 +40,55 @@ const ENTREGAS: [FormaEntrega, string, string][] = [
     : ["aplicativo", "Entrega por aplicativo (Belém)", "Valor informado no momento da compra, por conta da cliente."],
   ["retirada", "Retirada", "O endereço é enviado após a confirmação da compra."],
 ];
+// Compra não concluída: id da sacola guardada (para o lembrete com cupom), por navegador.
+const CHAVE_CARRINHO = "tcar";
+const idCarrinho = () => {
+  try {
+    let id = localStorage.getItem(CHAVE_CARRINHO);
+    if (!id || !/^c[a-z0-9]{16,40}$/.test(id)) {
+      id = "c" + Math.random().toString(36).slice(2, 12) + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      localStorage.setItem(CHAVE_CARRINHO, id);
+    }
+    return id;
+  } catch {
+    return "";
+  }
+};
+const postCarrinho = (corpo: object) =>
+  fetch("/api/carrinho", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corpo), keepalive: true }).catch(() => {});
+// Pedido feito: a compra não é mais "abandonada".
+export function carrinhoConcluido() {
+  try {
+    const id = localStorage.getItem(CHAVE_CARRINHO);
+    if (id) postCarrinho({ id, acao: "concluido" });
+    localStorage.removeItem(CHAVE_CARRINHO);
+  } catch {}
+}
 const novoId = () => `T${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 
 // Checkout por etapas. Cartão: Mercado Pago (quando configurado). Pix: QR Code na chave da loja
 // (quando configurada). Sempre é possível enviar o pedido pelo WhatsApp. Nenhum dado de cartão é coletado.
 // Correios: frete calculado pelo CEP (Melhor Envio), quando configurado.
 export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; correios: boolean }) {
-  const { bag, setBag, cupom, setCupom, pronto } = useLoja();
+  const { bag, setBag, cupom, setCupom, pronto, toast } = useLoja();
+  const [semLembrete, setSemLembrete] = useState(false);
+  // Link do lembrete (?carrinho=…): refaz a sacola e já aplica o cupom.
+  useEffect(() => {
+    if (!pronto) return;
+    const id = new URLSearchParams(location.search).get("carrinho");
+    if (!id || !/^c[a-z0-9]{16,40}$/.test(id)) return;
+    fetch(`/api/carrinho?id=${encodeURIComponent(id)}`)
+      .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
+      .then(({ ok, d }) => {
+        if (!ok) return toast(d.erro || "Link inválido.");
+        try { localStorage.setItem(CHAVE_CARRINHO, id); } catch {}
+        setBag(() => d.bag);
+        if (CFG.recuperacao?.cupom) setCupom(CFG.recuperacao.cupom);
+        toast(`Sua sacola voltou${CFG.recuperacao?.cupom ? ` com o cupom ${CFG.recuperacao.cupom}` : ""}.`);
+        history.replaceState(null, "", "/checkout");
+      })
+      .catch(() => {});
+  }, [pronto]); // eslint-disable-line react-hooks/exhaustive-deps
   const [step, setStep] = useState(0);
   const [ck, setCk] = useState<DadosCliente>({});
   const [ship, setShip] = useState<FormaEntrega>(correios ? "correios" : BELEM ? "belem" : "aplicativo");
@@ -161,6 +203,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     const id = novoId();
     avisarPedido(pedido, { id, canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: atendente.nome });
     registrar("pedido");
+    carrinhoConcluido();
     registrarPedido({ id, canal: "whatsapp", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
     setEnviado({ at: atendente.nome, wa: r.url });
     setBag(() => []);
@@ -178,6 +221,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     const texto = resumoPedido({ ...pedido, pagamentoOnline: { provedor: "Pix", id, status: "aguardando comprovante" } });
     avisarPedido(pedido, { id, canal: "Site (Pix)", situacao: "Aguardando Pix (conferir comprovante)", atendente: atendente.nome });
     registrar("pedido");
+    carrinhoConcluido();
     registrarPedido({ id, canal: "pix", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
     setPix({ at: atendente.nome, wa: `https://wa.me/${atendente.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, id });
     setBag(() => []);
@@ -249,9 +293,25 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     f = (
       <>
         <h2>Identificação</h2>
-        <form className="fg" style={{ marginTop: 16 }} noValidate onSubmit={(e) => { e.preventDefault(); if (validar(ler(e.currentTarget), OBRIG_ID)) ir(2); }}>
+        <form className="fg" style={{ marginTop: 16 }} noValidate onSubmit={(e) => {
+            e.preventDefault();
+            const d = ler(e.currentTarget);
+            if (!validar(d, OBRIG_ID)) return;
+            // Guarda a sacola para o lembrete de compra não concluída (se ela não pediu para não receber).
+            if (!semLembrete && CFG.recuperacao?.ativo) {
+              const id = idCarrinho();
+              if (id) postCarrinho({ id, cliente: { n: d.n, sn: d.sn, e: d.e, tel: d.tel }, bag });
+            }
+            ir(2);
+          }}>
           {fld("e", "E-mail", "", "s", "email")}{fld("n", "Nome")}{fld("sn", "Sobrenome")}
           {fld("tel", "Telefone", "(91) 90000-0000")}{fld("cpf", "CPF (opcional)", "000.000.000-00")}
+          {CFG.recuperacao?.ativo ? (
+            <p className="s ck-lemb">
+              Se você não finalizar agora, podemos te mandar um lembrete com um cupom por e-mail ou WhatsApp.{" "}
+              <label><input type="checkbox" checked={semLembrete} onChange={(e) => setSemLembrete(e.target.checked)} /> Não quero receber</label>
+            </p>
+          ) : null}
           <div className="er s">{erro}</div>
           <button className="btn s">IR PARA A ENTREGA</button>
         </form>
