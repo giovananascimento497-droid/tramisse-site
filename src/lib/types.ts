@@ -37,7 +37,8 @@ export type Catalogo = {
 };
 
 export type Atendente = { nome: string; whatsapp: string; exibicao: string };
-export type Cupom = { codigo: string; tipo: "percentual"; valor: number };
+// somenteClientes: só vale para quem já tem pedido pago no site (mesmo e-mail ou telefone).
+export type Cupom = { codigo: string; tipo: "percentual"; valor: number; somenteClientes?: boolean };
 
 export type Config = {
   marca: string;

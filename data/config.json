@@ -180,6 +180,12 @@
       "codigo": "VOLTEI5",
       "tipo": "percentual",
       "valor": 0.05
+    },
+    {
+      "codigo": "VOLTEI10",
+      "tipo": "percentual",
+      "valor": 0.1,
+      "somenteClientes": true
     }
   ],
   "redes": [

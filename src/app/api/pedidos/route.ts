@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { origemEstranha } from "@/lib/admin/rota";
 import { CFG } from "@/lib/config";
 import { montarPedido } from "@/lib/payment/pedido";
+import { acharCupom } from "@/lib/payment/pricing";
+import { jaComprou } from "@/lib/pedidos/clientes";
 import { limparCliente, limparFrete } from "@/lib/pedidos/limpar";
 import { idValido, salvarPedido } from "@/lib/pedidos/store";
 
@@ -30,7 +32,12 @@ export async function POST(req: Request) {
   if (!pedido || (canal === "pix" && pedido.pagamento !== "pix")) return NextResponse.json({ erro: "Pedido inválido." }, { status: 400 });
   const atendente = CFG.atendentes.find((a) => a.nome === d.atendente)?.nome ?? CFG.atendentes[0].nome;
   try {
-    await salvarPedido({ id: d.id, canal, atendente, situacao: "aguardando", pedido });
+    // Cupom de recompra sem compra anterior: registra, mas avisa a loja (confere antes de confirmar).
+    const alerta =
+      acharCupom(CFG, pedido.cupom)?.somenteClientes && !(await jaComprou(pedido.cliente.e, pedido.cliente.tel).catch(() => true))
+        ? `ATENÇÃO: cupom ${pedido.cupom} usado sem compra anterior encontrada no site com este e-mail/telefone. Confira antes de confirmar.`
+        : "";
+    await salvarPedido({ id: d.id, canal, atendente, situacao: "aguardando", pedido, ...(alerta ? { obs: alerta } : {}) });
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error(e);

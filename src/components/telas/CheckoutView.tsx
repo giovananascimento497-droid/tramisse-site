@@ -10,7 +10,7 @@ import { CFG } from "@/lib/config";
 import { bairrosBelem, belemAtivo, freteBelem } from "@/lib/frete/belem";
 import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
 import { codigoPix } from "@/lib/payment/pix";
-import { brl, calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
+import { acharCupom, brl, calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
 import { provedorWhatsApp, resumoPedido } from "@/lib/payment/whatsapp";
 import type { DadosCliente, FormaEntrega, FormaPagamento, OpcaoFrete } from "@/lib/types";
 import { useLoja } from "@/store/Store";
@@ -297,6 +297,13 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
             e.preventDefault();
             const d = ler(e.currentTarget);
             if (!validar(d, OBRIG_ID)) return;
+            // Cupom de recompra (ex.: VOLTEI10): confere se este e-mail/telefone já comprou no site.
+            const cp = acharCupom(CFG, cupom);
+            if (cp?.somenteClientes)
+              fetch("/api/cupom", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ codigo: cp.codigo, e: d.e, tel: d.tel }) })
+                .then((r) => r.json().then((x) => ({ ok: r.ok, x })))
+                .then(({ ok, x }) => { if (!ok) { setCupom(null); toast(x.erro || "Cupom não aplicado."); } })
+                .catch(() => {});
             // Guarda a sacola para o lembrete de compra não concluída (se ela não pediu para não receber).
             if (!semLembrete && CFG.recuperacao?.ativo) {
               const id = idCarrinho();

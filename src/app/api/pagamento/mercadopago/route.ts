@@ -5,6 +5,8 @@ import { cotarFrete, melhorEnvioAtivo } from "@/lib/frete/melhorenvio";
 import { calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
 import { criarPreferencia, mercadoPagoAtivo } from "@/lib/payment/mercadopago";
 import { montarPedido } from "@/lib/payment/pedido";
+import { acharCupom } from "@/lib/payment/pricing";
+import { jaComprou } from "@/lib/pedidos/clientes";
 import { salvarPedido } from "@/lib/pedidos/store";
 
 // Cria o link de pagamento do Mercado Pago para o pedido da sacola.
@@ -34,6 +36,9 @@ export async function POST(req: Request) {
   // Pix é pago direto na chave da loja (com desconto), não pelo Mercado Pago.
   if (pedido.pagamento === "pix") return NextResponse.json({ erro: "Pix é pago pela chave da loja." }, { status: 400 });
   if (!/^\S+@\S+\.\S+$/.test(pedido.cliente.e || "")) return NextResponse.json({ erro: "E-mail inválido." }, { status: 400 });
+  // Cupom de recompra: só para quem já tem pedido pago no site.
+  if (acharCupom(CFG, pedido.cupom)?.somenteClientes && !(await jaComprou(pedido.cliente.e, pedido.cliente.tel).catch(() => false)))
+    return NextResponse.json({ erro: `O cupom ${pedido.cupom} é para quem já comprou no site. Tire o cupom da sacola e tente de novo.` }, { status: 400 });
 
   const referencia = `T${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
   const origem = process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin;

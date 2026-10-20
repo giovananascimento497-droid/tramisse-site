@@ -86,7 +86,14 @@ export function BagDrawer() {
             />
             <button className="btn o" onClick={aplicar} style={{ padding: "0 20px" }}>OK</button>
           </div>
-          <div className="er">{erro || (cupom ? <span className="okk">Cupom {cupom} aplicado.</span> : null)}</div>
+          <div className="er">
+            {erro ||
+              (cupom ? (
+                <span className="okk">
+                  Cupom {cupom} aplicado.{acharCupom(CFG, cupom)?.somenteClientes ? " Válido para quem já comprou no site: confirmamos pelo seu e-mail ou telefone no checkout." : ""}
+                </span>
+              ) : null)}
+          </div>
           <div className="tt"><span>Subtotal</span><span>{brl(t.subtotal)}</span></div>
           <div className="tt"><span>Entrega</span><span>Calculada no checkout</span></div>
           {t.desconto ? <div className="tt"><span>Desconto</span><span>-{brl(t.desconto)}</span></div> : null}
