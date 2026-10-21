@@ -7,7 +7,32 @@ import type { Catalogo, Produto } from "@/lib/types";
 import { api, enviarVideo, MAX_SEGUNDOS_VIDEO, prepararFoto, prepararVideo } from "./util";
 
 type VideoHome = { src: string; poster?: string; titulo?: string; produtoId?: number };
-type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number>; videos: VideoHome[] };
+type BannerHome = { imagem: string; mobile?: string; link: string; alt?: string; fundo?: string };
+type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number>; videos: VideoHome[]; banners: BannerHome[] };
+
+// Destinos dos banners: coleções e categorias do site.
+const DESTINOS: [string, string][] = [
+  ["/categoria/new-in", "New In"], ["/categoria/curadoria", "Curadoria"], ["/categoria/jeans", "Jeans"], ["/categoria/coming-soon", "Coming Soon"],
+  ["/categoria/roupas", "Roupas (tudo)"], ["/categoria/roupas/blusas", "Blusas"], ["/categoria/roupas/calcas", "Calças"], ["/categoria/roupas/conjuntos", "Conjuntos"],
+  ["/categoria/roupas/vestidos", "Vestidos"], ["/categoria/roupas/saias", "Saias"], ["/categoria/roupas/macacoes", "Macacões"], ["/categoria/todos", "Ver tudo"],
+];
+
+// Cor das bordas de cima e de baixo da arte (fundo no celular, onde a arte aparece inteira).
+async function corDasBordas(dataUrl: string) {
+  const img = await createImageBitmap(await (await fetch(dataUrl)).blob());
+  const c = document.createElement("canvas");
+  c.width = 200; c.height = Math.max(2, Math.round((200 * img.height) / img.width));
+  const ctx = c.getContext("2d")!;
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+  const media = (y: number) => {
+    const d = ctx.getImageData(70, y, 60, 1).data;
+    let r = 0, g = 0, b = 0;
+    for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; }
+    const n = d.length / 4;
+    return "#" + [r, g, b].map((x) => Math.round(x / n).toString(16).padStart(2, "0")).join("").toUpperCase();
+  };
+  return `linear-gradient(${media(1)},${media(c.height - 2)})`;
+}
 type FotoNova = { caminho: string; blob: string; preview: string };
 
 const ORIGINAL = "/assets/brand/inicio.jpg";
@@ -93,6 +118,35 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
     if (!confirm("Tirar este vídeo do site?")) return;
     set({ videos: ed.videos.filter((_, k) => k !== i), ...(ed.video === v.src ? { video: "" } : {}) });
   };
+  const adicionarBanner = async (arquivo?: File) => {
+    if (!arquivo) return;
+    setErro("");
+    setOcupado("Enviando o banner…");
+    try {
+      const grande = await prepararFoto(arquivo, 2560);
+      const pequeno = await prepararFoto(arquivo, 1280);
+      const fundo = await corDasBordas(pequeno);
+      const r1 = await api("/api/admin/foto", { method: "POST", body: JSON.stringify({ slug: "banner", pasta: "inicio", base64: grande }) });
+      const r2 = await api("/api/admin/foto", { method: "POST", body: JSON.stringify({ slug: "banner-1280", pasta: "inicio", base64: pequeno }) });
+      setNovos((n) => [...n, { caminho: r1.caminho, blob: r1.blob }, { caminho: r2.caminho, blob: r2.blob }]);
+      setPrevias((x) => ({ ...x, [r1.caminho]: grande, [r2.caminho]: pequeno }));
+      setEd((e) => e && { ...e, banners: [...e.banners, { imagem: r1.caminho, mobile: r2.caminho, link: "/categoria/new-in", fundo }] });
+      setAviso("");
+    } catch (e) {
+      setErro((e as Error).message);
+    } finally {
+      setOcupado("");
+    }
+  };
+  const mudarBanner = (i: number, m: Partial<BannerHome>) => set({ banners: ed.banners.map((b, k) => (k === i ? { ...b, ...m } : b)) });
+  const moverBanner = (i: number, d: number) => {
+    const l = [...ed.banners];
+    const j = i + d;
+    if (j < 0 || j >= l.length) return;
+    [l[i], l[j]] = [l[j], l[i]];
+    set({ banners: l });
+  };
+
   const adicionarVideo = async (arquivo?: File) => {
     if (!arquivo) return;
     setErro("");
@@ -167,6 +221,34 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
         ) : (
           <button className="btn o" onClick={() => set({ imagem: ultimaImagem })}>MOSTRAR A IMAGEM DE ENTRADA</button>
         )}
+      </div>
+
+      <h3>Banners</h3>
+      <p className="adm-dica">
+        Artes prontas (do Canva, com texto e botão na própria imagem) que passam depois da imagem de entrada, com o efeito de entrada.
+        Use arte na horizontal (2:1, ex.: 2560 × 1280). No celular a arte aparece inteira. Escolha para onde cada banner leva.
+      </p>
+      <div className="adm-bans">
+        {ed.banners.map((b, i) => (
+          <div key={b.imagem} className="adm-ban">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={previas[b.imagem] ?? b.imagem} alt="" />
+            <select value={b.link} onChange={(e) => mudarBanner(i, { link: e.target.value })} aria-label="Leva para">
+              {DESTINOS.some(([v]) => v === b.link) ? null : <option value={b.link}>{b.link}</option>}
+              {DESTINOS.map(([v, t]) => <option key={v} value={v}>Leva para: {t}</option>)}
+            </select>
+            <input value={b.alt ?? ""} placeholder="Texto do banner (para o Google e leitores de tela)" onChange={(e) => mudarBanner(i, { alt: e.target.value })} />
+            <span className="adm-ord">
+              <button type="button" onClick={() => moverBanner(i, -1)} disabled={i === 0} aria-label="Antes">←</button>
+              <button type="button" onClick={() => confirm("Tirar este banner?") && set({ banners: ed.banners.filter((_, k) => k !== i) })} aria-label="Tirar banner">×</button>
+              <button type="button" onClick={() => moverBanner(i, 1)} disabled={i === ed.banners.length - 1} aria-label="Depois">→</button>
+            </span>
+          </div>
+        ))}
+        <label className="adm-add adm-ban-add">
+          {ocupado === "Enviando o banner…" ? ocupado : "+ Adicionar banner"}
+          <input type="file" accept="image/*" hidden onChange={(e) => { adicionarBanner(e.target.files?.[0]); e.target.value = ""; }} />
+        </label>
       </div>
 
       <h3>Vídeos</h3>

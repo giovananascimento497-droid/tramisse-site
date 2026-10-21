@@ -10,7 +10,8 @@ const INTERVALO = 5000; // ms de cada peça
 const TEMPO_ENTRADA = 6000; // ms da imagem de entrada
 const VIDEO_MAX = 40000; // o vídeo passa até o fim (no máximo 40 s)
 
-type Banner = { imagem: string; frase: string; textoFrase: string; video?: string };
+// banners: imagens prontas (do Canva, com texto e botão na arte), cada uma com link; passam depois da imagem de entrada.
+type Banner = { imagem: string; frase: string; textoFrase: string; video?: string; banners?: { imagem: string; mobile?: string; link: string; alt?: string; fundo?: string }[] };
 
 // Primeira imagem da home: a imagem de entrada (fundo + logo + frase), o vídeo da marca
 // (se houver; passa inteiro e volta para a imagem) e as peças UMA POR VEZ, cada uma com
@@ -24,9 +25,11 @@ export function HeroShop({ fotos, banner }: { fotos: Foto[]; banner?: Banner }) 
   const paginas = fotos;
 
   const temBanner = Boolean(banner?.imagem);
+  const artes = banner?.banners?.filter((b) => b.imagem) ?? [];
+  const iArtes = temBanner ? 1 : 0;
   const video = banner?.video || "";
-  const iVideo = video ? (temBanner ? 1 : 0) : -1;
-  const inicioPecas = (temBanner ? 1 : 0) + (video ? 1 : 0);
+  const iVideo = video ? iArtes + artes.length : -1;
+  const inicioPecas = iArtes + artes.length + (video ? 1 : 0);
   const total = paginas.length + inicioPecas;
   const proxima = () => setPag((x) => (x + 1) % total);
 
@@ -47,9 +50,9 @@ export function HeroShop({ fotos, banner }: { fotos: Foto[]; banner?: Banner }) 
       v.addEventListener("ended", fim);
       return () => { vivo = false; clearTimeout(t); v.removeEventListener("ended", fim); v.pause(); };
     }
-    esperar(pag === 0 && temBanner ? TEMPO_ENTRADA : INTERVALO);
+    esperar((pag === 0 && temBanner) || (pag >= iArtes && pag < iArtes + artes.length) ? TEMPO_ENTRADA : INTERVALO);
     return () => { vivo = false; clearTimeout(t); };
-  }, [pag, total, iVideo, temBanner]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pag, total, iVideo, temBanner, artes.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <section
@@ -71,6 +74,22 @@ export function HeroShop({ fotos, banner }: { fotos: Foto[]; banner?: Banner }) 
           </div>
         </div>
       ) : null}
+      {artes.map((a, k0) => {
+        const k = iArtes + k0;
+        return (
+          <div key={a.imagem} className={`hs-pg hs-arte${k === pag ? " on" : ""}`} aria-hidden={k !== pag}>
+            <Link href={a.link || "/categoria/new-in"} tabIndex={k === pag ? 0 : -1} aria-label={a.alt || "Ver peças"}>
+              {/* No celular a arte aparece inteira (sem cortar o texto) sobre a cor das bordas dela. */}
+              <span className="hs-arte-fundo" style={{ background: a.fundo || "#D6CDBF" }} />
+              <picture>
+                {a.mobile ? <source media="(max-width:700px)" srcSet={a.mobile} /> : null}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={a.imagem} alt={a.alt || ""} loading={k0 === 0 ? "eager" : "lazy"} decoding="async" />
+              </picture>
+            </Link>
+          </div>
+        );
+      })}
       {video ? (
         <div className={`hs-pg hs-um hs-vd${pag === iVideo ? " on" : ""}`} aria-hidden={pag !== iVideo}>
           <Link className="hs-it" href="/categoria/new-in" tabIndex={pag === iVideo ? 0 : -1}>

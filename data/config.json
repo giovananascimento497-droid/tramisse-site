@@ -231,6 +231,29 @@
       124,
       131,
       136
+    ],
+    "banners": [
+      {
+        "imagem": "/assets/inicio/banner-jeans.jpg",
+        "mobile": "/assets/inicio/banner-jeans-1280.jpg",
+        "link": "/categoria/jeans",
+        "alt": "Jeans: as suas peças favoritas estão de volta",
+        "fundo": "linear-gradient(#84818C,#85828B)"
+      },
+      {
+        "imagem": "/assets/inicio/banner-new.jpg",
+        "mobile": "/assets/inicio/banner-new-1280.jpg",
+        "link": "/categoria/new-in",
+        "alt": "New In",
+        "fundo": "linear-gradient(#84818C,#85828B)"
+      },
+      {
+        "imagem": "/assets/inicio/banner-ultimas-pecas.jpg",
+        "mobile": "/assets/inicio/banner-ultimas-pecas-1280.jpg",
+        "link": "/categoria/curadoria",
+        "alt": "Últimas peças: peças selecionadas",
+        "fundo": "linear-gradient(#CABEB5,#C4BAB2)"
+      }
     ]
   },
   "imagensMarca": {

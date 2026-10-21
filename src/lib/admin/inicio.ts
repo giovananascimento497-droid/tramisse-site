@@ -15,7 +15,10 @@ const CAPA = /^\/assets\/videos\/[a-z0-9-]+\.jpg$/;
 export const ARQUIVO_NOVO = /^\/assets\/(inicio\/[a-z0-9-]+\.jpg|videos\/[a-z0-9-]+\.(mp4|webm|jpg))$/;
 
 export type VideoHome = { src: string; poster?: string; titulo?: string; produtoId?: number };
-export type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number>; videos: VideoHome[] };
+export type BannerHome = { imagem: string; mobile?: string; link: string; alt?: string; fundo?: string };
+export type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number>; videos: VideoHome[]; banners: BannerHome[] };
+const IMG_INICIO = /^\/assets\/inicio\/[a-z0-9-]+\.jpg$/;
+const FUNDO = /^linear-gradient\(#[0-9A-Fa-f]{6},#[0-9A-Fa-f]{6}\)$/;
 
 export async function lerInicio(): Promise<Inicio> {
   const a = await lerArquivo(ARQ_CONFIG);
@@ -26,6 +29,7 @@ export async function lerInicio(): Promise<Inicio> {
   return {
     imagem: c.hero.imagem, video: c.hero.video ?? "", semPecas: Boolean(c.hero.semPecas), pecas: c.hero.pecas ?? [], fotosHome,
     videos: c.videos.filter((v) => v.src) as VideoHome[],
+    banners: c.hero.banners ?? [],
   };
 }
 
@@ -59,6 +63,21 @@ export async function publicarInicio(d: Inicio, foto: { caminho: string; blob: s
       }
       c.videos = lista as Config["videos"];
     }
+    // Banners prontos (arte com texto): imagem já no site ou enviada agora; link interno do site.
+    if (Array.isArray(d.banners)) {
+      const ja = new Set((c.hero.banners ?? []).flatMap((b) => [b.imagem, b.mobile].filter(Boolean) as string[]));
+      c.hero.banners = d.banners.slice(0, 8).map((b) => {
+        const imagem = String(b?.imagem ?? "");
+        const mobile = String(b?.mobile ?? "");
+        const ok = (x: string) => IMG_INICIO.test(x) && (ja.has(x) || enviados.has(x));
+        if (!ok(imagem) || (mobile && !ok(mobile))) throw Object.assign(new Error("Banner inválido. Envie de novo."), { validacao: true });
+        const link = String(b?.link ?? "/categoria/new-in");
+        if (!/^\/[a-z0-9\-/]*$/.test(link)) throw Object.assign(new Error("Link de banner inválido."), { validacao: true });
+        const alt = String(b?.alt ?? "").trim().slice(0, 120);
+        const fundo = String(b?.fundo ?? "");
+        return { imagem, ...(mobile ? { mobile } : {}), link, ...(alt ? { alt } : {}), ...(FUNDO.test(fundo) ? { fundo } : {}) };
+      });
+    }
     // Vídeo da entrada: só um dos vídeos da seção (se tirou o vídeo da lista, a entrada fica sem vídeo).
     let video = String(d.video ?? "");
     if (video && !c.videos.some((v) => v.src === video)) video = "";
@@ -72,7 +91,7 @@ export async function publicarInicio(d: Inicio, foto: { caminho: string; blob: s
     const arquivos: { caminho: string; texto?: string; blob?: string }[] = [{ caminho: ARQ_CONFIG, texto: JSON.stringify(c, null, 2) + "\n" }];
     if (foto) arquivos.push({ caminho: `public${foto.caminho}`, blob: foto.blob });
     // Só os arquivos novos que ficaram em uso.
-    const usados = new Set(c.videos.flatMap((v) => [v.src, v.poster]));
+    const usados = new Set([...c.videos.flatMap((v) => [v.src, v.poster]), ...(c.hero.banners ?? []).flatMap((b) => [b.imagem, b.mobile])]);
     for (const n of novos) if (usados.has(n.caminho)) arquivos.push({ caminho: `public${n.caminho}`, blob: n.blob });
     return arquivos;
   });

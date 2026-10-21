@@ -136,3 +136,10 @@
 .ent-rs{display:flex;align-items:center;gap:4px;font-size:13px}.ent-rs input{width:64px}
 .ent-faixa small{color:var(--mut);font-size:12px}
 .carr-ln .adm-nm small{display:block;white-space:normal}.carr .adm-resumo button:last-child{min-width:44px}
+/* Banners (aba Início) */
+.adm-bans{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.adm-ban{display:flex;flex-direction:column;gap:6px}
+.adm-ban img{width:100%;aspect-ratio:2/1;object-fit:cover;background:var(--mar)}
+.adm-ban select,.adm-ban input{border:1px solid var(--ln);background:var(--bg);padding:7px 9px;font:inherit;font-size:13px;width:100%}
+.adm-ban .adm-ord{justify-content:space-between}
+.adm-ban-add{aspect-ratio:2/1}
