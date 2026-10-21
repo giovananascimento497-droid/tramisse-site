@@ -12,7 +12,7 @@ type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[
 
 // Destinos dos banners: coleções e categorias do site.
 const DESTINOS: [string, string][] = [
-  ["/categoria/new-in", "New In"], ["/categoria/curadoria", "Curadoria"], ["/categoria/jeans", "Jeans"], ["/categoria/coming-soon", "Coming Soon"],
+  ["/categoria/new-in", "New In"], ["/categoria/curadoria", "Curadoria"], ["/categoria/jeans", "Jeans"], ["/categoria/ultimas-pecas", "Últimas peças (1 em estoque)"], ["/categoria/coming-soon", "Coming Soon"],
   ["/categoria/roupas", "Roupas (tudo)"], ["/categoria/roupas/blusas", "Blusas"], ["/categoria/roupas/calcas", "Calças"], ["/categoria/roupas/conjuntos", "Conjuntos"],
   ["/categoria/roupas/vestidos", "Vestidos"], ["/categoria/roupas/saias", "Saias"], ["/categoria/roupas/macacoes", "Macacões"], ["/categoria/todos", "Ver tudo"],
 ];

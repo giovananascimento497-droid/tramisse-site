@@ -11,6 +11,10 @@
     "titulo": "Jeans",
     "texto": "Lavagens e modelagens pensadas para o dia a dia, com o caimento da Tramisse."
   },
+  "ultimas-pecas": {
+    "titulo": "Últimas Peças",
+    "texto": "Peças selecionadas com a última unidade disponível."
+  },
   "roupas": {
     "titulo": "Roupas",
     "texto": "Peças essenciais, de modelagem precisa e caimento atemporal."

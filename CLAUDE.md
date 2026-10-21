@@ -56,6 +56,7 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - Imagens em `public/assets/` (servidas em `/assets/...`); fotos das peças em `public/assets/products/<slug>-<n>.jpg`. Peça sem foto mostra o degradê na cor da peça.
 - `fotos-nao-identificadas/`: fotos recebidas que não correspondem a peças do catálogo.
 - **Catálogo = estoque real** (planilha de 30/09/2026, importada por `scripts/importar-estoque-2026-09.mjs`, que não roda de novo). Cada variante (cor + tamanho) tem o estoque real; o site não deixa comprar acima dele (página, sacola e servidor). Custo, lucro e fornecedora **nunca** vão para o site (o catálogo é público).
+- **Últimas peças:** coleção automática `/categoria/ultimas-pecas` (`ultimaUnidade()` em `catalog.ts`: soma do estoque de todas as variantes = 1); é o link do banner "Últimas peças" da home. Muda sozinha a cada republicação (venda/estoque).
 - **Jeans:** coleção `/categoria/jeans` pela marca `flags.jeans` (caixa "Jeans" no painel), no cabeçalho, menu e rodapé.
 - **New In com prazo:** `flags.novo` + `novoDesde` (AAAA-MM-DD); a peça sai do New In sozinha depois de `novoDias` (30) dias (`ehNovo()` em `catalog.ts`; home, categorias e produto com `revalidate` diário). No painel, marcar New In ou desmarcar Coming Soon põe a data de hoje.
 - **Coming soon:** `emBreve: true` no produto. Aparece só em `/categoria/coming-soon` (e na seção da home), com etiqueta COMING SOON e botão "Avise-me quando chegar" no lugar da compra.

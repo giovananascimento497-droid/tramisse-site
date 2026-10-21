@@ -31,6 +31,8 @@ export const tamanhos = (p: Produto) => ordenaTamanhos(p.variantes.map((v) => v.
 export const temEstoque = (p: Produto) => !p.emBreve && p.variantes.some((v) => v.estoque > 0);
 // Esgotada: continua no site com a etiqueta ESGOTADO (no fim das listas), sem compra.
 export const esgotado = (p: Produto) => !p.emBreve && !temEstoque(p);
+// Últimas peças: só 1 unidade no estoque (somando cores e tamanhos). Banner "Últimas peças" da home.
+export const ultimaUnidade = (p: Produto) => !p.emBreve && p.variantes.reduce((a, v) => a + v.estoque, 0) === 1;
 // Tamanho pré-selecionado quando a cor só tem um tamanho.
 export const tamanhoUnico = (p: Produto, cor: string) => {
   const t = p.variantes.filter((v) => v.cor === cor).map((v) => v.tamanho);
@@ -52,6 +54,7 @@ export function listar(k: string, sub?: string): Produto[] {
   if (k === "new-in") return l.filter(ehNovo);
   if (k === "curadoria") return l.filter((p) => p.flags.curadoria);
   if (k === "jeans") return l.filter((p) => p.flags.jeans);
+  if (k === "ultimas-pecas") return l.filter(ultimaUnidade);
   if (k === "sale") return l.filter((p) => p.precoDe);
   if (k === "estilo") return l.filter((p) => slug(p.estilo) === sub);
   if (k === "todos") return l;

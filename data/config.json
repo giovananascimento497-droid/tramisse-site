@@ -252,7 +252,7 @@
       {
         "imagem": "/assets/inicio/banner-ultimas-pecas.jpg",
         "mobile": "/assets/inicio/banner-ultimas-pecas-celular.jpg",
-        "link": "/categoria/curadoria",
+        "link": "/categoria/ultimas-pecas",
         "alt": "Últimas peças: peças selecionadas",
         "fundo": "linear-gradient(#CABEB5,#C4BAB2)",
         "mobileVertical": true
