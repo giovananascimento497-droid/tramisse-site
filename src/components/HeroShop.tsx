@@ -11,7 +11,7 @@ const TEMPO_ENTRADA = 6000; // ms da imagem de entrada
 const VIDEO_MAX = 40000; // o vídeo passa até o fim (no máximo 40 s)
 
 // banners: imagens prontas (do Canva, com texto e botão na arte), cada uma com link; passam depois da imagem de entrada.
-type Banner = { imagem: string; frase: string; textoFrase: string; video?: string; banners?: { imagem: string; mobile?: string; link: string; alt?: string; fundo?: string }[] };
+type Banner = { imagem: string; frase: string; textoFrase: string; video?: string; banners?: { imagem: string; mobile?: string; mobileVertical?: boolean; link: string; alt?: string; fundo?: string }[] };
 
 // Primeira imagem da home: a imagem de entrada (fundo + logo + frase), o vídeo da marca
 // (se houver; passa inteiro e volta para a imagem) e as peças UMA POR VEZ, cada uma com
@@ -77,7 +77,7 @@ export function HeroShop({ fotos, banner }: { fotos: Foto[]; banner?: Banner }) 
       {artes.map((a, k0) => {
         const k = iArtes + k0;
         return (
-          <div key={a.imagem} className={`hs-pg hs-arte${k === pag ? " on" : ""}`} aria-hidden={k !== pag}>
+          <div key={a.imagem} className={`hs-pg hs-arte${a.mobileVertical ? " vert" : ""}${k === pag ? " on" : ""}`} aria-hidden={k !== pag}>
             <Link href={a.link || "/categoria/new-in"} tabIndex={k === pag ? 0 : -1} aria-label={a.alt || "Ver peças"}>
               {/* No celular a arte aparece inteira (sem cortar o texto) sobre a cor das bordas dela. */}
               <span className="hs-arte-fundo" style={{ background: a.fundo || "#D6CDBF" }} />

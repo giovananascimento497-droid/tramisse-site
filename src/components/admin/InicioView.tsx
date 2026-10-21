@@ -7,7 +7,7 @@ import type { Catalogo, Produto } from "@/lib/types";
 import { api, enviarVideo, MAX_SEGUNDOS_VIDEO, prepararFoto, prepararVideo } from "./util";
 
 type VideoHome = { src: string; poster?: string; titulo?: string; produtoId?: number };
-type BannerHome = { imagem: string; mobile?: string; link: string; alt?: string; fundo?: string };
+type BannerHome = { imagem: string; mobile?: string; mobileVertical?: boolean; link: string; alt?: string; fundo?: string };
 type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number>; videos: VideoHome[]; banners: BannerHome[] };
 
 // Destinos dos banners: coleções e categorias do site.
@@ -138,6 +138,23 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
       setOcupado("");
     }
   };
+  // Versão vertical do banner para o celular (ocupa a tela toda).
+  const celularBanner = async (i: number, arquivo?: File) => {
+    if (!arquivo) return;
+    setErro("");
+    setOcupado("Enviando a versão do celular…");
+    try {
+      const img = await prepararFoto(arquivo, 1920);
+      const r = await api("/api/admin/foto", { method: "POST", body: JSON.stringify({ slug: "banner-celular", pasta: "inicio", base64: img }) });
+      setNovos((n) => [...n, { caminho: r.caminho, blob: r.blob }]);
+      setPrevias((x) => ({ ...x, [r.caminho]: img }));
+      setEd((e) => e && { ...e, banners: e.banners.map((b, k) => (k === i ? { ...b, mobile: r.caminho, mobileVertical: true } : b)) });
+    } catch (e) {
+      setErro((e as Error).message);
+    } finally {
+      setOcupado("");
+    }
+  };
   const mudarBanner = (i: number, m: Partial<BannerHome>) => set({ banners: ed.banners.map((b, k) => (k === i ? { ...b, ...m } : b)) });
   const moverBanner = (i: number, d: number) => {
     const l = [...ed.banners];
@@ -226,13 +243,24 @@ export function InicioView({ cat, onSair }: { cat: Catalogo; onSair: () => void 
       <h3>Banners</h3>
       <p className="adm-dica">
         Artes prontas (do Canva, com texto e botão na própria imagem) que passam depois da imagem de entrada, com o efeito de entrada.
-        Use arte na horizontal (2:1, ex.: 2560 × 1280). No celular a arte aparece inteira. Escolha para onde cada banner leva.
+        Use arte na horizontal (2:1, ex.: 2560 × 1280) para o computador e, de preferência, uma versão vertical (1080 × 1920) para o
+        celular, que ocupa a tela toda; sem ela, no celular a arte horizontal aparece inteira no meio da tela. Escolha para onde cada banner leva.
       </p>
       <div className="adm-bans">
         {ed.banners.map((b, i) => (
           <div key={b.imagem} className="adm-ban">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={previas[b.imagem] ?? b.imagem} alt="" />
+            <div className="adm-ban-imgs">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={previas[b.imagem] ?? b.imagem} alt="Computador" />
+              {b.mobile && b.mobileVertical ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className="cel" src={previas[b.mobile] ?? b.mobile} alt="Celular" />
+              ) : null}
+            </div>
+            <label className="adm-ban-cel">
+              {ocupado === "Enviando a versão do celular…" ? ocupado : b.mobileVertical ? "Trocar versão do celular" : "+ Versão do celular (vertical, 1080 × 1920)"}
+              <input type="file" accept="image/*" hidden onChange={(e) => { celularBanner(i, e.target.files?.[0]); e.target.value = ""; }} />
+            </label>
             <select value={b.link} onChange={(e) => mudarBanner(i, { link: e.target.value })} aria-label="Leva para">
               {DESTINOS.some(([v]) => v === b.link) ? null : <option value={b.link}>{b.link}</option>}
               {DESTINOS.map(([v, t]) => <option key={v} value={v}>Leva para: {t}</option>)}

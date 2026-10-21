@@ -15,7 +15,7 @@ const CAPA = /^\/assets\/videos\/[a-z0-9-]+\.jpg$/;
 export const ARQUIVO_NOVO = /^\/assets\/(inicio\/[a-z0-9-]+\.jpg|videos\/[a-z0-9-]+\.(mp4|webm|jpg))$/;
 
 export type VideoHome = { src: string; poster?: string; titulo?: string; produtoId?: number };
-export type BannerHome = { imagem: string; mobile?: string; link: string; alt?: string; fundo?: string };
+export type BannerHome = { imagem: string; mobile?: string; mobileVertical?: boolean; link: string; alt?: string; fundo?: string };
 export type Inicio = { imagem: string; video: string; semPecas: boolean; pecas: number[]; fotosHome: Record<string, number>; videos: VideoHome[]; banners: BannerHome[] };
 const IMG_INICIO = /^\/assets\/inicio\/[a-z0-9-]+\.jpg$/;
 const FUNDO = /^linear-gradient\(#[0-9A-Fa-f]{6},#[0-9A-Fa-f]{6}\)$/;
@@ -75,7 +75,7 @@ export async function publicarInicio(d: Inicio, foto: { caminho: string; blob: s
         if (!/^\/[a-z0-9\-/]*$/.test(link)) throw Object.assign(new Error("Link de banner inválido."), { validacao: true });
         const alt = String(b?.alt ?? "").trim().slice(0, 120);
         const fundo = String(b?.fundo ?? "");
-        return { imagem, ...(mobile ? { mobile } : {}), link, ...(alt ? { alt } : {}), ...(FUNDO.test(fundo) ? { fundo } : {}) };
+        return { imagem, ...(mobile ? { mobile } : {}), ...(mobile && b?.mobileVertical ? { mobileVertical: true } : {}), link, ...(alt ? { alt } : {}), ...(FUNDO.test(fundo) ? { fundo } : {}) };
       });
     }
     // Vídeo da entrada: só um dos vídeos da seção (se tirou o vídeo da lista, a entrada fica sem vídeo).
