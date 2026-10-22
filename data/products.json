@@ -639,13 +639,13 @@
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
+      "novoDesde": "2026-09-30",
       "variantes": [
         {
           "cor": "mr",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "mr",
