@@ -1042,13 +1042,13 @@
         "maisVendida": false,
         "jeans": false
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
+      "novoDesde": "2026-09-30",
       "variantes": [
         {
           "cor": "ve",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1256,7 +1256,7 @@
         {
           "cor": "jm",
           "tamanho": "42",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
