@@ -234,27 +234,43 @@
     ],
     "banners": [
       {
-        "imagem": "/assets/inicio/banner-jeans.jpg",
-        "mobile": "/assets/inicio/banner-jeans-celular.jpg",
-        "link": "/categoria/jeans",
-        "alt": "Jeans: as suas peças favoritas estão de volta",
-        "fundo": "linear-gradient(#84818C,#85828B)",
-        "mobileVertical": true
-      },
-      {
-        "imagem": "/assets/inicio/banner-new.jpg",
-        "mobile": "/assets/inicio/banner-new-celular.jpg",
-        "link": "/categoria/new-in",
-        "alt": "New In",
-        "fundo": "linear-gradient(#84818C,#85828B)",
-        "mobileVertical": true
-      },
-      {
-        "imagem": "/assets/inicio/banner-ultimas-pecas.jpg",
-        "mobile": "/assets/inicio/banner-ultimas-pecas-celular.jpg",
+        "imagem": "/assets/inicio/banner-black-coming-soon.jpg",
+        "mobile": "/assets/inicio/banner-black-coming-soon-celular.jpg",
         "link": "/categoria/ultimas-pecas",
-        "alt": "Últimas peças: peças selecionadas",
-        "fundo": "linear-gradient(#CABEB5,#C4BAB2)",
+        "alt": "Black Friday: coming soon on 03/11",
+        "fundo": "linear-gradient(#AB9486,#E8E4E1)",
+        "mobileVertical": true
+      },
+      {
+        "imagem": "/assets/inicio/banner-jeans-classico.jpg",
+        "mobile": "/assets/inicio/banner-jeans-classico-celular.jpg",
+        "link": "/categoria/jeans",
+        "alt": "Jeans: o favorito da Tramisse",
+        "fundo": "linear-gradient(#A09E99,#857E7B)",
+        "mobileVertical": true
+      },
+      {
+        "imagem": "/assets/inicio/banner-blusas.jpg",
+        "mobile": "/assets/inicio/banner-blusas-celular.jpg",
+        "link": "/categoria/roupas/blusas",
+        "alt": "Blusas: a nova estação",
+        "fundo": "linear-gradient(#C1C2BA,#B7B0A6)",
+        "mobileVertical": true
+      },
+      {
+        "imagem": "/assets/inicio/banner-curadoria.jpg",
+        "mobile": "/assets/inicio/banner-curadoria-celular.jpg",
+        "link": "/categoria/curadoria",
+        "alt": "Curadoria Especial: peças escolhidas a dedo",
+        "fundo": "linear-gradient(#DDDDD8,#A4A39F)",
+        "mobileVertical": true
+      },
+      {
+        "imagem": "/assets/inicio/banner-essenciais.jpg",
+        "mobile": "/assets/inicio/banner-essenciais-celular.jpg",
+        "link": "/categoria/roupas",
+        "alt": "Essenciais: para todos os dias",
+        "fundo": "linear-gradient(#E6E6E3,#DCDBD7)",
         "mobileVertical": true
       }
     ]
