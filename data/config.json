@@ -234,10 +234,10 @@
     ],
     "banners": [
       {
-        "imagem": "/assets/inicio/banner-black-coming-soon.jpg",
-        "mobile": "/assets/inicio/banner-black-coming-soon-celular.jpg",
-        "link": "/categoria/ultimas-pecas",
-        "alt": "BLACK: coming soon on 03/11",
+        "imagem": "/assets/inicio/banner-black-lancamento.jpg",
+        "mobile": "/assets/inicio/banner-black-lancamento-celular.jpg",
+        "link": "/categoria/sale",
+        "alt": "BLACK Tramisse: peças selecionadas com até 60% off",
         "fundo": "linear-gradient(#AB9486,#E8E4E1)",
         "mobileVertical": true
       },
