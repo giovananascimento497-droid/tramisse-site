@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!p) return {};
   const descricao =
     (p.descricao ? `${p.descricao} ` : `${p.nome} da Tramisse, moda feminina contemporânea de Belém. `) +
-    (p.emBreve ? "Em breve na Tramisse." : `${brl(p.preco)} ou ${brl(precoPix(CFG, p.preco))} no Pix. Envio para todo o Brasil.`);
+    (p.emBreve ? "Em breve na Tramisse." : p.precoDe ? `De ${brl(p.precoDe)} por ${brl(p.preco)}. Envio para todo o Brasil.` : `${brl(p.preco)} ou ${brl(precoPix(CFG, p.preco))} no Pix. Envio para todo o Brasil.`);
   return {
     title: p.nome,
     description: descricao.slice(0, 300),

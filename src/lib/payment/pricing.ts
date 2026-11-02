@@ -62,20 +62,20 @@ export const nomesPagamento = (cfg: Config) =>
   }) as const;
 
 // Regras: cartão (crédito em até maxParcelas sem juros ou débito) paga a vitrine; Pix tem desconto sobre a vitrine.
-// O cupom vale sobre a vitrine. O cálculo é feito por peça (centavos arredondados por unidade),
+// O cupom vale sobre a vitrine. Peça em promoção (`promo`, com preço "de") não tem cupom nem desconto Pix. O cálculo é feito por peça (centavos arredondados por unidade),
 // para que o total do site seja exatamente a soma das peças enviadas ao Mercado Pago.
 // `pagamento` nulo = ainda não escolhido (sem desconto Pix).
 export function calcularTotais(
   cfg: Config,
-  linhas: { preco: number; q: number }[],
+  linhas: { preco: number; q: number; promo?: boolean }[],
   pagamento: FormaPagamento | null,
   codigoCupom?: string | null,
 ) {
   const cupom = acharCupom(cfg, codigoCupom);
   let subtotal = 0, desconto = 0, descontoPix = 0, total = 0;
-  const unitarios = linhas.map(({ preco, q }) => {
-    const comCupom = cupom ? r2(preco * (1 - cupom.valor)) : preco;
-    const final = pagamento === "pix" ? precoPix(cfg, comCupom) : comCupom;
+  const unitarios = linhas.map(({ preco, q, promo }) => {
+    const comCupom = cupom && !promo ? r2(preco * (1 - cupom.valor)) : preco;
+    const final = pagamento === "pix" && !promo ? precoPix(cfg, comCupom) : comCupom;
     subtotal += preco * q;
     desconto += (preco - comCupom) * q;
     descontoPix += (comCupom - final) * q;

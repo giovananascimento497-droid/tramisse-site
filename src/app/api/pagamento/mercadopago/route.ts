@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     if (!melhorEnvioAtivo()) return NextResponse.json({ erro: "Envio pelos Correios indisponível no momento." }, { status: 503 });
     const linhas = (Array.isArray(dados.bag) ? dados.bag : []).map((l: { id: number; q: number }) => ({ p: porId(Number(l.id)), q: Number(l.q) }));
     if (!linhas.length || linhas.some((l: { p?: unknown }) => !l.p)) return NextResponse.json({ erro: "Pedido inválido. Confira a sacola." }, { status: 400 });
-    const t = calcularTotais(CFG, linhas.map((l: { p: { preco: number }; q: number }) => ({ preco: l.p.preco, q: l.q })), null, dados.cupom);
+    const t = calcularTotais(CFG, linhas.map((l: { p: { preco: number; precoDe: number }; q: number }) => ({ preco: l.p.preco, q: l.q, promo: Boolean(l.p.precoDe) })), null, dados.cupom);
     try {
       const opcoes = await cotarFrete(dados.cliente?.cep || "", linhas, t.subtotal - t.desconto);
       frete = opcoes.find((o) => o.servico === Number(dados.frete?.servico)) ?? null;

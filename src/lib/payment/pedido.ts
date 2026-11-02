@@ -33,7 +33,7 @@ export function montarPedido(dados: {
     linhas.push({ p, cor: l.cor, tam: l.tam, q });
   }
   const cupom = acharCupom(CFG, dados.cupom)?.codigo;
-  const t = calcularTotais(CFG, linhas.map((l) => ({ preco: l.p.preco, q: l.q })), dados.pagamento, cupom);
+  const t = calcularTotais(CFG, linhas.map((l) => ({ preco: l.p.preco, q: l.q, promo: Boolean(l.p.precoDe) })), dados.pagamento, cupom);
   // Belém: o frete sai sempre da tabela de bairros (nunca do valor vindo do navegador).
   if (dados.entrega === "belem") {
     frete = freteBelem(CFG, dados.cliente?.bai, t.subtotal - t.desconto);

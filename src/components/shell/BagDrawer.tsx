@@ -10,7 +10,7 @@ import { Ph } from "../Ph";
 
 // Linhas da sacola com o preço de vitrine de cada peça (para calcularTotais).
 export function linhasSacola(bag: { id: number; q: number }[]) {
-  return bag.map((l) => ({ preco: porId(l.id)?.preco ?? 0, q: l.q }));
+  return bag.map((l) => ({ preco: porId(l.id)?.preco ?? 0, q: l.q, promo: Boolean(porId(l.id)?.precoDe) }));
 }
 
 export function BagDrawer() {
@@ -90,7 +90,7 @@ export function BagDrawer() {
             {erro ||
               (cupom ? (
                 <span className="okk">
-                  Cupom {cupom} aplicado.{acharCupom(CFG, cupom)?.somenteClientes ? " Válido para quem já comprou no site: confirmamos pelo seu e-mail ou telefone no checkout." : ""}
+                  Cupom {cupom} aplicado.{bag.some((l) => porId(l.id)?.precoDe) ? " Não vale para peças em promoção." : ""}{acharCupom(CFG, cupom)?.somenteClientes ? " Válido para quem já comprou no site: confirmamos pelo seu e-mail ou telefone no checkout." : ""}
                 </span>
               ) : null)}
           </div>

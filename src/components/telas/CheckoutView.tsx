@@ -22,7 +22,7 @@ const ETAPAS = ["SACOLA", "IDENTIFICAÇÃO", "ENTREGA", "PAGAMENTO"];
 const OBRIG_ID = ["e", "n", "sn", "tel"];
 const OBRIG_END = ["cep", "end", "num", "bai", "cid", "uf", "dest"];
 const PAGAMENTOS: [FormaPagamento, string, string][] = [
-  ["pix", "Pix", `${Math.round(CFG.pagamento.descontoPix * 100)}% de desconto nas peças.`],
+  ["pix", "Pix", `${Math.round(CFG.pagamento.descontoPix * 100)}% de desconto nas peças (exceto as em promoção).`],
   ["credito", "Cartão de crédito", ""], // texto calculado com as parcelas liberadas para a sacola
   ["debito", "Cartão de débito", "À vista."],
 ];

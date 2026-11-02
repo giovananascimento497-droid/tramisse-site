@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   if (!linhas.length || linhas.some((l) => !l.p || !Number.isInteger(l.q) || l.q < 1 || l.q > 50))
     return NextResponse.json({ erro: "Sacola inválida." }, { status: 400 });
   const ok = linhas as { p: NonNullable<(typeof linhas)[number]["p"]>; q: number }[];
-  const t = calcularTotais(CFG, ok.map((l) => ({ preco: l.p.preco, q: l.q })), null, dados.cupom);
+  const t = calcularTotais(CFG, ok.map((l) => ({ preco: l.p.preco, q: l.q, promo: Boolean(l.p.precoDe) })), null, dados.cupom);
   const valorPecas = t.subtotal - t.desconto;
   try {
     const opcoes = await cotarFrete(dados.cep, ok, valorPecas);

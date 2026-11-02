@@ -25,7 +25,7 @@ export function PixView({ codigo, total, at, wa, pedidoId }: { codigo: string; t
     <div className="pg">
       <h1>Pague com Pix</h1>
       <p>
-        Pedido nº {pedidoId} · <b style={{ fontWeight: 500 }}>{brl(total)}</b> (já com {Math.round(CFG.pagamento.descontoPix * 100)}% de desconto nas peças). Abra o app do seu banco,
+        Pedido nº {pedidoId} · <b style={{ fontWeight: 500 }}>{brl(total)}</b> (já com {Math.round(CFG.pagamento.descontoPix * 100)}% de desconto nas peças fora de promoção). Abra o app do seu banco,
         escolha Pix e leia o QR Code ou use o código copia e cola.
       </p>
       {/* eslint-disable-next-line @next/next/no-img-element */}
