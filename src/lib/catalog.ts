@@ -55,13 +55,17 @@ export function listar(k: string, sub?: string): Produto[] {
   if (k === "curadoria") return l.filter((p) => p.flags.curadoria);
   if (k === "jeans") return l.filter((p) => p.flags.jeans);
   if (k === "ultimas-pecas") return l.filter(ultimaUnidade);
-  if (k === "sale") return l.filter((p) => p.precoDe);
+  if (k === "sale") return l.filter((p) => p.precoDe).sort((a, b) => Number(esgotado(a)) - Number(esgotado(b)) || desconto(b) - desconto(a));
   if (k === "estilo") return l.filter((p) => slug(p.estilo) === sub);
   if (k === "todos") return l;
   return l.filter((p) => p.categoria === k && (!sub || slug(p.subcategoria) === sub));
 }
 
+// Desconto da peça em promoção (0,6 = 60%); 0 fora da promoção.
+export const desconto = (p: Produto) => (p.precoDe ? 1 - p.preco / p.precoDe : 0);
+
 // Acessórios e Sale só aparecem nos menus quando têm peça (categoria vazia parece loja incompleta).
+// Com Sale, a home e o menu do topo ficam voltados para a promoção (BLACK); sem Sale, voltam ao normal.
 export const TEM_ACESSORIOS = listar("acessorios").length > 0;
 export const TEM_SALE = listar("sale").length > 0;
 

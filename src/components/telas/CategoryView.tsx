@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CL, listar, slug, TODAS_CORES, TODOS_TAMANHOS, TREE, INFO, tamanhos, cores, temEstoque, esgotado } from "@/lib/catalog";
+import { CL, listar, slug, TODAS_CORES, TODOS_TAMANHOS, TREE, INFO, tamanhos, cores, temEstoque, esgotado, desconto } from "@/lib/catalog";
 import { useLoja, type Filtros } from "@/store/Store";
 import { Grid } from "../ProductCard";
 
@@ -18,11 +18,11 @@ export function CategoryView({ k, sub }: { k: string; sub?: string }) {
   if (F.pr) { const [a, b] = F.pr.split("-").map(Number); l = l.filter((p) => p.preco >= a && p.preco <= b); }
   if (F.est) l = l.filter((p) => p.estilo === F.est);
   if (F.disp) l = l.filter(temEstoque);
-  const o = F.o || "n";
+  const o = F.o || (k === "sale" ? "d" : "n");
   // Esgotadas sempre no fim, em qualquer ordenação.
   l = [...l].sort((a, b) =>
     Number(esgotado(a)) - Number(esgotado(b)) ||
-    (o === "lo" ? a.preco - b.preco : o === "hi" ? b.preco - a.preco : o === "b" ? Number(b.flags.maisVendida) - Number(a.flags.maisVendida) : b.id - a.id),
+    (o === "d" ? desconto(b) - desconto(a) : o === "lo" ? a.preco - b.preco : o === "hi" ? b.preco - a.preco : o === "b" ? Number(b.flags.maisVendida) - Number(a.flags.maisVendida) : b.id - a.id),
   );
 
   const sel = (n: keyof Filtros, lbl: string, opts: [string, string][]) => (
@@ -55,7 +55,7 @@ export function CategoryView({ k, sub }: { k: string; sub?: string }) {
           <input type="checkbox" checked={!!F.disp} onChange={(e) => setFiltros({ ...F, disp: e.target.checked })} style={{ minHeight: 0 }} /> Em estoque
         </label>
         <span style={{ flex: 1 }}></span>
-        {sel("o", "Ordenar", [["n", "Mais recentes"], ["b", "Mais vendidos"], ["lo", "Menor preço"], ["hi", "Maior preço"]])}
+        {sel("o", "Ordenar", [...(k === "sale" ? [["d", "Maior desconto"] as [string, string]] : []), ["n", "Mais recentes"], ["b", "Mais vendidos"], ["lo", "Menor preço"], ["hi", "Maior preço"]])}
       </div>
       <p style={{ color: "var(--mut)", fontSize: 13 }}>{l.length} {l.length === 1 ? "peça" : "peças"}</p>
       <Grid itens={l} style={{ marginBottom: 96 }} vazio={<p>Nenhuma peça por aqui ainda. Volte em breve ou veja a coleção completa.</p>} />

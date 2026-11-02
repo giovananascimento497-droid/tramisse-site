@@ -7,7 +7,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reels } from "@/components/Reels";
 import { Tile } from "@/components/Tile";
-import { ehNovo, PRODS, porId, slug, TEM_ACESSORIOS, temEstoque } from "@/lib/catalog";
+import { desconto, ehNovo, PRODS, porId, slug, TEM_ACESSORIOS, temEstoque } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import type { Produto } from "@/lib/types";
 
@@ -31,11 +31,15 @@ function CompreCategoria({ className, style, TP }: { className: string; style?: 
   );
 }
 
-// Peças do banner: as escolhidas no painel (na ordem) ou, sem escolha, todas com foto e estoque.
-// Peça esgotada ou sem foto sai sozinha.
+const ok = (p?: Produto): p is Produto => !!p && !p.emBreve && p.imagens.length > 0 && temEstoque(p);
+// Peças em promoção (BLACK), do maior desconto para o menor. Com elas, a home fica voltada para a promoção.
+const promo = () => PRODS.filter((p) => p.precoDe && ok(p)).sort((a, b) => desconto(b) - desconto(a));
+
+// Peças do banner: na promoção, as de maior desconto; fora dela, as escolhidas no painel (na ordem)
+// ou, sem escolha, todas com foto e estoque. Peça esgotada ou sem foto sai sozinha.
 function pecasBanner() {
   if (CFG.hero.semPecas) return [];
-  const ok = (p?: Produto): p is Produto => !!p && !p.emBreve && p.imagens.length > 0 && temEstoque(p);
+  if (promo().length) return promo().slice(0, 6);
   const escolhidas = (CFG.hero.pecas ?? []).map(porId).filter(ok);
   return escolhidas.length ? escolhidas : PRODS.filter(ok);
 }
@@ -51,9 +55,15 @@ export default function Home() {
   const desejadas = PRODS.filter((p) => p.flags.maisVendida && temEstoque(p));
   const emBreve = PRODS.filter((p) => p.emBreve);
   const TP = CFG.fotosHome;
+  const black = promo();
+  const maxOff = black.length ? Math.round(desconto(black[0]) * 100) : 0;
+  // Na promoção: sem a imagem de entrada, o banner da promoção (link para a Sale) abre a home.
+  const hero = black.length
+    ? { ...CFG.hero, imagem: "", banners: [...(CFG.hero.banners ?? [])].sort((a, b) => Number(b.link === "/categoria/sale") - Number(a.link === "/categoria/sale")) }
+    : CFG.hero;
   return (
     <>
-      <HeroShop fotos={pecasBanner().map(({ slug, nome, imagens, preco }) => ({ slug, nome, preco, imagens: imagens.slice(0, 1) }))} banner={CFG.hero} />
+      <HeroShop fotos={pecasBanner().map(({ slug, nome, imagens, preco }) => ({ slug, nome, preco, imagens: imagens.slice(0, 1) }))} banner={hero} />
 
       <Beneficios />
 
@@ -63,8 +73,8 @@ export default function Home() {
       <section className="sec ed-only">
         <div className="w">
           <div className="tiles">
-            {[["NEW IN", "/categoria/new-in"], ["CURADORIA ESPECIAL", "/categoria/curadoria"], ["ROUPAS", "/categoria/roupas"], TEM_ACESSORIOS ? ["ACESSÓRIOS", "/categoria/acessorios"] : ["JEANS", "/categoria/jeans"]].map(
-              ([t, h]) => <Tile key={t} t={t} href={h} foto={TP[t]} />,
+            {[black.length ? ["BLACK", "/categoria/sale"] : ["NEW IN", "/categoria/new-in"], ["CURADORIA ESPECIAL", "/categoria/curadoria"], ["ROUPAS", "/categoria/roupas"], TEM_ACESSORIOS ? ["ACESSÓRIOS", "/categoria/acessorios"] : ["JEANS", "/categoria/jeans"]].map(
+              ([t, h]) => <Tile key={t} t={t} href={h} foto={t === "BLACK" ? black[0].id : TP[t]} />,
             )}
           </div>
         </div>
@@ -72,12 +82,25 @@ export default function Home() {
 
       <section className="sec" style={{ paddingTop: 0 }}>
         <div className="w">
-          <div className="sh">
-            <div><h2>NEW IN</h2><p>Novidades que chegam para fazer parte da sua história.</p></div>
-            <CarouselButtons id="c1" />
-          </div>
-          <Carrossel l={novos} id="c1" />
-          <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/new-in">VER TODAS</Link></p>
+          {black.length ? (
+            <>
+              <div className="sh">
+                <div><h2>BLACK</h2><p>Peças selecionadas com até {maxOff}% off. Últimas unidades.</p></div>
+                <CarouselButtons id="c1" />
+              </div>
+              <Carrossel l={black} id="c1" />
+              <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/sale">VER TODAS</Link></p>
+            </>
+          ) : (
+            <>
+              <div className="sh">
+                <div><h2>NEW IN</h2><p>Novidades que chegam para fazer parte da sua história.</p></div>
+                <CarouselButtons id="c1" />
+              </div>
+              <Carrossel l={novos} id="c1" />
+              <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/new-in">VER TODAS</Link></p>
+            </>
+          )}
         </div>
       </section>
 

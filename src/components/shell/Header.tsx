@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { slug, TREE } from "@/lib/catalog";
+import { slug, TEM_SALE, TREE } from "@/lib/catalog";
 import { useLoja } from "@/store/Store";
 
 // Categorias visíveis no cabeçalho (computador). "Roupas" abre o menu grande com todas as subcategorias.
@@ -36,6 +36,7 @@ export function Header() {
         </div>
         <Link className="logo" href="/" aria-label="Tramisse, página inicial">TRAMISSE</Link>
         <nav className="pri" aria-label="Principal">
+          {TEM_SALE ? <div><Link href="/categoria/sale">BLACK</Link></div> : null}
           <div><Link href="/categoria/new-in">NEW IN</Link></div>
           <div className="dd">
             <Link href="/categoria/roupas">ROUPAS</Link>
