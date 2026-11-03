@@ -1288,7 +1288,7 @@
         {
           "cor": "ma",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1318,7 +1318,7 @@
         {
           "cor": "ma",
           "tamanho": "36",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
