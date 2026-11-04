@@ -289,7 +289,7 @@
         {
           "cor": "ro",
           "tamanho": "M",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -778,7 +778,7 @@
         {
           "cor": "az",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
