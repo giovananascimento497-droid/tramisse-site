@@ -30,6 +30,8 @@ export type PedidoSalvo = {
   etiqueta?: { id: string; servico: number; preco: number; status: "carrinho" | "paga" | "gerada"; protocolo?: string };
   // E-mails já mandados para a cliente (recebido, pago, enviado).
   avisos?: string[];
+  // Só na resposta do painel (não é guardado): link para a cliente avaliar as peças.
+  linkAvaliacao?: string;
 };
 
 // Situações que contam como venda (estoque baixado).

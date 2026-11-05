@@ -10,7 +10,7 @@ import { ResumoVendas } from "./ResumoVendas";
 import { NOMES_CANAL, NOMES_SITUACAO, SITUACOES, type PedidoSalvo, type Situacao } from "@/lib/pedidos/tipos";
 
 const PAGAMENTO = nomesPagamento(CFG);
-const NOMES_AVISO: Record<string, string> = { recebido: "Pedido recebido", pago: "Pagamento confirmado", enviado: "Pedido enviado" };
+const NOMES_AVISO: Record<string, string> = { recebido: "Pedido recebido", pago: "Pagamento confirmado", enviado: "Pedido enviado", avaliacao: "Pedir avaliação" };
 type Filtro = "abertos" | "todos" | "rota" | Situacao;
 
 const data = (iso: string) =>
@@ -230,8 +230,8 @@ function Detalhe(props: { p: PedidoSalvo; email: boolean; onVoltar: () => void; 
           : "E-mails automáticos desligados (falta configurar o Resend na Netlify)."}
       </p>
       <div className="adm-bts" style={{ marginBottom: 8 }}>
-        {(["recebido", "pago", "enviado"] as const).map((t) => {
-          const link = linkZap ? `${linkZap}?text=${encodeURIComponent(textoAviso(t, p).linhas.join("\n"))}` : "";
+        {(["recebido", "pago", "enviado", "avaliacao"] as const).map((t) => {
+          const link = linkZap ? `${linkZap}?text=${encodeURIComponent(textoAviso(t, p, p.linkAvaliacao).linhas.join("\n"))}` : "";
           return link ? (
             <a key={t} className={`btn${avisoDaSituacao(p) === t ? "" : " o"}`} href={link} target="_blank" rel="noopener">
               {NOMES_AVISO[t].toUpperCase()}

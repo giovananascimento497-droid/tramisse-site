@@ -4,7 +4,7 @@ import { getStore } from "@netlify/blobs";
 import { avisarCliente } from "../email";
 import type { PedidoSalvo } from "./tipos";
 
-export { SITUACOES, type PedidoSalvo, type Situacao } from "./tipos";
+export { SITUACOES, VENDIDO, type PedidoSalvo, type Situacao } from "./tipos";
 
 // Pedidos guardados para o painel /admin. Ficam no Netlify Blobs (armazenamento privado da
 // Netlify, já ligado ao site; não precisa de token). Nunca vão para o GitHub (o repositório

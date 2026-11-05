@@ -4,6 +4,7 @@
 // Sem essas variáveis, nada é enviado (o resto funciona normalmente).
 import { CFG } from "./config";
 import { SITE } from "./site";
+import { linkAvaliacao } from "./pedidos/avaliacoes";
 import { linkRastreio, textoAviso, type TipoAviso } from "./pedidos/mensagens";
 import type { PedidoSalvo } from "./pedidos/tipos";
 
@@ -60,6 +61,7 @@ export function avisoParaMudanca(antes: PedidoSalvo | null, novo: PedidoSalvo): 
   else if (antes.situacao !== novo.situacao) {
     if (["pago", "separacao"].includes(novo.situacao) && ["aguardando", "cancelado"].includes(antes.situacao)) t = "pago";
     else if (novo.situacao === "enviado") t = "enviado";
+    else if (novo.situacao === "entregue") t = "avaliacao";
   }
   return t && !novo.avisos?.includes(t) ? t : null;
 }
@@ -69,7 +71,8 @@ export async function avisarCliente(antes: PedidoSalvo | null, novo: PedidoSalvo
   const para = novo.pedido.cliente.e || "";
   const t = avisoParaMudanca(antes, novo);
   if (!t || !emailAtivo() || !/^\S+@\S+\.\S+$/.test(para)) return null;
-  const { assunto, linhas } = textoAviso(t, novo);
-  await enviarEmail(para, assunto, linhas, t === "enviado" ? novo.rastreio : undefined);
+  const link = t === "avaliacao" ? linkAvaliacao(novo.id) : "";
+  const { assunto, linhas } = textoAviso(t, novo, link);
+  await enviarEmail(para, assunto, linhas, t === "enviado" ? novo.rastreio : undefined, link ? { texto: "AVALIAR MINHAS PEÇAS", url: link } : undefined);
   return t;
 }

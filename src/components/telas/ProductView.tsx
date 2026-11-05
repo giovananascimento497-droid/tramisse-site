@@ -1,12 +1,13 @@
 "use client";
 
 import { registrar } from "@/lib/estatisticas";
-import { useEffect, useState, type CSSProperties, type MouseEvent } from "react";
-import { CL, cores, esgotado, estoqueDe, porId, tamanhoUnico, tamanhos } from "@/lib/catalog";
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
+import { CL, cores, esgotado, estoqueDe, porId, tamanhoUnico, tamanhos, ultimaUnidade } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
 import { AviseMeForm } from "../AviseMe";
+import { AvaliacoesPeca, NotaPeca } from "../Avaliacoes";
 import { faixaBelem, gratisBelem } from "@/lib/frete/belem";
 import { CalcularFrete } from "../CalcularFrete";
 import { FavButton } from "../FavButton";
@@ -26,6 +27,14 @@ export function ProductView({ id }: { id: number }) {
   const [zoom, setZoom] = useState(false);
   const [origem, setOrigem] = useState({ x: "50%", y: "50%" });
   const [erro, setErro] = useState("");
+  // Celular: barra fixa com o botão de compra quando o botão principal sai da tela.
+  const refComprar = useRef<HTMLDivElement>(null);
+  const [fixa, setFixa] = useState(false);
+  useEffect(() => {
+    const ver = () => { const el = refComprar.current; if (el) setFixa(el.getBoundingClientRect().bottom < 0); };
+    addEventListener("scroll", ver, { passive: true });
+    return () => removeEventListener("scroll", ver);
+  }, []);
 
   const mover = (e: MouseEvent<HTMLDivElement>) => {
     if (!zoom) return;
@@ -91,6 +100,8 @@ export function ProductView({ id }: { id: number }) {
       <div className="info">
         <small style={{ letterSpacing: ".14em" }}>{p.subcategoria.toUpperCase()}</small>
         <h1>{p.nome}</h1>
+        <NotaPeca produtoId={p.id} />
+        {!semEstoque && ultimaUnidade(p) ? <div><span className="pdp-ult">ÚLTIMA UNIDADE</span></div> : null}
         <div className="pr">
           {p.precoDe ? <><s style={{ color: "var(--mut)", fontSize: 16 }}>{brl(p.precoDe)}</s> </> : null}
           {brl(p.preco)}
@@ -148,7 +159,7 @@ export function ProductView({ id }: { id: number }) {
             </div>
           </>
         )}
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8 }} ref={refComprar}>
           {semEstoque ? (
             <button className="btn" style={{ flex: 1 }} onClick={() => setAvise((x) => !x)}>ESGOTADO · AVISE-ME</button>
           ) : p.emBreve ? (
@@ -161,13 +172,34 @@ export function ProductView({ id }: { id: number }) {
         {(p.emBreve || semEstoque) && avise ? (
           <AviseMeForm produtoId={p.id} nomePeca={p.nome} tam={tam ?? undefined} chegou={!p.emBreve} onWhatsApp={aviseMe} />
         ) : null}
+        {p.emBreve || semEstoque ? null : (
+          <ul className="pdp-vt" aria-label="Vantagens">
+            {!p.precoDe ? <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9zM8.5 12h7M12 8.5v7" /></svg>{Math.round(CFG.pagamento.descontoPix * 100)}% off no Pix, confirmado na hora</li> : null}
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM3 10h18M7 15h4" /></svg>Até {CFG.pagamento.maxParcelas}x sem juros no cartão</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9a8 8 0 0114-3l2 2M20 15a8 8 0 01-14 3l-2-2M18 3v5h-5M6 21v-5h5" /></svg>Trocas em até {CFG.trocas.prazoDias} dias</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7M7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM17 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" /></svg>{gratisBelem(CFG) ? `Belém: frete grátis acima de ${brl(gratisBelem(CFG))}` : "Envio para todo o Brasil"}</li>
+          </ul>
+        )}
         {p.emBreve || semEstoque ? null : <CalcularFrete id={p.id} q={q} />}
         <div style={{ marginTop: 32 }}>
           {acordeao.map(([t, c]) => (
             <details key={t}><summary>{t}</summary><p>{c}</p></details>
           ))}
         </div>
+        <AvaliacoesPeca produtoId={p.id} />
       </div>
+      {p.emBreve || semEstoque ? null : (
+        <div className={`pdp-fixa${fixa ? " on" : ""}`} aria-hidden={!fixa}>
+          <span><b>{p.nome}</b>{brl(p.preco)}{tam ? ` · tam. ${tam}` : ""}</span>
+          <button
+            className="btn"
+            tabIndex={fixa ? 0 : -1}
+            onClick={() => { if (!tam) { setErro("Escolha um tamanho para continuar."); refComprar.current?.scrollIntoView({ behavior: "smooth", block: "center" }); } else adicionar(); }}
+          >
+            {tam ? "ADICIONAR" : "ESCOLHER TAMANHO"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

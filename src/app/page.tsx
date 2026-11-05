@@ -7,7 +7,8 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reels } from "@/components/Reels";
 import { Tile } from "@/components/Tile";
-import { desconto, ehNovo, PRODS, porId, slug, TEM_ACESSORIOS, temEstoque } from "@/lib/catalog";
+import { desconto, ehNovo, PRODS, porId, slug, TEM_ACESSORIOS, temEstoque, ultimaUnidade } from "@/lib/catalog";
+import { AvaliacoesHome } from "@/components/Avaliacoes";
 import { CFG } from "@/lib/config";
 import type { Produto } from "@/lib/types";
 
@@ -54,6 +55,9 @@ export default function Home() {
   const novos = PRODS.filter((p) => ehNovo(p) && temEstoque(p));
   const desejadas = PRODS.filter((p) => p.flags.maisVendida && temEstoque(p));
   const emBreve = PRODS.filter((p) => p.emBreve);
+  // Últimas unidades (1 peça no estoque), sem as da promoção (que já têm a seção delas).
+  const ultimas = PRODS.filter((p) => ok(p) && ultimaUnidade(p) && !p.precoDe);
+  const nomes = Object.fromEntries(PRODS.map((p) => [p.id, p.nome]));
   const TP = CFG.fotosHome;
   const black = promo();
   const maxOff = black.length ? Math.round(desconto(black[0]) * 100) : 0;
@@ -104,6 +108,18 @@ export default function Home() {
         </div>
       </section>
 
+      {desejadas.length ? (
+        <section className="sec" style={{ paddingTop: 0 }}>
+          <div className="w">
+            <div className="sh"><h2>As mais desejadas</h2><CarouselButtons id="c2" /></div>
+            <Carrossel l={desejadas} id="c2" />
+            <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/todos">VER TODOS</Link></p>
+          </div>
+        </section>
+      ) : null}
+
+      <AvaliacoesHome nomes={nomes} />
+
       <section className="cur">
         <h2>Curadoria Especial</h2>
         <p>Uma seleção especial de peças escolhidas para traduzir a essência da Tramisse.</p>
@@ -120,8 +136,6 @@ export default function Home() {
         </div>
       </section>
 
-
-
       <CompreCategoria className="sec ed-only" style={{ paddingTop: 0 }} TP={TP} />
 
       <section className="sec" style={{ paddingTop: 0 }}>
@@ -135,13 +149,18 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="sec" style={{ paddingTop: 0 }}>
-        <div className="w">
-          <div className="sh"><h2>As mais desejadas</h2><CarouselButtons id="c2" /></div>
-          <Carrossel l={desejadas} id="c2" />
-          <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/todos">VER TODOS</Link></p>
-        </div>
-      </section>
+      {ultimas.length ? (
+        <section className="sec" style={{ paddingTop: 0 }}>
+          <div className="w">
+            <div className="sh">
+              <div><h2>Últimas unidades</h2><p>Só uma peça de cada. Quando acabar, acabou.</p></div>
+              <CarouselButtons id="c5" />
+            </div>
+            <Carrossel l={ultimas} id="c5" />
+            <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/ultimas-pecas">VER TODAS</Link></p>
+          </div>
+        </section>
+      ) : null}
 
       {emBreve.length ? (
         <section className="sec" style={{ paddingTop: 0 }}>

@@ -146,3 +146,4 @@
 .adm-ban-imgs{display:flex;gap:6px;align-items:stretch}.adm-ban-imgs img{flex:1;min-width:0}
 .adm-ban-imgs img.cel{flex:0 0 22%;aspect-ratio:9/16;object-fit:cover}
 .adm-ban-cel{font-size:12px;text-decoration:underline;cursor:pointer;color:var(--car)}
+.aval-ln .adm-nm{display:grid;gap:4px}.aval-st{color:#1E1D1B;letter-spacing:.08em}.aval-tx{font-size:14px;font-style:italic}

@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { exigirLogin } from "@/lib/admin/rota";
 import { emailAtivo } from "@/lib/email";
+import { linkAvaliacao } from "@/lib/pedidos/avaliacoes";
 import { estoqueAoMudar } from "@/lib/pedidos/estoque";
 import { alterarPedido, apagarPedido, idValido, lerPedido, listarPedidos, SITUACOES, type PedidoSalvo, type Situacao } from "@/lib/pedidos/store";
 
 export const dynamic = "force-dynamic";
+
+// Link para a cliente avaliar as peças (botão de WhatsApp "Pedir avaliação").
+const comLink = (p: PedidoSalvo) => ({ ...p, linkAvaliacao: linkAvaliacao(p.id) });
 
 const falha = (e: unknown, acao: string) => {
   console.error(e);
@@ -16,7 +20,7 @@ export async function GET(req: Request) {
   const negado = await exigirLogin(req);
   if (negado) return negado;
   try {
-    return NextResponse.json({ pedidos: await listarPedidos(), email: emailAtivo() });
+    return NextResponse.json({ pedidos: (await listarPedidos()).map(comLink), email: emailAtivo() });
   } catch (e) {
     return falha(e, "carregar os pedidos");
   }
@@ -49,7 +53,7 @@ export async function PATCH(req: Request) {
     }
     const p = await alterarPedido(d.id, () => m);
     if (!p) return NextResponse.json({ erro: "Pedido não encontrado." }, { status: 404 });
-    return NextResponse.json({ pedido: p, aviso });
+    return NextResponse.json({ pedido: comLink(p), aviso });
   } catch (e) {
     if ((e as { estoque?: boolean }).estoque) return NextResponse.json({ erro: (e as Error).message }, { status: 502 });
     return falha(e, "salvar o pedido");

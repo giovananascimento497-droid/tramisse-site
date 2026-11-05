@@ -3,7 +3,7 @@ import { brl } from "../payment/pricing";
 import { textoPrazo } from "../frete/regras";
 import type { PedidoSalvo } from "./tipos";
 
-export type TipoAviso = "recebido" | "pago" | "enviado";
+export type TipoAviso = "recebido" | "pago" | "enviado" | "avaliacao";
 export const linkRastreio = (codigo: string) => `https://rastreamento.correios.com.br/app/index.php?objetos=${encodeURIComponent(codigo)}`;
 
 const primeiroNome = (p: PedidoSalvo) => (p.pedido.cliente.n || "").trim().split(/\s+/)[0] || "";
@@ -13,11 +13,23 @@ export function avisoDaSituacao(p: PedidoSalvo): TipoAviso | null {
   if (p.situacao === "aguardando") return "recebido";
   if (p.situacao === "pago" || p.situacao === "separacao") return "pago";
   if (p.situacao === "enviado") return "enviado";
+  if (p.situacao === "entregue") return "avaliacao";
   return null;
 }
 
-export function textoAviso(tipo: TipoAviso, p: PedidoSalvo): { assunto: string; linhas: string[] } {
+// link: página para avaliar as peças (só no aviso "avaliacao").
+export function textoAviso(tipo: TipoAviso, p: PedidoSalvo, link = ""): { assunto: string; linhas: string[] } {
   const ola = `Olá${primeiroNome(p) ? `, ${primeiroNome(p)}` : ""}!`;
+  if (tipo === "avaliacao")
+    return {
+      assunto: "O que você achou das suas peças? · Tramisse",
+      linhas: [
+        ola,
+        "Esperamos que você esteja amando as suas peças da Tramisse!",
+        "Conta pra gente o que achou? Leva menos de um minuto e ajuda outras clientes a escolher.",
+        ...(link ? ["", `Avaliar: ${link}`] : []),
+      ],
+    };
   const pecas = p.pedido.itens.map((i) => `• ${i.q}x ${i.nome} (${i.cor}, tam. ${i.tam})`);
   const ped = p.pedido;
   if (tipo === "recebido")
