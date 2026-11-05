@@ -8,6 +8,7 @@ import { CarrinhosView } from "./CarrinhosView";
 import { EntregaView } from "./EntregaView";
 import { EsperaView } from "./EsperaView";
 import { AvaliacoesView } from "./AvaliacoesView";
+import { CuponsView } from "./CuponsView";
 import { EstatisticasView } from "./EstatisticasView";
 import { InicioView } from "./InicioView";
 import { api, prepararFoto } from "./util";
@@ -44,7 +45,7 @@ export function AdminView() {
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todas");
   const [ocupado, setOcupado] = useState("");
-  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio" | "espera" | "estat" | "entrega" | "carrinhos" | "aval">("pecas");
+  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio" | "espera" | "estat" | "entrega" | "carrinhos" | "aval" | "cupons">("pecas");
 
   const carregarSessao = () => api("/api/admin/sessao").then(setSessao).catch(() => setSessao({ configurado: false, github: false, logado: false }));
   useEffect(() => { carregarSessao(); }, []);
@@ -225,6 +226,7 @@ export function AdminView() {
         <button className={aba === "pedidos" ? "on" : ""} onClick={() => { setAba("pedidos"); setSel(null); }}>PEDIDOS</button>
         <button className={aba === "carrinhos" ? "on" : ""} onClick={() => { setAba("carrinhos"); setSel(null); }}>CARRINHOS</button>
         <button className={aba === "inicio" ? "on" : ""} onClick={() => { setAba("inicio"); setSel(null); }}>INÍCIO</button>
+        <button className={aba === "cupons" ? "on" : ""} onClick={() => { setAba("cupons"); setSel(null); }}>CUPONS</button>
         <button className={aba === "aval" ? "on" : ""} onClick={() => { setAba("aval"); setSel(null); }}>AVALIAÇÕES</button>
         <button className={aba === "espera" ? "on" : ""} onClick={() => { setAba("espera"); setSel(null); }}>AVISE-ME</button>
         <button className={aba === "estat" ? "on" : ""} onClick={() => { setAba("estat"); setSel(null); }}>ESTATÍSTICAS</button>
@@ -233,6 +235,7 @@ export function AdminView() {
       {aba === "carrinhos" ? <CarrinhosView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "entrega" ? <EntregaView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "estat" ? cat ? <EstatisticasView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
+      {aba === "cupons" ? <CuponsView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "aval" ? cat ? <AvaliacoesView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
       {aba === "espera" ? cat ? <EsperaView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
       {aba === "inicio" ? cat ? <InicioView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
@@ -392,6 +395,24 @@ function Editor(props: {
           Modelo
           <input value={p.modelo ?? ""} onChange={(e) => set({ modelo: e.target.value })} placeholder="A modelo tem 1,70 m e veste P" />
         </label>
+        <div className="s adm-combina">
+          <span>Complete o look (até 4 peças que combinam; vazio = o site sugere sozinho)</span>
+          <div>
+            {(p.combina ?? []).map((id) => (
+              <button key={id} type="button" className="adm-chip" onClick={() => set({ combina: (p.combina ?? []).filter((x) => x !== id) })} title="Tirar">
+                {cat.produtos.find((x) => x.id === id)?.nome ?? `Peça ${id}`} ×
+              </button>
+            ))}
+            {(p.combina ?? []).length < 4 ? (
+              <select value="" onChange={(e) => e.target.value && set({ combina: [...(p.combina ?? []), Number(e.target.value)] })} aria-label="Adicionar peça que combina">
+                <option value="">+ adicionar peça…</option>
+                {[...cat.produtos].filter((x) => x.id !== p.id && !(p.combina ?? []).includes(x.id)).sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR")).map((x) => (
+                  <option key={x.id} value={x.id}>{x.nome}</option>
+                ))}
+              </select>
+            ) : null}
+          </div>
+        </div>
         <div className="s adm-flags">
           <label>
             <input type="checkbox" checked={p.flags.novo} onChange={(e) => set({ flags: { ...p.flags, novo: e.target.checked }, novoDesde: e.target.checked ? hoje() : undefined })} />{" "}

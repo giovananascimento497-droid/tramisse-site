@@ -46,6 +46,10 @@ export function limparProduto(p: Produto, cat: Catalogo): { ok: Produto } | { er
       tecido: String(p.tecido || "").trim(),
       ...(String(p.medidas || "").trim() ? { medidas: String(p.medidas).trim().slice(0, 1500) } : {}),
       ...(String(p.modelo || "").trim() ? { modelo: String(p.modelo).trim().slice(0, 200) } : {}),
+      ...((() => {
+        const ids = [...new Set((Array.isArray(p.combina) ? p.combina : []).map(Number))].filter((x) => x !== Number(p.id) && cat.produtos.some((q) => q.id === x)).slice(0, 4);
+        return ids.length ? { combina: ids } : {};
+      })()),
       preco: Math.round(preco * 100) / 100,
       precoDe: Math.round(precoDe * 100) / 100,
       categoria,

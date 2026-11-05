@@ -41,7 +41,7 @@ export function parcelasPedido(cfg: Config, total: number, minimoLiquido: number
 export function acharCupom(cfg: Config, codigo?: string | null): Cupom | undefined {
   if (!codigo) return undefined;
   const c = codigo.trim().toUpperCase();
-  return cfg.cupons.find((x) => x.codigo.toUpperCase() === c);
+  return cfg.cupons.find((x) => x.codigo.toUpperCase() === c && x.ativo !== false);
 }
 
 // "ou 2x de R$ 118,95 sem juros" (vazio quando o preço só permite à vista)

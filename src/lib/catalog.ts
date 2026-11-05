@@ -33,6 +33,22 @@ export const temEstoque = (p: Produto) => !p.emBreve && p.variantes.some((v) => 
 export const esgotado = (p: Produto) => !p.emBreve && !temEstoque(p);
 // Últimas peças: só 1 unidade no estoque (somando cores e tamanhos). Banner "Últimas peças" da home.
 export const ultimaUnidade = (p: Produto) => !p.emBreve && p.variantes.reduce((a, v) => a + v.estoque, 0) === 1;
+// "Complete o look": as peças escolhidas no painel (combina) ou, sem escolha, sugestão automática
+// de peças que completam esta (parte de cima ↔ parte de baixo; vestido/macacão/conjunto ↔ terceira peça),
+// do mesmo estilo primeiro. Só peças à venda e com foto.
+const CIMA = ["Blusas", "Camisas", "Regatas", "Croppeds", "T-shirts", "Tops"];
+const BAIXO = ["Calças", "Saias", "Shorts", "Bermudas"];
+const TERCEIRA = ["Blazers", "Coletes", "Casacos", "Kimonos"];
+export function completeOLook(p: Produto, max = 3): Produto[] {
+  const ok = (x?: Produto): x is Produto => !!x && x.id !== p.id && !x.emBreve && x.imagens.length > 0 && temEstoque(x);
+  const escolhidas = (p.combina ?? []).map(porId).filter(ok);
+  if (escolhidas.length) return escolhidas.slice(0, 4);
+  const s = p.subcategoria;
+  const alvo = CIMA.includes(s) ? BAIXO : BAIXO.includes(s) ? CIMA : TERCEIRA.includes(s) ? [...CIMA, ...BAIXO] : ["Vestidos", "Macacões", "Conjuntos"].includes(s) ? TERCEIRA : [];
+  const nota = (x: Produto) => (p.estilo && x.estilo === p.estilo ? 4 : 0) + (x.flags.maisVendida ? 2 : 0) + (x.flags.curadoria ? 1 : 0);
+  return PRODS.filter((x) => ok(x) && alvo.includes(x.subcategoria)).sort((a, b) => nota(b) - nota(a)).slice(0, max);
+}
+
 // Tamanho pré-selecionado quando a cor só tem um tamanho.
 export const tamanhoUnico = (p: Produto, cor: string) => {
   const t = p.variantes.filter((v) => v.cor === cor).map((v) => v.tamanho);

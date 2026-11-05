@@ -15,6 +15,8 @@ export type Produto = {
   medidas?: string;
   // Quem veste nas fotos, ex.: "A modelo tem 1,70 m e veste P".
   modelo?: string;
+  // "Complete o look": ids das peças que combinam (escolhidas no painel; vazio = sugestão automática).
+  combina?: number[];
   preco: number;
   precoDe: number; // preço "de" (promoção); 0 = sem promoção
   precoBase?: number; // valor base (data/products.json), preenchido pelo catálogo ao calcular a vitrine
@@ -42,7 +44,8 @@ export type Catalogo = {
 
 export type Atendente = { nome: string; whatsapp: string; exibicao: string };
 // somenteClientes: só vale para quem já tem pedido pago no site (mesmo e-mail ou telefone).
-export type Cupom = { codigo: string; tipo: "percentual"; valor: number; somenteClientes?: boolean };
+// parceira: influenciadora/parceira dona do cupom (relatório de vendas no painel); ativo: false = desligado.
+export type Cupom = { codigo: string; tipo: "percentual"; valor: number; somenteClientes?: boolean; parceira?: string; ativo?: boolean };
 
 export type Config = {
   marca: string;

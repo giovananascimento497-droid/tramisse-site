@@ -147,3 +147,13 @@
 .adm-ban-imgs img.cel{flex:0 0 22%;aspect-ratio:9/16;object-fit:cover}
 .adm-ban-cel{font-size:12px;text-decoration:underline;cursor:pointer;color:var(--car)}
 .aval-ln .adm-nm{display:grid;gap:4px}.aval-st{color:#1E1D1B;letter-spacing:.08em}.aval-tx{font-size:14px;font-style:italic}
+.cup-l{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));margin:16px 0}
+.cup-c{border:1px solid var(--ln);padding:14px;display:grid;gap:10px;background:var(--bg)}.cup-c.off{opacity:.55}
+.cup-top{display:flex;gap:8px;align-items:center}.cup-cod{flex:1;min-width:0;font:inherit;font-weight:500;letter-spacing:.08em;padding:8px;border:1px solid var(--ln)}
+.cup-pct{display:flex;align-items:center;gap:4px}.cup-pct input{width:56px;font:inherit;padding:8px;border:1px solid var(--ln);text-align:right}
+.cup-par{display:grid;gap:4px;font-size:13px}.cup-par input{font:inherit;padding:8px;border:1px solid var(--ln)}
+.cup-ck{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}.cup-v{margin:0;font-size:13px;color:var(--car)}
+.cup-link{display:flex;gap:6px;margin:0}.cup-link input{flex:1;min-width:0;font:inherit;font-size:12px;padding:8px;border:1px solid var(--ln)}.cup-link .btn{padding:8px 12px;font-size:11px}
+.adm-combina{display:grid;gap:6px;font-size:13px}.adm-combina>div{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.adm-chip{border:1px solid var(--ln);background:var(--mar);padding:6px 10px;font:inherit;font-size:12px;cursor:pointer}
+.adm-combina select{font:inherit;font-size:13px;padding:6px}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Grid } from "@/components/ProductCard";
 import { ProductView } from "@/components/telas/ProductView";
-import { CL, esgotado, porSlug, PRODS, temEstoque } from "@/lib/catalog";
+import { completeOLook, CL, esgotado, porSlug, PRODS, temEstoque } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
 import { brl, precoPix } from "@/lib/payment/pricing";
 import { SITE, urlAbsoluta } from "@/lib/site";
@@ -70,8 +70,9 @@ function dadosEstruturados(p: NonNullable<ReturnType<typeof porSlug>>) {
 export default async function ProdutoPage({ params }: Props) {
   const p = porSlug((await params).slug);
   if (!p) notFound();
-  // Sugestões: só peças à venda, primeiro as do mesmo tipo.
-  const rel = PRODS.filter((x) => x.id !== p.id && temEstoque(x) && (x.subcategoria === p.subcategoria || x.categoria === p.categoria))
+  const look = completeOLook(p);
+  // Sugestões: só peças à venda, primeiro as do mesmo tipo (sem repetir as do "Complete o look").
+  const rel = PRODS.filter((x) => x.id !== p.id && !look.includes(x) && temEstoque(x) && (x.subcategoria === p.subcategoria || x.categoria === p.categoria))
     .sort((a, b) => Number(b.subcategoria === p.subcategoria) - Number(a.subcategoria === p.subcategoria))
     .slice(0, 4);
   return (
@@ -79,6 +80,13 @@ export default async function ProdutoPage({ params }: Props) {
       {/* key: ao trocar de produto, a seleção (cor, tamanho, foto) recomeça */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(dadosEstruturados(p)).replace(/</g, "\\u003c") }} />
       <ProductView key={p.id} id={p.id} />
+      {look.length ? (
+        <>
+          <h2 style={{ marginBottom: 8 }}>Complete o look</h2>
+          <p style={{ color: "var(--mut)", margin: "0 0 24px" }}>Peças que combinam com {p.nome}.</p>
+          <Grid itens={look} style={{ marginBottom: 64 }} vazio={null} />
+        </>
+      ) : null}
       <h2 style={{ marginBottom: 24 }}>Você também pode gostar</h2>
       <Grid itens={rel} style={{ marginBottom: 96 }} vazio={null} />
     </div>

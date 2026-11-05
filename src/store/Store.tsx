@@ -2,6 +2,8 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { estoqueDe, porId } from "@/lib/catalog";
+import { CFG } from "@/lib/config";
+import { acharCupom } from "@/lib/payment/pricing";
 import type { ItemSacola } from "@/lib/types";
 
 // Estado da loja no navegador. Usa as mesmas chaves de localStorage do site
@@ -46,7 +48,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [bag, setBagS] = useState<ItemSacola[]>([]);
   const [fav, setFav] = useState<number[]>([]);
   const [user, setUserS] = useState<Usuario>(null);
-  const [cupom, setCupom] = useState<string | null>(null);
+  const [cupom, setCupomS] = useState<string | null>(null);
+  // O cupom fica guardado por 7 dias (ex.: veio pelo link de uma influenciadora e a cliente compra depois).
+  const setCupom = useCallback((c: string | null) => {
+    setCupomS(c);
+    ST.s("tcup", c ? { c, ate: Date.now() + 7 * 86400000 } : null);
+  }, []);
   const [filtros, setFiltros] = useState<Filtros>({});
   const [gaveta, abrir] = useState<Gaveta>(null);
   const [mensagem, setMensagem] = useState("");
@@ -65,6 +72,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setBagS(valida);
     setFav(ST.g("tf", []));
     setUserS(ST.g("tu", null));
+    // Link de divulgação (?cupom=CODIGO): aplica o cupom; senão, volta o cupom guardado (se ainda valer).
+    const doLink = new URLSearchParams(location.search).get("cupom");
+    const salvo = ST.g<{ c: string; ate: number } | null>("tcup", null);
+    if (doLink && acharCupom(CFG, doLink)) {
+      const c = acharCupom(CFG, doLink)!.codigo;
+      setCupomS(c);
+      ST.s("tcup", { c, ate: Date.now() + 7 * 86400000 });
+      setTimeout(() => setMensagem(`Cupom ${c} aplicado: ${Math.round(acharCupom(CFG, c)!.valor * 100)}% off na sacola.`), 600);
+      setTimeout(() => setMensagem(""), 4600);
+    } else if (salvo && salvo.ate > Date.now() && acharCupom(CFG, salvo.c)) setCupomS(salvo.c);
     setPronto(true);
   }, []);
 
