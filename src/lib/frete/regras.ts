@@ -30,8 +30,7 @@ export function aplicarFreteGratis(cfg: Config, opcoes: Omit<OpcaoFrete, "gratis
 }
 
 // Quanto falta para o frete grátis (0 = já tem ou não há frete grátis).
-export function faltaFreteGratis(cfg: Config, valorPecas: number) {
-  const min = cfg.entrega.correios.freteGratisAcima;
+export function faltaFreteGratis(cfg: Config, valorPecas: number, min = cfg.entrega.correios.freteGratisAcima) {
   return min > 0 && valorPecas < min ? r2(min - valorPecas) : 0;
 }
 

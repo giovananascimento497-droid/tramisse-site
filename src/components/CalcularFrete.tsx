@@ -1,7 +1,7 @@
 "use client";
 
 import { porId } from "@/lib/catalog";
-import { bairrosBelem, belemAtivo, faixaBelem, freteBelem } from "@/lib/frete/belem";
+import { bairrosBelem, belemAtivo, gratisBelem, faixaBelem, freteBelem } from "@/lib/frete/belem";
 import { useState } from "react";
 import { CFG } from "@/lib/config";
 import { cepValido, limparCep, textoPrazo } from "@/lib/frete/regras";
@@ -86,7 +86,7 @@ export function CalcularFrete({ id, q }: { id: number; q: number }) {
           <small style={{ color: "var(--mut)" }}>{CFG.entrega.belem!.aviso} Bairro fora da lista? Fale com a gente no WhatsApp.</small>
         </div>
       ) : null}
-      {GRATIS_ACIMA ? <small style={{ color: "var(--mut)", display: "block", marginTop: 8 }}>Frete grátis em compras acima de {brl(GRATIS_ACIMA)}. {faixaBelem(CFG) ? <>Em Belém, entrega aos sábados por bairro ({faixaBelem(CFG)}){verBelem ? "" : <> · <a href="#" onClick={(e) => { e.preventDefault(); setVerBelem(true); }} style={{ textDecoration: "underline" }}>ver o valor do meu bairro</a></>}, ou retirada.</> : "Em Belém, também há entrega por aplicativo ou retirada."}</small> : null}
+      <small style={{ color: "var(--mut)", display: "block", marginTop: 8 }}>{GRATIS_ACIMA ? `Frete grátis em compras acima de ${brl(GRATIS_ACIMA)}. ` : ""}{faixaBelem(CFG) ? <>Em Belém, entrega aos sábados por bairro ({faixaBelem(CFG)}{gratisBelem(CFG) ? `; grátis acima de ${brl(gratisBelem(CFG))}` : ""}){verBelem ? "" : <> · <a href="#" onClick={(e) => { e.preventDefault(); setVerBelem(true); }} style={{ textDecoration: "underline" }}>ver o valor do meu bairro</a></>}, ou retirada.</> : "Em Belém, também há entrega por aplicativo ou retirada."}</small>
     </div>
   );
 }

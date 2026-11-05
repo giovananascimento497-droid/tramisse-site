@@ -5,7 +5,7 @@ import { brl } from "@/lib/payment/pricing";
 import { api } from "./util";
 
 type Faixa = { nome: string; valor: number; bairros: string[] };
-type Belem = { ativo: boolean; nome: string; aviso: string; faixas: Faixa[] };
+type Belem = { ativo: boolean; nome: string; aviso: string; freteGratisAcima?: number; faixas: Faixa[] };
 // Na tela, os bairros ficam como texto (um por linha) para editar fácil.
 type FaixaEd = { nome: string; valor: string; bairros: string };
 
@@ -18,6 +18,7 @@ export function EntregaView({ onSair }: { onSair: () => void }) {
   const [orig, setOrig] = useState<Belem | null>(null);
   const [ativo, setAtivo] = useState(true);
   const [aviso, setAviso] = useState("");
+  const [gratis, setGratis] = useState("");
   const [faixas, setFaixas] = useState<FaixaEd[]>([]);
   const [erro, setErro] = useState("");
   const [ok, setOk] = useState("");
@@ -30,6 +31,7 @@ export function EntregaView({ onSair }: { onSair: () => void }) {
         setOrig(b);
         setAtivo(b.ativo);
         setAviso(b.aviso);
+        setGratis(String(b.freteGratisAcima ?? 0));
         setFaixas(paraTela(b));
       })
       .catch((e) => ((e as { status?: number }).status === 401 ? onSair() : setErro((e as Error).message)));
@@ -43,7 +45,7 @@ export function EntregaView({ onSair }: { onSair: () => void }) {
     setOk("");
     setOcupado(true);
     try {
-      const d = await api("/api/admin/entrega", { method: "POST", body: JSON.stringify({ belem: { ativo, nome: orig.nome, aviso, faixas: daTela(faixas) } }) });
+      const d = await api("/api/admin/entrega", { method: "POST", body: JSON.stringify({ belem: { ativo, nome: orig.nome, aviso, freteGratisAcima: Number(gratis.replace(",", ".")) || 0, faixas: daTela(faixas) } }) });
       setOrig(d.belem);
       setFaixas(paraTela(d.belem));
       setOk("Publicado! O site atualiza em uns 3 minutos.");
@@ -59,13 +61,19 @@ export function EntregaView({ onSair }: { onSair: () => void }) {
       <h3 style={{ marginTop: 8 }}>Entrega em Belém por bairro</h3>
       <p className="adm-dica">
         No checkout, a cliente escolhe o bairro e o frete entra no pedido (pago junto, no Pix ou no cartão). Bairro fora da lista não aparece:
-        ela escolhe Correios ou fala no WhatsApp. Frete grátis acima do valor mínimo vale aqui também.
+        ela escolhe Correios ou fala no WhatsApp. 
       </p>
       <label className="ent-ck"><input type="checkbox" checked={ativo} onChange={(e) => setAtivo(e.target.checked)} /> Mostrar a entrega em Belém no checkout</label>
       <label className="ent-campo">
         Aviso para a cliente
         <textarea rows={2} value={aviso} onChange={(e) => setAviso(e.target.value)} />
       </label>
+
+      <label className="ent-campo">
+        Frete grátis em Belém acima de (R$ em peças; 0 = sem frete grátis)
+        <input inputMode="decimal" value={gratis} onChange={(e) => setGratis(e.target.value)} style={{ maxWidth: 140 }} />
+      </label>
+      <p className="adm-dica" style={{ marginTop: 0 }}>Se mudar este valor, troque também a frase da barra do topo do site (me peça).</p>
 
       <div className="ent-faixas">
         {faixas.map((f, i) => {

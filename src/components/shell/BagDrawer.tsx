@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { CL, estoqueDe, porId } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
+import { gratisBelem } from "@/lib/frete/belem";
 import { acharCupom, brl, calcularTotais } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
 import { Ph } from "../Ph";
@@ -74,7 +75,11 @@ export function BagDrawer() {
               ? t.subtotal - t.desconto >= CFG.entrega.correios.freteGratisAcima
                 ? "Você ganhou frete grátis pelos Correios (PAC)."
                 : `Faltam ${brl(CFG.entrega.correios.freteGratisAcima - (t.subtotal - t.desconto))} para o frete grátis.`
-              : "Frete calculado pelo CEP no checkout."}
+              : gratisBelem(CFG)
+                ? t.subtotal - t.desconto >= gratisBelem(CFG)
+                  ? "Em Belém, você ganhou frete grátis (entrega de sábado)."
+                  : `Em Belém, faltam ${brl(gratisBelem(CFG) - (t.subtotal - t.desconto))} para o frete grátis.`
+                : "Frete calculado pelo CEP no checkout."}
           </p>
           <div className="cp">
             <input

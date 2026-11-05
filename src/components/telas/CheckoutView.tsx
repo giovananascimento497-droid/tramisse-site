@@ -7,7 +7,7 @@ import { CL, porId } from "@/lib/catalog";
 import { avisarPedido, registrarPedido } from "@/lib/avisoPedido";
 import { montarPedido } from "@/lib/payment/pedido";
 import { CFG } from "@/lib/config";
-import { bairrosBelem, belemAtivo, freteBelem } from "@/lib/frete/belem";
+import { bairrosBelem, belemAtivo, freteBelem, gratisBelem } from "@/lib/frete/belem";
 import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
 import { codigoPix } from "@/lib/payment/pix";
 import { acharCupom, brl, calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
@@ -36,7 +36,7 @@ const ENTREGAS: [FormaEntrega, string, string][] = [
   ["correios", "Correios (PAC ou SEDEX)",
     `Para todo o Brasil. Frete calculado pelo CEP${GRATIS_ACIMA ? `; grátis acima de ${brl(GRATIS_ACIMA)} em peças` : ""}.`],
   BELEM
-    ? ["belem", CFG.entrega.belem!.nome, `Por bairro, de ${brl(Math.min(...valoresBelem))} a ${brl(Math.max(...valoresBelem))}. ${CFG.entrega.belem!.aviso}`]
+    ? ["belem", CFG.entrega.belem!.nome, `Por bairro, de ${brl(Math.min(...valoresBelem))} a ${brl(Math.max(...valoresBelem))}${gratisBelem(CFG) ? `; grátis acima de ${brl(gratisBelem(CFG))} em peças` : ""}. ${CFG.entrega.belem!.aviso}`]
     : ["aplicativo", "Entrega por aplicativo (Belém)", "Valor informado no momento da compra, por conta da cliente."],
   ["retirada", "Retirada", "O endereço é enviado após a confirmação da compra."],
 ];
@@ -113,7 +113,8 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   const tCartao = calcularTotais(CFG, linhasSacola(bag), "credito", cupom);
   const baseSacola = bag.reduce((s, l) => s + (porId(l.id)?.precoBase ?? 0) * l.q, 0);
   const parcelas = parcelasPedido(CFG, tCartao.total + valorFrete, baseSacola + valorFrete);
-  const falta = faltaFreteGratis(CFG, t.subtotal - t.desconto);
+  const minGratis = ship === "belem" ? gratisBelem(CFG) : ship === "correios" ? GRATIS_ACIMA : 0;
+  const falta = faltaFreteGratis(CFG, t.subtotal - t.desconto, minGratis);
 
   // Sacola ou cupom mudaram: o frete precisa ser calculado de novo.
   useEffect(() => { setFretes(null); setFrete(null); }, [bag, cupom]);
@@ -274,7 +275,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
       </div>
       <div className="tt big"><span>Total</span><span>{brl(total)}</span></div>
       {ship === "aplicativo" ? <small style={{ color: "var(--mut)" }}>O valor da entrega por aplicativo é informado no atendimento.</small> : null}
-      {(ship === "correios" || ship === "belem") && falta ? <small style={{ color: "var(--mut)" }}>Faltam {brl(falta)} em peças para o frete grátis (acima de {brl(GRATIS_ACIMA)}).</small> : null}
+      {(ship === "correios" || ship === "belem") && falta ? <small style={{ color: "var(--mut)" }}>Faltam {brl(falta)} em peças para o frete grátis (acima de {brl(minGratis)}).</small> : null}
     </details>
   );
 

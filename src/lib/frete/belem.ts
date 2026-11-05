@@ -16,7 +16,10 @@ export function bairrosBelem(cfg: Config): { bairro: string; valor: number; faix
     .sort((x, y) => x.bairro.localeCompare(y.bairro, "pt-BR"));
 }
 
-// Frete do bairro (null = bairro não atendido). Frete grátis vale aqui também (peças acima do mínimo).
+// Frete grátis da entrega em Belém: peças (vitrine com cupom) a partir deste valor (0 = sem frete grátis).
+export const gratisBelem = (cfg: Config) => (belemAtivo(cfg) ? cfg.entrega.belem!.freteGratisAcima ?? 0 : 0);
+
+// Frete do bairro (null = bairro não atendido). Grátis quando as peças chegam ao mínimo de Belém.
 export function freteBelem(cfg: Config, bairro: string | undefined, valorPecas: number): OpcaoFrete | null {
   const b = cfg.entrega.belem;
   if (!b?.ativo || !bairro) return null;
@@ -24,7 +27,7 @@ export function freteBelem(cfg: Config, bairro: string | undefined, valorPecas: 
   const i = b.faixas.findIndex((f) => f.bairros.some((x) => chave(x) === k));
   if (i < 0) return null;
   const valor = r2(b.faixas[i].valor);
-  const min = cfg.entrega.correios.freteGratisAcima;
+  const min = gratisBelem(cfg);
   const gratis = min > 0 && valorPecas >= min;
   return { servico: 100 + i, nome: b.nome, valor: gratis ? 0 : valor, valorOriginal: valor, prazo: 0, gratis };
 }

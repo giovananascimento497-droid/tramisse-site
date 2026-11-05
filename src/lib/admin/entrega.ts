@@ -37,6 +37,7 @@ export function limparBelem(d: unknown): Belem {
     ativo: Boolean(o.ativo),
     nome: String(o.nome ?? "Entrega em Belém (sábado)").trim().slice(0, 50) || "Entrega em Belém (sábado)",
     aviso: String(o.aviso ?? "").trim().slice(0, 300),
+    freteGratisAcima: Math.min(10000, Math.max(0, Math.round(Number(o.freteGratisAcima) || 0))),
     faixas,
   };
 }

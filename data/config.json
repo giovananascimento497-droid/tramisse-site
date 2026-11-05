@@ -10,7 +10,7 @@
   "_aparencia": "Visual do site: \"editorial\" (original) ou \"loja\" (cabeçalho com categorias, faixa de vantagens, títulos em maiúsculo). Prévia sem publicar: abra o site com ?visual=loja (e ?visual=editorial para voltar).",
   "aparencia": "loja",
   "barraSuperior": [
-    "FRETE GRÁTIS ACIMA DE R$ 799",
+    "FRETE GRÁTIS EM BELÉM ACIMA DE R$ 299",
     "ENTREGA EM BELÉM AOS SÁBADOS",
     "ENVIO PARA TODO O BRASIL",
     "ATÉ 3X SEM JUROS",
@@ -47,7 +47,7 @@
         1,
         2
       ],
-      "freteGratisAcima": 799,
+      "freteGratisAcima": 0,
       "diasPreparo": 1,
       "embalagem": {
         "nome": "Envelope de segurança",
@@ -77,6 +77,7 @@
       "ativo": true,
       "nome": "Entrega em Belém (sábado)",
       "aviso": "Entregas em rota única aos sábados. Pedidos pagos até sexta-feira às 18h saem no sábado seguinte.",
+      "freteGratisAcima": 299,
       "faixas": [
         {
           "nome": "Perto",

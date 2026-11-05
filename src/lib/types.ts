@@ -69,7 +69,7 @@ export type Config = {
       pesoPorPeca: Record<string, number>; // kg por subcategoria; "padrao" para as demais
     };
     // Entrega própria em Belém por bairro, em rota aos sábados (src/lib/frete/belem.ts).
-    belem?: { ativo: boolean; nome: string; aviso: string; faixas: { nome: string; valor: number; bairros: string[] }[] };
+    belem?: { ativo: boolean; nome: string; aviso: string; freteGratisAcima?: number; faixas: { nome: string; valor: number; bairros: string[] }[] };
   };
   trocas: { prazoDias: number };
   atendentes: Atendente[];

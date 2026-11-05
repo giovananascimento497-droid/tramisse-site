@@ -1,13 +1,16 @@
 import { TEM_SALE } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
-import { belemAtivo } from "@/lib/frete/belem";
+import { belemAtivo, gratisBelem } from "@/lib/frete/belem";
 
 // Faixa de vantagens logo abaixo do banner (números vindos da configuração da loja).
 const P = CFG.pagamento;
 const ITENS: [string, string, React.ReactNode][] = [
-  [CFG.entrega.correios.freteGratisAcima ? `FRETE GRÁTIS ACIMA DE R$ ${CFG.entrega.correios.freteGratisAcima}` : "ENVIO PARA TODO O BRASIL",
-    belemAtivo(CFG) ? "Pelos Correios. Em Belém, entrega aos sábados" : "Pelos Correios. Em Belém, também por aplicativo",
-    <path key="e" d="M3 7h11v9H3zM14 10h4l3 3v3h-7M7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM17 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />],
+  CFG.entrega.correios.freteGratisAcima
+    ? [`FRETE GRÁTIS ACIMA DE R$ ${CFG.entrega.correios.freteGratisAcima}`, belemAtivo(CFG) ? "Pelos Correios. Em Belém, entrega aos sábados" : "Pelos Correios. Em Belém, também por aplicativo",
+      <path key="e" d="M3 7h11v9H3zM14 10h4l3 3v3h-7M7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM17 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />]
+    : [gratisBelem(CFG) ? `FRETE GRÁTIS EM BELÉM ACIMA DE R$ ${gratisBelem(CFG)}` : "ENVIO PARA TODO O BRASIL",
+      gratisBelem(CFG) ? "Entrega aos sábados. Todo o Brasil pelos Correios" : belemAtivo(CFG) ? "Pelos Correios. Em Belém, entrega aos sábados" : "Pelos Correios. Em Belém, também por aplicativo",
+      <path key="e" d="M3 7h11v9H3zM14 10h4l3 3v3h-7M7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM17 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />],
   [`ATÉ ${P.maxParcelas}X SEM JUROS`, `No cartão, parcela mínima de R$ ${P.parcelaMinima}`,
     <path key="c" d="M3 6h18v12H3zM3 10h18M7 15h4" />],
   [`${Math.round(P.descontoPix * 100)}% OFF NO PIX`, TEM_SALE ? "Exceto peças da BLACK" : "Desconto direto no pedido",
