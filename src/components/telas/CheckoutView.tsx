@@ -18,7 +18,7 @@ import { linhasSacola } from "../shell/BagDrawer";
 import { Ph } from "../Ph";
 import { PixView, type PixAberto } from "./PixView";
 
-const ETAPAS = ["IDENTIFICAÇÃO", "ENTREGA", "PAGAMENTO"];
+const ETAPAS = ["ENTREGA", "PAGAMENTO", "FINALIZAR"];
 const OBRIG_ID = ["e", "n", "sn", "tel"];
 const OBRIG_END = ["cep", "end", "num", "bai", "cid", "uf", "dest"];
 const PAGAMENTOS: [FormaPagamento, string, string][] = [
@@ -129,7 +129,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   useEffect(() => { if (pronto && bag.length) registrar("checkout"); }, [pronto, bag.length]);
   const [gerando, setGerando] = useState(false);
 
-  const t = calcularTotais(CFG, linhasSacola(bag), step >= 2 ? pay : null, cupom);
+  const t = calcularTotais(CFG, linhasSacola(bag), step >= 1 ? pay : null, cupom);
   // Frete em uso: Correios (cotado pelo CEP) ou Belém (tabela de bairros).
   const freteEf = ship === "correios" ? frete : ship === "belem" ? freteBelem(CFG, ck.bai, t.subtotal - t.desconto) : null;
   const valorFrete = freteEf ? freteEf.valor : 0;
@@ -213,18 +213,15 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   };
   const ir = (s: number) => { setErro(""); setFaltando([]); setStep(s); };
 
-  const pedidoAtual = () => montarPedido({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
+  const pedidoAtual = (cli: DadosCliente) => montarPedido({ bag, cupom, pagamento: pay, entrega: ship, cliente: cli, frete: freteEf });
 
-  // Preenche rua, bairro, cidade e estado pelo CEP (só os campos ainda vazios).
-  const preencherCep = async (form: HTMLFormElement, cep: string) => {
+  // Endereço pelo CEP: guarda rua, bairro, cidade e estado para a etapa final (a cliente confere e completa lá).
+  const preencherCep = async (cep: string) => {
+    if (!cepValido(cep)) return;
+    setCk((c) => ({ ...c, cep }));
     const e = await enderecoDoCep(cep);
     if (!e) return;
-    for (const k of ["end", "bai", "cid", "uf"] as const) {
-      const el = form.elements.namedItem(k);
-      if (el instanceof HTMLInputElement && el.type !== "hidden" && !el.value.trim()) el.value = e[k];
-    }
-    const num = form.elements.namedItem("num");
-    if (num instanceof HTMLInputElement && !num.value) num.focus();
+    setCk((c) => ({ ...c, cep, end: e.end || c.end, bai: e.bai || c.bai, cid: e.cid || c.cid, uf: e.uf || c.uf }));
   };
 
   // Cota PAC e SEDEX no servidor (Melhor Envio) para o CEP digitado.
@@ -252,8 +249,8 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   };
 
   // Sem pagamento online disponível: o resumo vai para a atendente pelo WhatsApp.
-  const enviar = async () => {
-    const pedido = pedidoAtual();
+  const enviar = async (cli: DadosCliente) => {
+    const pedido = pedidoAtual(cli);
     if (!pedido) return setErro("Não foi possível montar o pedido. Confira a sacola.");
     const r = await provedorWhatsApp(ATENDENTE).finalizar(pedido);
     if (r.tipo !== "redirecionar") return;
@@ -261,7 +258,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     avisarPedido(pedido, { id, canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: ATENDENTE.nome });
     registrar("pedido");
     carrinhoConcluido();
-    registrarPedido({ id, canal: "whatsapp", atendente: ATENDENTE.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
+    registrarPedido({ id, canal: "whatsapp", atendente: ATENDENTE.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: cli, frete: freteEf });
     setEnviado({ at: ATENDENTE.nome, wa: r.url });
     setBag(() => []);
     setCupom(null);
@@ -269,7 +266,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   };
 
   // Pix: automático pelo Mercado Pago (confirma sozinho). Se não der, Pix na chave da loja com comprovante.
-  const pagarPix = async () => {
+  const pagarPix = async (cli: DadosCliente) => {
     setErro("");
     if (mercadoPago) {
       setGerando(true);
@@ -277,7 +274,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
         const r = await fetch("/api/pagamento/pix", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ bag, cupom, pagamento: "pix", entrega: ship, cliente: ck, frete: frete && { servico: frete.servico } }),
+          body: JSON.stringify({ bag, cupom, pagamento: "pix", entrega: ship, cliente: cli, frete: frete && { servico: frete.servico } }),
         });
         const d = await r.json();
         if (r.ok && d.codigo) {
@@ -294,8 +291,8 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
         setGerando(false);
       }
     }
-    if (!PIX_ATIVO) return enviar();
-    const pedido = pedidoAtual();
+    if (!PIX_ATIVO) return enviar(cli);
+    const pedido = pedidoAtual(cli);
     if (!pedido) return setErro("Não foi possível montar o pedido. Confira a sacola.");
     const id = novoId();
     const codigo = codigoPix({ ...CFG.pagamento.pix, valor: pedido.total, txid: id });
@@ -303,7 +300,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     avisarPedido(pedido, { id, canal: "Site (Pix)", situacao: "Aguardando Pix (conferir comprovante)", atendente: ATENDENTE.nome });
     registrar("pedido");
     carrinhoConcluido();
-    registrarPedido({ id, canal: "pix", atendente: ATENDENTE.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
+    registrarPedido({ id, canal: "pix", atendente: ATENDENTE.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: cli, frete: freteEf });
     setPix({ wa: `https://wa.me/${ATENDENTE.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, pedidoId: id });
     setBag(() => []);
     setCupom(null);
@@ -312,14 +309,14 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
 
   // Gera o link do Mercado Pago no servidor e leva a cliente para pagar lá.
   // O pedido fica guardado no navegador para a página de retorno (/checkout/retorno).
-  const pagarMercadoPago = async () => {
+  const pagarMercadoPago = async (cli: DadosCliente) => {
     setErro("");
     setGerando(true);
     try {
       const r = await fetch("/api/pagamento/mercadopago", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: frete && { servico: frete.servico } }),
+        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: cli, frete: frete && { servico: frete.servico } }),
       });
       const d = await r.json();
       if (!r.ok || !d.url) throw new Error(d.erro || "Não foi possível gerar o pagamento.");
@@ -359,43 +356,39 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     </details>
   );
 
+  // Guarda a sacola para o lembrete de compra não concluída (quando já há e-mail ou WhatsApp).
+  const guardarCarrinho = (d: DadosCliente) => {
+    if (semLembrete || !CFG.recuperacao?.ativo || !(d.e || d.tel)) return;
+    const id = idCarrinho();
+    if (id) postCarrinho({ id, cliente: { n: d.n, sn: d.sn, e: d.e, tel: d.tel }, bag });
+  };
+  // Cupom de recompra (ex.: VOLTEI10): só para quem já comprou no site com este e-mail/telefone.
+  const cupomRecompraOk = async (d: DadosCliente) => {
+    const cp = acharCupom(CFG, cupom);
+    if (!cp?.somenteClientes) return true;
+    try {
+      const r = await fetch("/api/cupom", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ codigo: cp.codigo, e: d.e, tel: d.tel }) });
+      if (r.ok) return true;
+      const x = await r.json().catch(() => ({}));
+      setCupom(null);
+      setErro(`${x.erro || "Cupom não aplicado."} O total foi atualizado: confira e finalize de novo.`);
+      return false;
+    } catch {
+      return true; // sem conexão com a conferência: o servidor confere de novo no pagamento
+    }
+  };
+  const pagar = (cli: DadosCliente) => (pay === "pix" ? pagarPix(cli) : mercadoPago ? pagarMercadoPago(cli) : enviar(cli));
+  const textoBotao = gerando
+    ? "GERANDO PAGAMENTO…"
+    : pay === "pix"
+      ? `PAGAR COM PIX · ${brl(total)}`
+      : mercadoPago
+        ? `PAGAR COM CARTÃO · ${brl(total)}`
+        : "ENVIAR PEDIDO PELO WHATSAPP";
+
   let f: React.ReactNode = null;
+  // 1. Entrega: forma de entrega e frete (só o CEP ou o bairro; o resto do endereço vem no fim).
   if (step === 0)
-    f = (
-      <>
-        <h2>Identificação</h2>
-        <form className="fg" style={{ marginTop: 16 }} noValidate onSubmit={(e) => {
-            e.preventDefault();
-            const d = ler(e.currentTarget);
-            if (!validar(d, OBRIG_ID)) return;
-            // Cupom de recompra (ex.: VOLTEI10): confere se este e-mail/telefone já comprou no site.
-            const cp = acharCupom(CFG, cupom);
-            if (cp?.somenteClientes)
-              fetch("/api/cupom", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ codigo: cp.codigo, e: d.e, tel: d.tel }) })
-                .then((r) => r.json().then((x) => ({ ok: r.ok, x })))
-                .then(({ ok, x }) => { if (!ok) { setCupom(null); toast(x.erro || "Cupom não aplicado."); } })
-                .catch(() => {});
-            // Guarda a sacola para o lembrete de compra não concluída (se ela não pediu para não receber).
-            if (!semLembrete && CFG.recuperacao?.ativo) {
-              const id = idCarrinho();
-              if (id) postCarrinho({ id, cliente: { n: d.n, sn: d.sn, e: d.e, tel: d.tel }, bag });
-            }
-            ir(1);
-          }}>
-          {fld("e", "E-mail", "", "s", "email")}{fld("n", "Nome")}{fld("sn", "Sobrenome")}
-          {fld("tel", "WhatsApp", "(91) 90000-0000")}
-          {CFG.recuperacao?.ativo ? (
-            <p className="s ck-lemb">
-              Se você não finalizar agora, podemos te mandar um lembrete com um cupom por e-mail ou WhatsApp.{" "}
-              <label><input type="checkbox" checked={semLembrete} onChange={(e) => setSemLembrete(e.target.checked)} /> Não quero receber</label>
-            </p>
-          ) : null}
-          <div className="er s">{erro}</div>
-          <button className="btn s">IR PARA A ENTREGA</button>
-        </form>
-      </>
-    );
-  if (step === 1)
     f = (
       <>
         <h2>Entrega</h2>
@@ -405,119 +398,104 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
           noValidate
           onSubmit={(e) => {
             e.preventDefault();
-            const d = ler(e.currentTarget);
-            if (ship !== "retirada" && !validar(d, OBRIG_END)) return;
-            if (ship === "correios" && !frete) return setErro(cotando ? "Aguarde o cálculo do frete." : "Calcule o frete e escolha PAC ou SEDEX.");
-            if (ship === "belem" && !freteBelem(CFG, d.bai, t.subtotal - t.desconto)) {
+            ler(e.currentTarget);
+            if (ship === "correios" && !frete) {
+              setFaltando(["cep"]);
+              return setErro(cotando ? "Aguarde o cálculo do frete." : "Digite o CEP e escolha PAC ou SEDEX.");
+            }
+            if (ship === "belem" && !freteBelem(CFG, ck.bai, t.subtotal - t.desconto)) {
               setFaltando(["bai"]);
               return setErro("Escolha o seu bairro. Se ele não estiver na lista, escolha Correios ou fale com a gente no WhatsApp.");
             }
-            if (ship === "correios" && (d.cpf || "").replace(/\D/g, "").length !== 11) {
-              setFaltando(["cpf"]);
-              return setErro("Informe o CPF (11 números): os Correios pedem para a etiqueta.");
-            }
-            ir(2);
+            ir(1);
           }}
         >
           <div className="s">
             {ENTREGAS.filter(([v]) => v !== "correios" || correios).map(([v, tt, sub]) => (
               <label className="opc" key={v}>
-                <input type="radio" name="sh" value={v} checked={ship === v} onChange={(e) => { ler(e.currentTarget.form!); setShip(v); }} />
+                <input type="radio" name="sh" value={v} checked={ship === v} onChange={(e) => { ler(e.currentTarget.form!); setShip(v); setErro(""); }} />
                 <span>{tt}<br /><small>{sub}</small></span>
               </label>
             ))}
           </div>
-          {ship === "retirada" ? null : (
+          {ship === "correios" ? (
             <>
-              {ship === "correios" ? (
-                <>
-                  <label className="s">
-                    CEP
-                    <span style={{ display: "flex", gap: 8, minWidth: 0 }}>
-                      <input
-                        name="cep"
-                        inputMode="numeric"
-                        placeholder="00000-000"
-                        defaultValue={ck.cep || ""}
-                        autoComplete="postal-code"
-                        className={faltando.includes("cep") ? "bad" : undefined}
-                        style={{ flex: 1, minWidth: 0 }}
-                        onChange={(e) => {
-                          setFretes(null);
-                          setFrete(null);
-                          // CEP completo: preenche o endereço e já calcula o frete.
-                          const v = e.currentTarget.value;
-                          if (cepValido(v)) { preencherCep(e.currentTarget.form!, v); cotar(v); }
-                        }}
-                        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); cotar(e.currentTarget.value); } }}
-                      />
-                      <button
-                        type="button"
-                        className="btn o"
-                        style={{ padding: "0 16px", whiteSpace: "nowrap" }}
-                        disabled={cotando}
-                        onClick={(e) => cotar(String(new FormData(e.currentTarget.form!).get("cep") || ""))}
-                      >
-                        {cotando ? "CALCULANDO…" : "CALCULAR FRETE"}
-                      </button>
+              <label className="s">
+                CEP
+                <span style={{ display: "flex", gap: 8, minWidth: 0 }}>
+                  <input
+                    name="cep"
+                    inputMode="numeric"
+                    placeholder="00000-000"
+                    defaultValue={ck.cep || ""}
+                    autoComplete="postal-code"
+                    className={faltando.includes("cep") ? "bad" : undefined}
+                    style={{ flex: 1, minWidth: 0 }}
+                    onChange={(e) => {
+                      setFretes(null);
+                      setFrete(null);
+                      // CEP completo: já calcula o frete e guarda o endereço do CEP para o fim.
+                      const v = e.currentTarget.value;
+                      if (cepValido(v)) { preencherCep(v); cotar(v); }
+                    }}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); cotar(e.currentTarget.value); } }}
+                  />
+                  <button
+                    type="button"
+                    className="btn o"
+                    style={{ padding: "0 16px", whiteSpace: "nowrap" }}
+                    disabled={cotando}
+                    onClick={(e) => { const v = String(new FormData(e.currentTarget.form!).get("cep") || ""); preencherCep(v); cotar(v); }}
+                  >
+                    {cotando ? "CALCULANDO…" : "CALCULAR"}
+                  </button>
+                </span>
+              </label>
+              <div className="s">
+                {fretes?.map((o) => (
+                  <label className="opc" key={o.servico}>
+                    <input type="radio" name="fr" checked={frete?.servico === o.servico} onChange={() => setFrete(o)} />
+                    <span>
+                      Correios {o.nome} · {o.gratis ? <>Grátis <s style={{ color: "var(--mut)" }}>{brl(o.valorOriginal)}</s></> : brl(o.valor)}
+                      <br /><small>Entrega em {textoPrazo(o.prazo)} após a confirmação do pagamento.</small>
                     </span>
                   </label>
-                  <div className="s">
-                    {fretes?.map((o) => (
-                      <label className="opc" key={o.servico}>
-                        <input type="radio" name="fr" checked={frete?.servico === o.servico} onChange={() => setFrete(o)} />
-                        <span>
-                          Correios {o.nome} · {o.gratis ? <>Grátis <s style={{ color: "var(--mut)" }}>{brl(o.valorOriginal)}</s></> : brl(o.valor)}
-                          <br /><small>Entrega em {textoPrazo(o.prazo)} após a confirmação do pagamento.</small>
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </>
-              ) : fld("cep", "CEP", "00000-000")}
-              {fld("end", "Endereço")}{fld("num", "Número")}{fld("cmp", "Complemento")}
-              {ship === "belem" ? (
-                <>
-                  <label>
-                    Bairro
-                    <select
-                      name="bai"
-                      value={ck.bai || ""}
-                      onChange={(e) => setCk((c) => ({ ...c, bai: e.target.value, cid: "Belém", uf: "PA" }))}
-                      className={faltando.includes("bai") ? "bad" : undefined}
-                    >
-                      <option value="">Escolha o bairro…</option>
-                      {BAIRROS.map((b) => (
-                        <option key={b.bairro} value={b.bairro}>{b.bairro} · {brl(b.valor)}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <input type="hidden" name="cid" value="Belém" />
-                  <input type="hidden" name="uf" value="PA" />
-                  <p className="s" style={{ margin: 0, fontSize: 13, color: "var(--mut)" }}>
-                    {CFG.entrega.belem!.aviso} Seu bairro não está na lista? Escolha Correios ou fale com a gente no WhatsApp.
-                  </p>
-                </>
-              ) : (
-                <>{fld("bai", "Bairro")}{fld("cid", "Cidade")}{fld("uf", "Estado")}</>
-              )}
-              {fld("dest", "Destinatário", "", "s")}
-              {ship === "correios" ? fld("cpf", "CPF (os Correios pedem para a etiqueta)", "000.000.000-00", "s") : null}
+                ))}
+              </div>
             </>
-          )}
+          ) : null}
+          {ship === "belem" ? (
+            <>
+              <label className="s">
+                Bairro
+                <select
+                  name="bai"
+                  value={ck.bai || ""}
+                  onChange={(e) => setCk((c) => ({ ...c, bai: e.target.value, cid: "Belém", uf: "PA" }))}
+                  className={faltando.includes("bai") ? "bad" : undefined}
+                >
+                  <option value="">Escolha o bairro…</option>
+                  {BAIRROS.map((b) => (
+                    <option key={b.bairro} value={b.bairro}>{b.bairro} · {brl(b.valor)}</option>
+                  ))}
+                </select>
+              </label>
+              <p className="s" style={{ margin: 0, fontSize: 13, color: "var(--mut)" }}>
+                {CFG.entrega.belem!.aviso} Seu bairro não está na lista? Escolha Correios ou fale com a gente no WhatsApp.
+              </p>
+            </>
+          ) : null}
           <div className="er s">{erro}</div>
-          <button className="btn s">IR PARA O PAGAMENTO</button>
+          <button className="btn s">CONTINUAR</button>
         </form>
       </>
     );
-  if (step === 2)
+  // 2. Pagamento: só a escolha da forma (o botão de pagar fica no fim, com os dados).
+  if (step === 1)
     f = (
       <>
         <h2>Pagamento</h2>
-        <form className="fg" style={{ marginTop: 16 }} onSubmit={(e) => {
-            e.preventDefault();
-            if (pay === "pix") pagarPix(); else if (mercadoPago) pagarMercadoPago(); else enviar();
-          }}>
+        <form className="fg" style={{ marginTop: 16 }} onSubmit={(e) => { e.preventDefault(); ir(2); }}>
           <div className="s">
             {PAGAMENTOS.map(([v, tt, sub]) => (
               <label className="opc" key={v}>
@@ -529,29 +507,81 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
           <p className="s" style={{ color: "var(--mut)", fontSize: 14 }}>
             {pay === "pix"
               ? mercadoPago
-                ? "O QR Code e o Pix copia e cola aparecem na próxima tela. O pagamento é confirmado na hora, sem precisar mandar comprovante."
+                ? "O QR Code e o Pix copia e cola aparecem depois dos seus dados. O pagamento é confirmado na hora, sem precisar mandar comprovante."
                 : PIX_ATIVO
                   ? "Você paga pelo QR Code ou pelo Pix copia e cola e envia o comprovante pelo WhatsApp."
                   : "Você envia o pedido pelo WhatsApp e recebe a chave Pix com o valor já com desconto."
               : mercadoPago
                 ? "Você paga no ambiente seguro do Mercado Pago e volta para o site com o pedido confirmado."
                 : "Você envia o pedido pelo WhatsApp e o atendimento combina o pagamento no cartão."}{" "}
-            {ship === "aplicativo" ? "O valor da entrega por aplicativo é combinado no atendimento. " : ""}Nenhum dado de cartão é coletado neste site.
+            Nenhum dado de cartão é coletado neste site.
           </p>
+          <button className="btn s">CONTINUAR</button>
+        </form>
+      </>
+    );
+  // 3. Finalizar: dados de quem compra e endereço, e o botão de pagar.
+  if (step === 2) {
+    const obrig = [...OBRIG_ID, ...(ship === "retirada" ? [] : ship === "correios" ? OBRIG_END : ["end", "num", "dest"])];
+    f = (
+      <>
+        <h2>Seus dados</h2>
+        <form
+          className="fg"
+          style={{ marginTop: 16 }}
+          noValidate
+          onBlur={(e) => { if (e.target instanceof HTMLInputElement && ["e", "tel"].includes(e.target.name)) guardarCarrinho(ler(e.currentTarget)); }}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const d = ler(e.currentTarget);
+            if (!validar(d, obrig)) return;
+            if (!/^\S+@\S+\.\S+$/.test(d.e || "")) { setFaltando(["e"]); return setErro("Confira o e-mail."); }
+            if (ship === "correios" && (d.cpf || "").replace(/\D/g, "").length !== 11) {
+              setFaltando(["cpf"]);
+              return setErro("Informe o CPF (11 números): os Correios pedem para a etiqueta.");
+            }
+            guardarCarrinho(d);
+            if (!(await cupomRecompraOk(d))) return;
+            pagar(d);
+          }}
+        >
+          {fld("n", "Nome")}{fld("sn", "Sobrenome")}
+          {fld("e", "E-mail", "", "", "email")}{fld("tel", "WhatsApp", "(91) 90000-0000")}
+          {ship === "retirada" ? (
+            <p className="s" style={{ margin: 0, fontSize: 14, color: "var(--mut)" }}>Retirada: o endereço é enviado depois da confirmação da compra.</p>
+          ) : (
+            <>
+              {ship === "correios" ? (
+                <p className="s" style={{ margin: 0, fontSize: 14 }}>
+                  CEP {ck.cep} · <a href="#" onClick={(e) => { e.preventDefault(); ir(0); }} style={{ textDecoration: "underline" }}>alterar</a>
+                  <input type="hidden" name="cep" value={ck.cep || ""} />
+                </p>
+              ) : null}
+              {fld("end", "Endereço", "", "s")}{fld("num", "Número")}{fld("cmp", "Complemento")}
+              {ship === "belem" ? (
+                <p className="s" style={{ margin: 0, fontSize: 14 }}>
+                  Bairro: {ck.bai} (Belém/PA) · <a href="#" onClick={(e) => { e.preventDefault(); ir(0); }} style={{ textDecoration: "underline" }}>alterar</a>
+                </p>
+              ) : (
+                <>{fld("bai", "Bairro")}{fld("cid", "Cidade")}{fld("uf", "Estado")}</>
+              )}
+              {fld("dest", "Quem vai receber", "", "s")}
+              {ship === "correios" ? fld("cpf", "CPF (os Correios pedem para a etiqueta)", "000.000.000-00", "s") : null}
+            </>
+          )}
+          {CFG.recuperacao?.ativo ? (
+            <p className="s ck-lemb">
+              Se você não finalizar agora, podemos te mandar um lembrete com um cupom.{" "}
+              <label><input type="checkbox" checked={semLembrete} onChange={(e) => setSemLembrete(e.target.checked)} /> Não quero receber</label>
+            </p>
+          ) : null}
           <div className="er s">{erro}</div>
-          <button className="btn s" disabled={gerando}>
-            {gerando
-              ? "GERANDO PAGAMENTO…"
-              : pay === "pix"
-                ? `PAGAR COM PIX · ${brl(total)}`
-                : mercadoPago
-                  ? `PAGAR COM CARTÃO · ${brl(total)}`
-                  : "ENVIAR PEDIDO PELO WHATSAPP"}
-          </button>
+          <button className="btn s" disabled={gerando}>{textoBotao}</button>
           {mercadoPago ? <p className="s seg">Pagamento seguro pelo Mercado Pago · Trocas em até {CFG.trocas.prazoDias} dias</p> : null}
         </form>
       </>
     );
+  }
 
   return (
     <div className="w">
