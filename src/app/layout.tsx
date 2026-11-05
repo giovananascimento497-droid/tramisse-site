@@ -18,6 +18,8 @@ import "@/styles/topbar.css";
 import "@/styles/hero.css";
 import "@/styles/loja.css";
 
+const GOOGLE_MERCHANT = "wcjmz-qjsFtEflLABdI9LIfaYXYFvAwrbdEA_C_umf8";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: { default: "Tramisse — Moda feminina contemporânea de Belém", template: "%s — Tramisse" },
@@ -32,8 +34,9 @@ export const metadata: Metadata = {
     images: [{ url: "/assets/brand/inicio.jpg", alt: "Tramisse" }],
   },
   twitter: { card: "summary_large_image" },
-  // Google Search Console: código de verificação (Netlify → NEXT_PUBLIC_GOOGLE_VERIFICACAO).
-  ...(process.env.NEXT_PUBLIC_GOOGLE_VERIFICACAO ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICACAO } } : {}),
+  // Verificação do Google (Merchant Center / Search Console). Os códigos são públicos (aparecem no site);
+  // outro código pode vir também pela Netlify (NEXT_PUBLIC_GOOGLE_VERIFICACAO).
+  verification: { google: [GOOGLE_MERCHANT, process.env.NEXT_PUBLIC_GOOGLE_VERIFICACAO].filter((x): x is string => !!x) },
 };
 
 // Sempre no visual claro da marca (mesmo com o celular no modo escuro).
