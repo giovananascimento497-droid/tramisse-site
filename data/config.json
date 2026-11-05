@@ -159,6 +159,7 @@
   "trocas": {
     "prazoDias": 7
   },
+  "atendentePedidos": "Victoria",
   "atendentes": [
     {
       "nome": "Giovana",

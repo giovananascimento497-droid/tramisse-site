@@ -73,6 +73,8 @@ export type Config = {
   };
   trocas: { prazoDias: number };
   atendentes: Atendente[];
+  // Quem recebe os pedidos no WhatsApp (nome de uma das atendentes); a cliente não escolhe mais.
+  atendentePedidos?: string;
   cupons: Cupom[];
   redes: { nome: string; url: string }[];
   // Guia de tamanhos: [tamanho, busto, cintura, quadril] em cm.

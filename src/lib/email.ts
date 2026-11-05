@@ -55,8 +55,8 @@ export async function enviarEmail(para: string, assunto: string, linhas: string[
 // Qual e-mail mandar quando o pedido é criado (antes = null) ou muda de situação.
 export function avisoParaMudanca(antes: PedidoSalvo | null, novo: PedidoSalvo): TipoAviso | null {
   let t: TipoAviso | null = null;
-  // Cartão: só avisa quando o pagamento é aprovado (quem desiste no Mercado Pago não recebe e-mail).
-  if (!antes) t = novo.canal === "mercadopago" ? null : "recebido";
+  // Cartão e Pix automático: só avisa quando o pagamento é aprovado (quem desiste não recebe e-mail).
+  if (!antes) t = novo.canal === "mercadopago" || novo.mercadoPago ? null : "recebido";
   else if (antes.situacao !== novo.situacao) {
     if (["pago", "separacao"].includes(novo.situacao) && ["aguardando", "cancelado"].includes(antes.situacao)) t = "pago";
     else if (novo.situacao === "enviado") t = "enviado";

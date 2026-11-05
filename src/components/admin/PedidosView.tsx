@@ -202,7 +202,7 @@ function Detalhe(props: { p: PedidoSalvo; email: boolean; onVoltar: () => void; 
       <p>
         {PAGAMENTO[p.pedido.pagamento]}
         {p.mercadoPago ? <> · Mercado Pago nº {p.mercadoPago.id} ({STATUS_MP[p.mercadoPago.status] ?? p.mercadoPago.status})</> : null}
-        {p.canal === "pix" && p.situacao === "aguardando" ? <> · <b>confira o comprovante do Pix antes de marcar como pago</b></> : null}
+        {p.canal === "pix" && !p.mercadoPago && p.situacao === "aguardando" ? <> · <b>confira o comprovante do Pix antes de marcar como pago</b></> : null}
         <br />
         {textoEntrega(p.pedido).split(":")[0]}
       </p>

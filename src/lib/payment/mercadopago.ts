@@ -9,7 +9,7 @@ const token = () => (process.env.MERCADOPAGO_ACCESS_TOKEN || "").trim();
 export const mercadoPagoAtivo = () => Boolean(token());
 
 // A forma de pagamento é escolhida no site, então o Mercado Pago só oferece a escolhida
-// (crédito em até maxParcelas sem juros ou débito). Pix é pago direto na chave da loja.
+// (crédito em até maxParcelas sem juros ou débito). Pix tem cobrança própria (criarPix).
 // "account_money" (saldo na conta Mercado Pago) não pode ser excluído: o Mercado Pago recusa a preferência.
 const TIPOS = ["credit_card", "debit_card", "bank_transfer", "ticket", "atm", "prepaid_card"];
 const PERMITIDOS: Record<FormaPagamento, string[]> = {
@@ -68,6 +68,32 @@ export async function criarPreferencia(pedido: Pedido, opcoes: { referencia: str
   const url: string = token().startsWith("TEST-") ? r.sandbox_init_point || r.init_point : r.init_point;
   if (!url) throw new Error("Mercado Pago não retornou o link de pagamento");
   return { url, preferenciaId: r.id as string };
+}
+
+// Pix automático: cobrança Pix do Mercado Pago (QR Code + copia e cola). O aviso (webhook) confirma
+// o pagamento sozinho: o pedido vira "Pago" e o estoque baixa, como no cartão. A conta do
+// Mercado Pago precisa ter uma chave Pix cadastrada.
+export const MINUTOS_PIX = 30;
+export async function criarPix(pedido: Pedido, opcoes: { referencia: string; origem: string; estoque?: string }) {
+  const c = pedido.cliente;
+  const https = opcoes.origem.startsWith("https://");
+  // Prazo no horário de Brasília (o Mercado Pago pede a data com fuso).
+  const expira = new Date(Date.now() + MINUTOS_PIX * 60000 - 3 * 3600000).toISOString().replace("Z", "-03:00");
+  const cpf = (c.cpf || "").replace(/\D/g, "");
+  const corpo = {
+    transaction_amount: pedido.total,
+    description: `Pedido Tramisse ${opcoes.referencia}`,
+    payment_method_id: "pix",
+    payer: { email: c.e, first_name: c.n, last_name: c.sn, ...(cpf.length === 11 ? { identification: { type: "CPF", number: cpf } } : {}) },
+    external_reference: opcoes.referencia,
+    date_of_expiration: expira,
+    ...(https ? { notification_url: `${opcoes.origem}/api/pagamento/mercadopago/webhook?source_news=webhooks` } : {}),
+    metadata: { estoque: opcoes.estoque ?? "", pagamento: "pix", entrega: pedido.entrega, cupom: pedido.cupom ?? null, frete: pedido.frete?.valor ?? null, total: pedido.total },
+  };
+  const r = await mp("/v1/payments", { method: "POST", body: JSON.stringify(corpo), headers: { "X-Idempotency-Key": opcoes.referencia } });
+  const t = r.point_of_interaction?.transaction_data ?? {};
+  if (!t.qr_code) throw new Error("Mercado Pago não retornou o código Pix");
+  return { id: String(r.id), status: String(r.status), codigo: String(t.qr_code), qr: String(t.qr_code_base64 || ""), expira: Date.now() + MINUTOS_PIX * 60000 };
 }
 
 export async function consultarPagamento(id: string) {

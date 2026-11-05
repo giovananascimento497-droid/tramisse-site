@@ -171,3 +171,8 @@ body.m .wf,body.g .wf{display:none}
 .ck-lemb{margin:0;font-size:13px;color:var(--mut);line-height:1.6}
 .ck-lemb label{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:6px;color:var(--car);white-space:nowrap}
 .ck-lemb input{width:auto!important;margin:0}
+/* Checkout: Pix automático aguardando o pagamento e selo de pagamento seguro */
+.pix-esp{display:flex;gap:10px;align-items:center;font-size:14px}
+.pix-pt{flex:0 0 10px;height:10px;border-radius:50%;background:var(--car,#3B3936);animation:pix-pt 1.4s ease-in-out infinite}
+@keyframes pix-pt{50%{opacity:.25}}
+.ck .seg{font-size:12px;letter-spacing:.04em;color:var(--mut);text-align:center;margin:4px 0 0}

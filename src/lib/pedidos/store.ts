@@ -93,6 +93,8 @@ export async function atualizarPorMercadoPago(referencia: string, pagamento: { i
     if (p.situacao === "aguardando" && pagamento.status === "approved") m.situacao = "pago";
     // Aprovado: o webhook baixa o estoque deste pagamento (registra aqui para o painel não baixar de novo).
     if (pagamento.status === "approved" && !p.estoque) m.estoque = { estado: "baixado", seq: 0 };
+    // Pix automático que venceu sem pagamento: pedido cancelado.
+    if (p.canal === "pix" && p.situacao === "aguardando" && ["cancelled", "rejected", "expired"].includes(pagamento.status)) m.situacao = "cancelado";
     // Pagamento devolvido/estornado depois de aprovado: volta a pedir atenção.
     if (p.situacao === "pago" && ["refunded", "charged_back"].includes(pagamento.status)) m.situacao = "cancelado";
     return m;

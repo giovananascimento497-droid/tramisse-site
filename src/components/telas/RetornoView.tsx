@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { avisarPedido } from "@/lib/avisoPedido";
-import { CFG } from "@/lib/config";
+import { ATENDENTE } from "@/lib/config";
 import { resumoPedido } from "@/lib/payment/whatsapp";
 import type { Pedido } from "@/lib/types";
 import { useLoja } from "@/store/Store";
@@ -59,7 +59,7 @@ export function RetornoView() {
 
   const linkWhatsApp = (status: string) => {
     if (!pend) return "";
-    const at = CFG.atendentes.find((a) => a.nome === pend.atendente) ?? CFG.atendentes[0];
+    const at = ATENDENTE;
     const pedido: Pedido = { ...pend.pedido, pagamentoOnline: { provedor: "Mercado Pago", id: pagamentoId, status } };
     return `https://wa.me/${at.whatsapp}?text=${encodeURIComponent(resumoPedido(pedido))}`;
   };
@@ -78,12 +78,12 @@ export function RetornoView() {
       <div className="pg">
         <h1>Pagamento aprovado</h1>
         <p>
-          Obrigada! Seu pagamento foi confirmado pelo Mercado Pago (pagamento nº {pagamentoId}). Envie agora o resumo do pedido
-          para a {pend?.atendente} pelo WhatsApp: o atendimento combina a entrega ou a retirada com você.
+          Obrigada! Seu pagamento foi confirmado pelo Mercado Pago (pagamento nº {pagamentoId}) e o pedido nº {pend?.referencia} está
+          confirmado. Você recebe as novidades da entrega pelo e-mail e pelo WhatsApp que informou.
         </p>
         <p>
-          <a className="btn" href={linkWhatsApp("aprovado")} target="_blank" rel="noopener">ENVIAR PEDIDO PELO WHATSAPP</a>{" "}
-          <Link className="btn o" href="/">VOLTAR À HOME</Link>
+          <Link className="btn" href="/">CONTINUAR COMPRANDO</Link>{" "}
+          <a className="btn o" href={linkWhatsApp("aprovado")} target="_blank" rel="noopener">FALAR COM O ATENDIMENTO</a>
         </p>
       </div>
     );

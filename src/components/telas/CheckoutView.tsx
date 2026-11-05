@@ -6,19 +6,19 @@ import { useEffect, useState } from "react";
 import { CL, porId } from "@/lib/catalog";
 import { avisarPedido, registrarPedido } from "@/lib/avisoPedido";
 import { montarPedido } from "@/lib/payment/pedido";
-import { CFG } from "@/lib/config";
+import { ATENDENTE, CFG } from "@/lib/config";
 import { bairrosBelem, belemAtivo, freteBelem, gratisBelem } from "@/lib/frete/belem";
 import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
 import { codigoPix } from "@/lib/payment/pix";
 import { acharCupom, brl, calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
 import { provedorWhatsApp, resumoPedido } from "@/lib/payment/whatsapp";
-import type { DadosCliente, FormaEntrega, FormaPagamento, OpcaoFrete } from "@/lib/types";
+import type { DadosCliente, FormaEntrega, FormaPagamento, OpcaoFrete, Pedido } from "@/lib/types";
 import { useLoja } from "@/store/Store";
 import { linhasSacola } from "../shell/BagDrawer";
 import { Ph } from "../Ph";
-import { PixView } from "./PixView";
+import { PixView, type PixAberto } from "./PixView";
 
-const ETAPAS = ["SACOLA", "IDENTIFICAÇÃO", "ENTREGA", "PAGAMENTO"];
+const ETAPAS = ["IDENTIFICAÇÃO", "ENTREGA", "PAGAMENTO"];
 const OBRIG_ID = ["e", "n", "sn", "tel"];
 const OBRIG_END = ["cep", "end", "num", "bai", "cid", "uf", "dest"];
 const PAGAMENTOS: [FormaPagamento, string, string][] = [
@@ -64,6 +64,29 @@ export function carrinhoConcluido() {
     localStorage.removeItem(CHAVE_CARRINHO);
   } catch {}
 }
+// Pix automático em aberto (para a tela voltar se a página recarregar enquanto a cliente paga no banco).
+const CHAVE_PIX = "tpix";
+type PixGuardado = PixAberto & { pedido: Pedido };
+const lerPix = (): PixGuardado | null => {
+  try {
+    const x = JSON.parse(localStorage.getItem(CHAVE_PIX) || "null") as PixGuardado | null;
+    // Guardado por até 1 dia depois de vencer (a tela mostra que venceu e deixa gerar outro).
+    return x?.mpId && x.expira && x.expira > Date.now() - 86400000 ? x : null;
+  } catch {
+    return null;
+  }
+};
+const esquecerPix = () => { try { localStorage.removeItem(CHAVE_PIX); } catch {} };
+// Endereço pelo CEP (ViaCEP): preenche rua, bairro, cidade e estado.
+async function enderecoDoCep(cep: string) {
+  try {
+    const r = await fetch(`https://viacep.com.br/ws/${cep.replace(/\D/g, "")}/json/`);
+    const d = await r.json();
+    return d.erro ? null : { end: d.logradouro || "", bai: d.bairro || "", cid: d.localidade || "", uf: d.uf || "" };
+  } catch {
+    return null;
+  }
+}
 const novoId = () => `T${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 
 // Checkout por etapas. Cartão: Mercado Pago (quando configurado). Pix: QR Code na chave da loja
@@ -99,12 +122,14 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   const [erro, setErro] = useState("");
   const [faltando, setFaltando] = useState<string[]>([]);
   const [enviado, setEnviado] = useState<{ at: string; wa: string } | null>(null);
-  const [pix, setPix] = useState<{ at: string; wa: string; codigo: string; total: number; id: string } | null>(null);
+  const [pix, setPix] = useState<(PixAberto & { wa?: string; pedido?: Pedido }) | null>(null);
+  // Pix automático em aberto: volta para a tela do QR Code.
+  useEffect(() => { if (pronto) { const x = lerPix(); if (x) setPix(x); } }, [pronto]);
   // Estatísticas: começou o checkout (uma vez por aba), só com peça na sacola.
   useEffect(() => { if (pronto && bag.length) registrar("checkout"); }, [pronto, bag.length]);
   const [gerando, setGerando] = useState(false);
 
-  const t = calcularTotais(CFG, linhasSacola(bag), step >= 3 ? pay : null, cupom);
+  const t = calcularTotais(CFG, linhasSacola(bag), step >= 2 ? pay : null, cupom);
   // Frete em uso: Correios (cotado pelo CEP) ou Belém (tabela de bairros).
   const freteEf = ship === "correios" ? frete : ship === "belem" ? freteBelem(CFG, ck.bai, t.subtotal - t.desconto) : null;
   const valorFrete = freteEf ? freteEf.valor : 0;
@@ -119,7 +144,26 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   // Sacola ou cupom mudaram: o frete precisa ser calculado de novo.
   useEffect(() => { setFretes(null); setFrete(null); }, [bag, cupom]);
 
-  if (pix) return <PixView codigo={pix.codigo} total={pix.total} at={pix.at} wa={pix.wa} pedidoId={pix.id} />;
+  if (pix)
+    return (
+      <PixView
+        pix={pix}
+        wa={pix.wa}
+        onPago={() => {
+          // Pix automático pago: pedido confirmado (o painel já marcou como Pago pelo aviso do Mercado Pago).
+          if (pix.pedido)
+            avisarPedido({ ...pix.pedido, pagamentoOnline: { provedor: "Pix (Mercado Pago)", id: pix.mpId!, status: "aprovado" } }, {
+              id: pix.pedidoId, canal: "Site (Pix automático)", situacao: `Pix pago (Mercado Pago nº ${pix.mpId})`, atendente: ATENDENTE.nome,
+            });
+          registrar("pedido");
+          carrinhoConcluido();
+          esquecerPix();
+          setBag(() => []);
+          setCupom(null);
+        }}
+        onNovo={() => { esquecerPix(); setPix(null); setStep(2); }}
+      />
+    );
   if (enviado)
     return (
       <div className="pg">
@@ -171,6 +215,18 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
 
   const pedidoAtual = () => montarPedido({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
 
+  // Preenche rua, bairro, cidade e estado pelo CEP (só os campos ainda vazios).
+  const preencherCep = async (form: HTMLFormElement, cep: string) => {
+    const e = await enderecoDoCep(cep);
+    if (!e) return;
+    for (const k of ["end", "bai", "cid", "uf"] as const) {
+      const el = form.elements.namedItem(k);
+      if (el instanceof HTMLInputElement && el.type !== "hidden" && !el.value.trim()) el.value = e[k];
+    }
+    const num = form.elements.namedItem("num");
+    if (num instanceof HTMLInputElement && !num.value) num.focus();
+  };
+
   // Cota PAC e SEDEX no servidor (Melhor Envio) para o CEP digitado.
   const cotar = async (cep: string) => {
     setFretes(null);
@@ -195,36 +251,60 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
     }
   };
 
-  const enviar = async (at: string) => {
-    const atendente = CFG.atendentes.find((a) => a.nome === at) ?? CFG.atendentes[0];
+  // Sem pagamento online disponível: o resumo vai para a atendente pelo WhatsApp.
+  const enviar = async () => {
     const pedido = pedidoAtual();
     if (!pedido) return setErro("Não foi possível montar o pedido. Confira a sacola.");
-    const r = await provedorWhatsApp(atendente).finalizar(pedido);
+    const r = await provedorWhatsApp(ATENDENTE).finalizar(pedido);
     if (r.tipo !== "redirecionar") return;
     const id = novoId();
-    avisarPedido(pedido, { id, canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: atendente.nome });
+    avisarPedido(pedido, { id, canal: "WhatsApp", situacao: "Enviado pelo WhatsApp (pagamento a combinar)", atendente: ATENDENTE.nome });
     registrar("pedido");
     carrinhoConcluido();
-    registrarPedido({ id, canal: "whatsapp", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
-    setEnviado({ at: atendente.nome, wa: r.url });
+    registrarPedido({ id, canal: "whatsapp", atendente: ATENDENTE.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
+    setEnviado({ at: ATENDENTE.nome, wa: r.url });
     setBag(() => []);
     setCupom(null);
     window.open(r.url, "_blank");
   };
 
-  // Pix na chave da loja: gera o QR Code/copia e cola com o valor já com desconto.
-  const pagarPix = (at: string) => {
-    const atendente = CFG.atendentes.find((a) => a.nome === at) ?? CFG.atendentes[0];
+  // Pix: automático pelo Mercado Pago (confirma sozinho). Se não der, Pix na chave da loja com comprovante.
+  const pagarPix = async () => {
+    setErro("");
+    if (mercadoPago) {
+      setGerando(true);
+      try {
+        const r = await fetch("/api/pagamento/pix", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bag, cupom, pagamento: "pix", entrega: ship, cliente: ck, frete: frete && { servico: frete.servico } }),
+        });
+        const d = await r.json();
+        if (r.ok && d.codigo) {
+          const novo: PixGuardado = { codigo: d.codigo, qr: d.qr, total: d.pedido.total, pedidoId: d.referencia, mpId: d.id, expira: d.expira, pedido: d.pedido };
+          try { localStorage.setItem(CHAVE_PIX, JSON.stringify(novo)); } catch {}
+          setPix(novo);
+          scrollTo(0, 0);
+          return;
+        }
+        // Erro do pedido (peça acabou, cupom...): mostra. Pix automático fora do ar: usa a chave da loja.
+        if (r.status === 400) return setErro(d.erro || "Confira o pedido.");
+      } catch {
+      } finally {
+        setGerando(false);
+      }
+    }
+    if (!PIX_ATIVO) return enviar();
     const pedido = pedidoAtual();
     if (!pedido) return setErro("Não foi possível montar o pedido. Confira a sacola.");
     const id = novoId();
     const codigo = codigoPix({ ...CFG.pagamento.pix, valor: pedido.total, txid: id });
     const texto = resumoPedido({ ...pedido, pagamentoOnline: { provedor: "Pix", id, status: "aguardando comprovante" } });
-    avisarPedido(pedido, { id, canal: "Site (Pix)", situacao: "Aguardando Pix (conferir comprovante)", atendente: atendente.nome });
+    avisarPedido(pedido, { id, canal: "Site (Pix)", situacao: "Aguardando Pix (conferir comprovante)", atendente: ATENDENTE.nome });
     registrar("pedido");
     carrinhoConcluido();
-    registrarPedido({ id, canal: "pix", atendente: atendente.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
-    setPix({ at: atendente.nome, wa: `https://wa.me/${atendente.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, id });
+    registrarPedido({ id, canal: "pix", atendente: ATENDENTE.nome, bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: freteEf });
+    setPix({ wa: `https://wa.me/${ATENDENTE.whatsapp}?text=${encodeURIComponent(texto)}`, codigo, total: pedido.total, pedidoId: id });
     setBag(() => []);
     setCupom(null);
     scrollTo(0, 0);
@@ -232,18 +312,18 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
 
   // Gera o link do Mercado Pago no servidor e leva a cliente para pagar lá.
   // O pedido fica guardado no navegador para a página de retorno (/checkout/retorno).
-  const pagarMercadoPago = async (at: string) => {
+  const pagarMercadoPago = async () => {
     setErro("");
     setGerando(true);
     try {
       const r = await fetch("/api/pagamento/mercadopago", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: frete && { servico: frete.servico }, atendente: at }),
+        body: JSON.stringify({ bag, cupom, pagamento: pay, entrega: ship, cliente: ck, frete: frete && { servico: frete.servico } }),
       });
       const d = await r.json();
       if (!r.ok || !d.url) throw new Error(d.erro || "Não foi possível gerar o pagamento.");
-      try { localStorage.setItem("tp", JSON.stringify({ referencia: d.referencia, pedido: d.pedido, atendente: at })); } catch {}
+      try { localStorage.setItem("tp", JSON.stringify({ referencia: d.referencia, pedido: d.pedido, atendente: ATENDENTE.nome })); } catch {}
       location.href = d.url;
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Não foi possível gerar o pagamento.");
@@ -283,16 +363,6 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   if (step === 0)
     f = (
       <>
-        <h2>Sacola</h2>
-        <div style={{ margin: "16px 0" }}>
-          {bag.map((l, i) => <div key={i}>{porId(l.id)?.nome} · {l.q}x</div>)}
-        </div>
-        <button className="btn" onClick={() => ir(1)}>CONTINUAR</button>
-      </>
-    );
-  if (step === 1)
-    f = (
-      <>
         <h2>Identificação</h2>
         <form className="fg" style={{ marginTop: 16 }} noValidate onSubmit={(e) => {
             e.preventDefault();
@@ -310,10 +380,10 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
               const id = idCarrinho();
               if (id) postCarrinho({ id, cliente: { n: d.n, sn: d.sn, e: d.e, tel: d.tel }, bag });
             }
-            ir(2);
+            ir(1);
           }}>
           {fld("e", "E-mail", "", "s", "email")}{fld("n", "Nome")}{fld("sn", "Sobrenome")}
-          {fld("tel", "Telefone", "(91) 90000-0000")}{fld("cpf", "CPF (opcional)", "000.000.000-00")}
+          {fld("tel", "WhatsApp", "(91) 90000-0000")}
           {CFG.recuperacao?.ativo ? (
             <p className="s ck-lemb">
               Se você não finalizar agora, podemos te mandar um lembrete com um cupom por e-mail ou WhatsApp.{" "}
@@ -325,7 +395,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
         </form>
       </>
     );
-  if (step === 2)
+  if (step === 1)
     f = (
       <>
         <h2>Entrega</h2>
@@ -346,7 +416,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
               setFaltando(["cpf"]);
               return setErro("Informe o CPF (11 números): os Correios pedem para a etiqueta.");
             }
-            ir(3);
+            ir(2);
           }}
         >
           <div className="s">
@@ -372,7 +442,13 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
                         autoComplete="postal-code"
                         className={faltando.includes("cep") ? "bad" : undefined}
                         style={{ flex: 1, minWidth: 0 }}
-                        onChange={() => { setFretes(null); setFrete(null); }}
+                        onChange={(e) => {
+                          setFretes(null);
+                          setFrete(null);
+                          // CEP completo: preenche o endereço e já calcula o frete.
+                          const v = e.currentTarget.value;
+                          if (cepValido(v)) { preencherCep(e.currentTarget.form!, v); cotar(v); }
+                        }}
                         onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); cotar(e.currentTarget.value); } }}
                       />
                       <button
@@ -434,15 +510,13 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
         </form>
       </>
     );
-  if (step === 3)
+  if (step === 2)
     f = (
       <>
         <h2>Pagamento</h2>
         <form className="fg" style={{ marginTop: 16 }} onSubmit={(e) => {
             e.preventDefault();
-            const at = String(new FormData(e.currentTarget).get("at"));
-            const via = (e.nativeEvent as SubmitEvent).submitter?.getAttribute("value");
-            if (via === "mp") pagarMercadoPago(at); else if (via === "pix") pagarPix(at); else enviar(at);
+            if (pay === "pix") pagarPix(); else if (mercadoPago) pagarMercadoPago(); else enviar();
           }}>
           <div className="s">
             {PAGAMENTOS.map(([v, tt, sub]) => (
@@ -452,31 +526,29 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
               </label>
             ))}
           </div>
-          <label className="s">
-            Quem vai te atender
-            <select name="at">{CFG.atendentes.map((a) => <option key={a.nome}>{a.nome}</option>)}</select>
-          </label>
           <p className="s" style={{ color: "var(--mut)", fontSize: 14 }}>
             {pay === "pix"
-              ? PIX_ATIVO
-                ? "Você paga pelo QR Code ou pelo Pix copia e cola e envia o comprovante pelo WhatsApp."
-                : "Você envia o pedido pelo WhatsApp e a atendente passa a chave Pix com o valor já com desconto."
+              ? mercadoPago
+                ? "O QR Code e o Pix copia e cola aparecem na próxima tela. O pagamento é confirmado na hora, sem precisar mandar comprovante."
+                : PIX_ATIVO
+                  ? "Você paga pelo QR Code ou pelo Pix copia e cola e envia o comprovante pelo WhatsApp."
+                  : "Você envia o pedido pelo WhatsApp e recebe a chave Pix com o valor já com desconto."
               : mercadoPago
-                ? "Você paga no ambiente seguro do Mercado Pago, ou envia o pedido pelo WhatsApp para combinar com o atendimento."
+                ? "Você paga no ambiente seguro do Mercado Pago e volta para o site com o pedido confirmado."
                 : "Você envia o pedido pelo WhatsApp e o atendimento combina o pagamento no cartão."}{" "}
             {ship === "aplicativo" ? "O valor da entrega por aplicativo é combinado no atendimento. " : ""}Nenhum dado de cartão é coletado neste site.
           </p>
           <div className="er s">{erro}</div>
-          {pay === "pix" && PIX_ATIVO ? (
-            <button className="btn s" name="via" value="pix">PAGAR COM PIX · {brl(total)}</button>
-          ) : pay !== "pix" && mercadoPago ? (
-            <>
-              <button className="btn s" name="via" value="mp" disabled={gerando}>{gerando ? "GERANDO PAGAMENTO…" : `PAGAR COM MERCADO PAGO · ${brl(total)}`}</button>
-              <button className="btn o s" name="via" value="wa" disabled={gerando}>ENVIAR PEDIDO PELO WHATSAPP</button>
-            </>
-          ) : (
-            <button className="btn s" name="via" value="wa">ENVIAR PEDIDO PELO WHATSAPP</button>
-          )}
+          <button className="btn s" disabled={gerando}>
+            {gerando
+              ? "GERANDO PAGAMENTO…"
+              : pay === "pix"
+                ? `PAGAR COM PIX · ${brl(total)}`
+                : mercadoPago
+                  ? `PAGAR COM CARTÃO · ${brl(total)}`
+                  : "ENVIAR PEDIDO PELO WHATSAPP"}
+          </button>
+          {mercadoPago ? <p className="s seg">Pagamento seguro pelo Mercado Pago · Trocas em até {CFG.trocas.prazoDias} dias</p> : null}
         </form>
       </>
     );
