@@ -76,8 +76,8 @@
       "_comentario": "Entrega própria em Belém por bairro, em rota única aos sábados. Valor por faixa de distância (a partir do Mangueirão). Bairro fora da lista: a cliente fala no WhatsApp ou escolhe Correios. Editável no painel (aba ENTREGA).",
       "ativo": true,
       "nome": "Entrega em Belém (sábado)",
-      "aviso": "Entregas em rota única aos sábados. Pedidos pagos até sexta-feira às 18h saem no sábado seguinte.",
-      "freteGratisAcima": 299,
+      "aviso": "Entregas em rota única aos sábados. Pedidos pagos até sexta-feira às 18h saem no sábado seguinte.\nCaso queira no mesmo dia, entregas por aplicativo, frete por conta do cliente.",
+      "freteGratisAcima": 459,
       "faixas": [
         {
           "nome": "Perto",
