@@ -11,6 +11,10 @@ export type Produto = {
   nome: string;
   descricao: string;
   tecido: string;
+  // Medidas da própria peça (texto livre, uma linha por tamanho, ex.: "P: busto 88 cm, comprimento 62 cm").
+  medidas?: string;
+  // Quem veste nas fotos, ex.: "A modelo tem 1,70 m e veste P".
+  modelo?: string;
   preco: number;
   precoDe: number; // preço "de" (promoção); 0 = sem promoção
   precoBase?: number; // valor base (data/products.json), preenchido pelo catálogo ao calcular a vitrine

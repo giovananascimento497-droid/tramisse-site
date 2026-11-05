@@ -383,6 +383,15 @@ function Editor(props: {
           Tecido / composição
           <input value={p.tecido} onChange={(e) => set({ tecido: e.target.value })} />
         </label>
+        <label className="s">
+          Medidas da peça (uma linha por tamanho)
+          <textarea rows={3} value={p.medidas ?? ""} onChange={(e) => set({ medidas: e.target.value })} placeholder={"P: busto 88 cm, cintura 68 cm, comprimento 62 cm\nM: busto 92 cm, cintura 72 cm, comprimento 63 cm"} />
+          <small style={{ color: "var(--mut)" }}>Medidas da própria peça, tiradas com ela esticada na mesa. Aparecem na página da peça.</small>
+        </label>
+        <label className="s">
+          Modelo
+          <input value={p.modelo ?? ""} onChange={(e) => set({ modelo: e.target.value })} placeholder="A modelo tem 1,70 m e veste P" />
+        </label>
         <div className="s adm-flags">
           <label>
             <input type="checkbox" checked={p.flags.novo} onChange={(e) => set({ flags: { ...p.flags, novo: e.target.checked }, novoDesde: e.target.checked ? hoje() : undefined })} />{" "}

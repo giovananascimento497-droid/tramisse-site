@@ -66,7 +66,8 @@ export function ProductView({ id }: { id: number }) {
   const acordeao: [string, string][] = [
     ["DESCRIÇÃO", p.descricao || "Descrição em breve. Fale com o nosso atendimento para mais detalhes da peça."],
     ["COMPOSIÇÃO", p.tecido ? `Tecido: ${p.tecido}.` : "Sob consulta no atendimento."],
-    ["DETALHES", `Tamanhos da peça: ${tams.join(", ")}.`],
+    ...(p.medidas?.trim() ? [["MEDIDAS DA PEÇA", p.medidas.trim()] as [string, string]] : []),
+    ["DETALHES", `Tamanhos da peça: ${tams.join(", ")}.${p.modelo?.trim() ? ` ${p.modelo.trim().replace(/\.?$/, ".")}` : ""}`],
     ["CUIDADOS", "Siga as instruções da etiqueta da peça."],
     ["ENTREGA", `Envio para todo o Brasil pelos Correios (PAC ou SEDEX), com o frete calculado pelo CEP${CFG.entrega.correios.freteGratisAcima ? ` e grátis acima de ${brl(CFG.entrega.correios.freteGratisAcima)}` : ""}. ${faixaBelem(CFG) ? `Em Belém, entrega aos sábados por bairro (${faixaBelem(CFG)}${gratisBelem(CFG) ? `; grátis acima de ${brl(gratisBelem(CFG))}` : ""}) ou retirada.` : "Em Belém, também há entrega por aplicativo (valor informado na compra) ou retirada."}`],
     ["TROCAS E DEVOLUÇÕES", "Em até 7 dias, com a etiqueta fixada na peça e mediante disponibilidade de estoque. Solicite pelo nosso atendimento."],
@@ -126,6 +127,7 @@ export function ProductView({ id }: { id: number }) {
             Guia de tamanhos
           </a>
         </p>
+        {p.modelo?.trim() ? <p className="pdp-mod">{p.modelo.trim()}</p> : null}
         <div className="opt">
           {tams.map((t) => (
             <button
@@ -183,7 +185,7 @@ export function ProductView({ id }: { id: number }) {
         {p.emBreve || semEstoque ? null : <CalcularFrete id={p.id} q={q} />}
         <div style={{ marginTop: 32 }}>
           {acordeao.map(([t, c]) => (
-            <details key={t}><summary>{t}</summary><p>{c}</p></details>
+            <details key={t}><summary>{t}</summary><p style={{ whiteSpace: "pre-line" }}>{c}</p></details>
           ))}
         </div>
         <AvaliacoesPeca produtoId={p.id} />

@@ -200,3 +200,4 @@ body.m .wf,body.g .wf{display:none}
 @media(max-width:700px){.pdp-fixa{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;gap:12px;align-items:center;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#F7F5F1;border-top:1px solid var(--ln);transform:translateY(110%);transition:transform .25s}
 .pdp-fixa.on{transform:none}.pdp-fixa span{font-size:13px;line-height:1.3;min-width:0}.pdp-fixa span b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pdp-fixa .btn{flex:0 0 auto;padding:14px 18px}}
 @media(max-width:700px){body:has(.pdp-fixa.on) .wf{bottom:calc(92px + env(safe-area-inset-bottom))}.wf{transition:bottom .25s}}
+.pdp-mod{font-size:13px;color:var(--mut);margin:-4px 0 10px}

@@ -30,7 +30,7 @@ Premium sem parecer inacessível. Não parecer marketplace nem home cheia de car
 - Endereço oficial em `src/lib/site.ts` (`NEXT_PUBLIC_SITE_URL` ou `https://tramisse.com.br`). `robots.txt` e `sitemap.xml` (com fotos) usam ele. Cada página tem `canonical`; peça tem dados estruturados `Product` (preço, disponibilidade, trocas 7 dias); layout tem `ClothingStore` (Belém/PA) e prévia de compartilhamento (Open Graph com `inicio.jpg`). Verificação do Google Search Console pela variável `NEXT_PUBLIC_GOOGLE_VERIFICACAO` (ou TXT no DNS do registro.br).
 
 ## Hospedagem
-- **Netlify** (`netlify.toml`; adaptador oficial de Next.js). Domínio `tramisse.com.br` (DNS no registro.br). Segredos só nas variáveis de ambiente da Netlify. GitHub Pages foi descartado (estático e proibido para loja).
+- **Netlify** (`netlify.toml`; adaptador oficial de Next.js). Selo "Powered by Netlify": desligar em Project configuration → General → Powered by Netlify badge (não vem do código). Domínio `tramisse.com.br` (DNS no registro.br). Segredos só nas variáveis de ambiente da Netlify. GitHub Pages foi descartado (estático e proibido para loja).
 
 ## Referência de navegação
 Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto, sacola, checkout). **Não copiar** design, textos, imagens, logo nem código.
@@ -68,7 +68,7 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - `fotos-fora-do-estoque/`: fotos de peças do catálogo antigo que não estão no estoque atual.
 
 - **Avaliações** (05/11/2026): só reais. Pedido marcado **Entregue** → e-mail (Resend) e botão **PEDIR AVALIAÇÃO** no WhatsApp do pedido com o link `/avaliar?p=<pedido>&k=<chave>` (chave = HMAC com ADMIN_SENHA, `src/lib/pedidos/avaliacoes.ts`). O que a cliente manda fica **pendente** até aprovar na aba **AVALIAÇÕES** (`AvaliacoesView.tsx`, `api/admin/avaliacoes`), onde a loja também cadastra avaliações recebidas no WhatsApp/Instagram (já aprovadas). Netlify Blobs store `avaliacoes` (uma lista por peça). No site (`src/components/Avaliacoes.tsx`, `api/avaliacoes`): nota ao lado do nome da peça, seção "Avaliações" na peça ("Compra verificada" nas do link) e "Quem comprou, amou" na home (some sem avaliações).
-- **Página da peça:** etiqueta ÚLTIMA UNIDADE (estoque total 1), vantagens (Pix, parcelas, trocas, frete Belém) e, no celular, barra fixa com ADICIONAR quando o botão principal sai da tela (`.pdp-fixa`). **Home:** "As mais desejadas" e avaliações logo depois do New In/BLACK; seção "Últimas unidades".
+- **Página da peça:** campos `medidas` (texto, uma linha por tamanho → seção "MEDIDAS DA PEÇA") e `modelo` ("A modelo tem 1,70 m e veste P", junto dos tamanhos), editáveis no painel; etiqueta ÚLTIMA UNIDADE (estoque total 1), vantagens (Pix, parcelas, trocas, frete Belém) e, no celular, barra fixa com ADICIONAR quando o botão principal sai da tela (`.pdp-fixa`). **Home:** "As mais desejadas" e avaliações logo depois do New In/BLACK; seção "Últimas unidades".
 
 ## Estado atual e pendências
 - Feito: home editorial, seção de vídeos em carrossel, categorias com filtros, produto com galeria/zoom, sacola com cupom (`TRAMISSE10`), checkout por etapas, conta/favoritos (localStorage), páginas institucionais.
