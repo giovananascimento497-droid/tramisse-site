@@ -14,7 +14,7 @@
     "ENTREGA EM BELÉM AOS SÁBADOS",
     "ENVIO PARA TODO O BRASIL",
     "ATÉ 3X SEM JUROS",
-    "10% DE DESCONTO NO PIX",
+    "5% DE DESCONTO NO PIX",
     "TROCAS EM ATÉ 7 DIAS"
   ],
   "pagamento": {
@@ -26,7 +26,7 @@
     },
     "parcelaMinima": 70,
     "centavosVitrine": 0.9,
-    "descontoPix": 0.1,
+    "descontoPix": 0.05,
     "maxParcelas": 3,
     "pix": {
       "_comentario": "chave: chave Pix (CNPJ só números, CPF, e-mail, telefone ou aleatória). nome/cidade: até 25/15 letras, sem acento (vão dentro do código Pix). titular/banco: só para mostrar à cliente.",
