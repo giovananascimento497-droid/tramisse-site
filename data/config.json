@@ -208,12 +208,14 @@
     {
       "src": "/assets/videos/video-1.mp4",
       "poster": "/assets/videos/video-1.jpg",
-      "titulo": "Tramisse"
+      "titulo": "Tramisse",
+      "produtoId": 133
     },
     {
       "src": "/assets/videos/video-2.mp4",
       "poster": "/assets/videos/video-2.jpg",
-      "titulo": "Tramisse"
+      "titulo": "Tramisse",
+      "produtoId": 124
     },
     {
       "src": "/assets/videos/video-3.mp4",
@@ -226,7 +228,7 @@
     "imagem": "/assets/brand/inicio.jpg",
     "frase": "/assets/brand/inicio-frase.svg",
     "textoFrase": "essencial. atemporal. autêntica",
-    "video": "/assets/videos/video-1.mp4",
+    "video": "/assets/videos/video-2.mp4",
     "semPecas": false,
     "pecas": [
       134,
@@ -238,42 +240,42 @@
       {
         "imagem": "/assets/inicio/banner-black-lancamento.jpg",
         "mobile": "/assets/inicio/banner-black-lancamento-celular.jpg",
+        "mobileVertical": true,
         "link": "/categoria/sale",
         "alt": "BLACK Tramisse: peças selecionadas com até 60% off",
-        "fundo": "linear-gradient(#AB9486,#E8E4E1)",
-        "mobileVertical": true
+        "fundo": "linear-gradient(#AB9486,#E8E4E1)"
       },
       {
         "imagem": "/assets/inicio/banner-jeans-classico.jpg",
         "mobile": "/assets/inicio/banner-jeans-classico-celular.jpg",
+        "mobileVertical": true,
         "link": "/categoria/jeans",
         "alt": "Jeans: o favorito da Tramisse",
-        "fundo": "linear-gradient(#A09E99,#857E7B)",
-        "mobileVertical": true
+        "fundo": "linear-gradient(#A09E99,#857E7B)"
       },
       {
         "imagem": "/assets/inicio/banner-blusas.jpg",
         "mobile": "/assets/inicio/banner-blusas-celular.jpg",
+        "mobileVertical": true,
         "link": "/categoria/roupas/blusas",
         "alt": "Blusas: a nova estação",
-        "fundo": "linear-gradient(#C1C2BA,#B7B0A6)",
-        "mobileVertical": true
+        "fundo": "linear-gradient(#C1C2BA,#B7B0A6)"
       },
       {
         "imagem": "/assets/inicio/banner-curadoria.jpg",
         "mobile": "/assets/inicio/banner-curadoria-celular.jpg",
+        "mobileVertical": true,
         "link": "/categoria/curadoria",
         "alt": "Curadoria Especial: peças escolhidas a dedo",
-        "fundo": "linear-gradient(#DDDDD8,#A4A39F)",
-        "mobileVertical": true
+        "fundo": "linear-gradient(#DDDDD8,#A4A39F)"
       },
       {
         "imagem": "/assets/inicio/banner-essenciais.jpg",
         "mobile": "/assets/inicio/banner-essenciais-celular.jpg",
+        "mobileVertical": true,
         "link": "/categoria/roupas",
         "alt": "Essenciais: para todos os dias",
-        "fundo": "linear-gradient(#E6E6E3,#DCDBD7)",
-        "mobileVertical": true
+        "fundo": "linear-gradient(#E6E6E3,#DCDBD7)"
       }
     ]
   },
