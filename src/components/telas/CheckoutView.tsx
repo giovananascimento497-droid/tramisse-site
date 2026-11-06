@@ -500,7 +500,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
             {PAGAMENTOS.map(([v, tt, sub]) => (
               <label className="opc" key={v}>
                 <input type="radio" name="pay" value={v} checked={pay === v} onChange={() => setPay(v)} />
-                <span>{tt}<br /><small>{v === "credito" ? (parcelas > 1 ? `Em até ${parcelas}x sem juros.` : `À vista (parcelamento a partir de ${brl(CFG.pagamento.parcelaMinima * 2)}).`) : sub}</small></span>
+                <span>{tt}<br /><small>{v === "credito" ? (parcelas > 1 ? `Em até ${parcelas}x sem juros (parcela mínima de ${brl(CFG.pagamento.parcelaMinima)}).` : `À vista nesta compra (parcela mínima de ${brl(CFG.pagamento.parcelaMinima)}).`) : sub}</small></span>
               </label>
             ))}
           </div>
