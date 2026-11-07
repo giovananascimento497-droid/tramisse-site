@@ -177,9 +177,9 @@ body.m .wf,body.g .wf{display:none}
 @keyframes pix-pt{50%{opacity:.25}}
 .ck .seg{font-size:12px;letter-spacing:.04em;color:var(--mut);text-align:center;margin:4px 0 0}
 /* Avaliações (estrelas, página da peça, home, página de avaliar) */
-.est{display:inline-flex;gap:2px;line-height:1;vertical-align:middle}
-.est i{font-style:normal;color:#CFC6B8}.est i.on{color:#1E1D1B}
-.est button{background:none;border:0;padding:2px;cursor:pointer;color:#CFC6B8;font-size:inherit;line-height:1}.est button.on{color:#1E1D1B}
+.estr{display:inline-flex;gap:2px;line-height:1;vertical-align:middle}
+.estr i{font-style:normal;color:#CFC6B8}.estr i.on{color:#1E1D1B}
+.estr button{background:none;border:0;padding:2px;cursor:pointer;color:#CFC6B8;font-size:inherit;line-height:1}.estr button.on{color:#1E1D1B}
 .nota-pc{display:inline-flex;gap:8px;align-items:center;font-size:13px;color:var(--mut);margin:-4px 0 10px}
 .av-pc{margin-top:40px;border-top:1px solid var(--ln);padding-top:28px}
 .av-pc h2{font-size:15px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 8px}
