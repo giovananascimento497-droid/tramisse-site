@@ -1394,8 +1394,9 @@
       "id": 121,
       "slug": "bermuda-paloma-fio",
       "nome": "Bermuda Paloma Fio",
-      "descricao": "",
+      "descricao": "Bermuda jeans feminina confeccionada em denim encorpado com lavagem azul escura, trazendo uma proposta moderna e versátil. A modelagem possui cintura alta, comprimento alongado e caimento mais amplo nas pernas, garantindo conforto sem perder a estrutura característica do jeans.",
       "tecido": "Jeans 100% algodão",
+      "medidas": "A modelo veste 40.\nModelagem pequena, compre um número a mais do que o usual.",
       "preco": 100.62,
       "precoDe": 139.9,
       "categoria": "roupas",
@@ -1435,6 +1436,8 @@
       "nome": "Wide Leg Paloma",
       "descricao": "Calça em modelagem wide leg straight, lavagem marmorizada em algodão.",
       "tecido": "Algodão",
+      "medidas": "Modelagem pequena, compre um tamanho a mais.",
+      "modelo": "Modelo veste 40.",
       "preco": 133.09,
       "precoDe": 189.9,
       "categoria": "roupas",
@@ -1472,8 +1475,8 @@
         }
       ],
       "imagens": [
-        "/assets/products/wide-leg-paloma-musbsit7.jpg",
         "/assets/products/wide-leg-paloma-musbsjjp.jpg",
+        "/assets/products/wide-leg-paloma-musbsit7.jpg",
         "/assets/products/wide-leg-paloma-musbsk86.jpg",
         "/assets/products/wide-leg-paloma-musbsl88.jpg"
       ]
@@ -1484,6 +1487,7 @@
       "nome": "Calça Barrel Estonada",
       "descricao": "Calça na modelagem barrel e lavagem estonada vintage, com detalhes em recorte.",
       "tecido": "Algodão",
+      "medidas": "Modelagem maior. \nModelo veste 36.",
       "preco": 132.93,
       "precoDe": 184.9,
       "categoria": "roupas",
