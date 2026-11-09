@@ -10,7 +10,7 @@ import { ATENDENTE, CFG } from "@/lib/config";
 import { bairrosBelem, belemAtivo, freteBelem, gratisBelem } from "@/lib/frete/belem";
 import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
 import { codigoPix } from "@/lib/payment/pix";
-import { acharCupom, brl, calcularTotais, parcelasPedido } from "@/lib/payment/pricing";
+import { acharCupom, brl, calcularTotais, minimoLiquido, parcelaMinima, parcelasPedido } from "@/lib/payment/pricing";
 import { provedorWhatsApp, resumoPedido } from "@/lib/payment/whatsapp";
 import type { DadosCliente, FormaEntrega, FormaPagamento, OpcaoFrete, Pedido } from "@/lib/types";
 import { useLoja } from "@/store/Store";
@@ -136,8 +136,11 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
   const total = t.total + valorFrete;
   // Parcelas sem juros liberadas para esta sacola (parcela mínima e taxa coberta pelo pedido).
   const tCartao = calcularTotais(CFG, linhasSacola(bag), "credito", cupom);
-  const baseSacola = bag.reduce((s, l) => s + (porId(l.id)?.precoBase ?? 0) * l.q, 0);
-  const parcelas = parcelasPedido(CFG, tCartao.total + valorFrete, baseSacola + valorFrete);
+  // Peça em promoção (BLACK) na sacola: vale a parcela mínima da promoção.
+  const temPromo = bag.some((l) => porId(l.id)?.precoDe);
+  const minParcela = parcelaMinima(CFG, temPromo);
+  const minimo = minimoLiquido(CFG, bag.map((l) => { const p = porId(l.id); return { preco: p?.preco ?? 0, base: p?.precoBase ?? 0, q: l.q, promo: !!p?.precoDe }; }), valorFrete);
+  const parcelas = parcelasPedido(CFG, tCartao.total + valorFrete, minimo, temPromo);
   const minGratis = ship === "belem" ? gratisBelem(CFG) : ship === "correios" ? GRATIS_ACIMA : 0;
   const falta = faltaFreteGratis(CFG, t.subtotal - t.desconto, minGratis);
 
@@ -500,7 +503,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
             {PAGAMENTOS.map(([v, tt, sub]) => (
               <label className="opc" key={v}>
                 <input type="radio" name="pay" value={v} checked={pay === v} onChange={() => setPay(v)} />
-                <span>{tt}<br /><small>{v === "credito" ? (parcelas > 1 ? `Em até ${parcelas}x sem juros (parcela mínima de ${brl(CFG.pagamento.parcelaMinima)}).` : `À vista nesta compra (parcela mínima de ${brl(CFG.pagamento.parcelaMinima)}).`) : sub}</small></span>
+                <span>{tt}<br /><small>{v === "credito" ? (parcelas > 1 ? `Em até ${parcelas}x sem juros (parcela mínima de ${brl(minParcela)}).` : `À vista nesta compra (parcela mínima de ${brl(minParcela)}).`) : sub}</small></span>
               </label>
             ))}
           </div>

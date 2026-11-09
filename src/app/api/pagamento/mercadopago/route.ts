@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { porId } from "@/lib/catalog";
 import { ATENDENTE, CFG } from "@/lib/config";
-import { parcelasPedido } from "@/lib/payment/pricing";
+import { minimoLiquido, parcelasPedido } from "@/lib/payment/pricing";
 import { criarPreferencia, mercadoPagoAtivo } from "@/lib/payment/mercadopago";
 import { pedidoDoServidor } from "@/lib/payment/servidor";
 import { salvarPedido } from "@/lib/pedidos/store";
@@ -17,9 +17,10 @@ export async function POST(req: Request) {
   if (pedido.pagamento === "pix") return NextResponse.json({ erro: "Pix é pago pelo QR Code do site." }, { status: 400 });
   const origem = process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin;
   try {
-    // Parcelas sem juros: parcela mínima e taxa do Mercado Pago coberta pelo pedido (peças pelo valor base + frete).
-    const minimo = pedido.itens.reduce((s, i) => s + (porId(i.id)?.precoBase ?? 0) * i.q, 0) + (pedido.frete?.valor ?? 0);
-    const maxParcelas = parcelasPedido(CFG, pedido.total, minimo);
+    // Parcelas sem juros: parcela mínima (a da promoção, se houver peça da BLACK) e taxa do Mercado Pago
+    // coberta pelo pedido (peças normais pelo valor base, peças em promoção absorvendo a taxa, + frete).
+    const linhas = pedido.itens.map((i) => { const p = porId(i.id); return { preco: i.precoFinal, base: p?.precoBase ?? 0, q: i.q, promo: !!p?.precoDe }; });
+    const maxParcelas = parcelasPedido(CFG, pedido.total, minimoLiquido(CFG, linhas, pedido.frete?.valor ?? 0), linhas.some((l) => l.promo));
     const { url } = await criarPreferencia(pedido, { referencia, origem, maxParcelas, estoque });
     // Registra no painel (aguardando pagamento). Se falhar, a compra segue normalmente.
     await salvarPedido({ id: referencia, canal: "mercadopago", atendente: ATENDENTE.nome, situacao: "aguardando", pedido }).catch((e) => console.error(e));

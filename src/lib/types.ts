@@ -57,6 +57,7 @@ export type Config = {
   pagamento: {
     taxasCartao: Record<string, number>; // taxa total do Mercado Pago por nº de parcelas ("1" = à vista)
     parcelaMinima: number; // valor mínimo de cada parcela no crédito
+    parcelaMinimaPromo?: number; // parcela mínima das peças em promoção (não muda o preço de vitrine)
     centavosVitrine: number | null; // vitrine arredondada para cima até terminar nesses centavos (ex.: 0.9 -> ,90)
     descontoPix: number; // desconto sobre a vitrine no Pix
     maxParcelas: number; // crédito sem juros

@@ -6,9 +6,13 @@ export const r2 = (v: number) => Math.round((v + Number.EPSILON) * 100) / 100;
 // Taxa total do Mercado Pago para n parcelas (1 = à vista).
 export const taxaParcelas = (cfg: Config, n: number) => cfg.pagamento.taxasCartao[String(n)] ?? cfg.pagamento.taxasCartao["1"];
 
+// Parcela mínima: a geral, ou a das peças em promoção (BLACK), que pode ser menor. A da promoção
+// não muda o preço de vitrine (que segue a geral): a loja absorve a diferença da taxa nessas peças.
+export const parcelaMinima = (cfg: Config, promo = false) => (promo ? cfg.pagamento.parcelaMinimaPromo ?? cfg.pagamento.parcelaMinima : cfg.pagamento.parcelaMinima);
+
 // Quantas parcelas sem juros um valor permite pela parcela mínima (1 a maxParcelas).
-export const parcelasPermitidas = (cfg: Config, valor: number) =>
-  Math.max(1, Math.min(cfg.pagamento.maxParcelas, Math.floor(valor / cfg.pagamento.parcelaMinima + 1e-9)));
+export const parcelasPermitidas = (cfg: Config, valor: number, minimo = cfg.pagamento.parcelaMinima) =>
+  Math.max(1, Math.min(cfg.pagamento.maxParcelas, Math.floor(valor / minimo + 1e-9)));
 
 const arredonda = (cfg: Config, v: number) => {
   const c = cfg.pagamento.centavosVitrine;
@@ -33,8 +37,9 @@ export const precoVitrine = (cfg: Config, base: number) => {
 
 // Parcelas liberadas para um pedido: respeita a parcela mínima e só libera n parcelas se,
 // descontada a taxa de n parcelas, o pedido ainda paga o valor base das peças (mais o frete).
-export function parcelasPedido(cfg: Config, total: number, minimoLiquido: number) {
-  for (let n = parcelasPermitidas(cfg, total); n > 1; n--) if (total * (1 - taxaParcelas(cfg, n)) >= minimoLiquido - 0.01) return n;
+// Com peça em promoção na sacola, vale a parcela mínima da promoção (promo = true).
+export function parcelasPedido(cfg: Config, total: number, minimoLiquido: number, promo = false) {
+  for (let n = parcelasPermitidas(cfg, total, parcelaMinima(cfg, promo)); n > 1; n--) if (total * (1 - taxaParcelas(cfg, n)) >= minimoLiquido - 0.01) return n;
   return 1;
 }
 
@@ -44,9 +49,16 @@ export function acharCupom(cfg: Config, codigo?: string | null): Cupom | undefin
   return cfg.cupons.find((x) => x.codigo.toUpperCase() === c && x.ativo !== false);
 }
 
+// O mínimo que a loja aceita receber do pedido (líquido de taxa) para liberar parcelas: o valor base das
+// peças normais e, nas peças em promoção, o preço delas menos a taxa da maior parcela (a loja absorve a diferença).
+export function minimoLiquido(cfg: Config, linhas: { preco: number; base: number; q: number; promo: boolean }[], frete = 0) {
+  const taxaMax = taxaParcelas(cfg, cfg.pagamento.maxParcelas);
+  return r2(linhas.reduce((s, l) => s + (l.promo ? l.preco * (1 - taxaMax) : l.base) * l.q, 0) + frete);
+}
+
 // "ou 2x de R$ 118,95 sem juros" (vazio quando o preço só permite à vista)
-export const parcelado = (cfg: Config, preco: number) => {
-  const n = parcelasPermitidas(cfg, preco);
+export const parcelado = (cfg: Config, preco: number, promo = false) => {
+  const n = parcelasPermitidas(cfg, preco, parcelaMinima(cfg, promo));
   return n < 2 ? "" : `ou ${n}x de ${brl(r2(preco / n))} sem juros`;
 };
 
