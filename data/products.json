@@ -1471,7 +1471,7 @@
         {
           "cor": "un",
           "tamanho": "42",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1506,7 +1506,7 @@
         {
           "cor": "un",
           "tamanho": "40",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "un",
