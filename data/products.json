@@ -435,7 +435,7 @@
         {
           "cor": "am",
           "tamanho": "M",
-          "estoque": 0
+          "estoque": 1
         },
         {
           "cor": "am",
@@ -2002,8 +2002,9 @@
       "nome": "Blusa Napoleon",
       "descricao": "Blusa de Renda Estilo Napoleão\n\nInspirada na estética clássica das jaquetas Napoleão, esta blusa combina a delicadeza da renda com uma construção marcante e sofisticada.\n\nConfeccionada em renda branca de trama delicada e desenho floral, apresenta gola alta estruturada e mangas curtas levemente amplas, criando uma silhueta elegante. O fechamento frontal é o grande destaque: seis fechos de inspiração oriental, formados por cordões delicados e pequenos botões revestidos, percorrem toda a extensão da peça.",
       "tecido": "Renda de poliamida",
-      "preco": 156.9,
-      "precoDe": 0,
+      "modelo": "A modelo veste P",
+      "preco": 118,
+      "precoDe": 169.9,
       "categoria": "roupas",
       "subcategoria": "Blusas",
       "estilo": "Romântico clássico",
@@ -2039,9 +2040,9 @@
         }
       ],
       "imagens": [
+        "/assets/products/blusa-napoleonica-muspadwz.jpg",
         "/assets/products/blusa-napoleonica-muspac2x.jpg",
-        "/assets/products/blusa-napoleonica-muspacxb.jpg",
-        "/assets/products/blusa-napoleonica-muspadwz.jpg"
+        "/assets/products/blusa-napoleonica-muspacxb.jpg"
       ]
     },
     {
