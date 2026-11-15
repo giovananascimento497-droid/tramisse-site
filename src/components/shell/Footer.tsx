@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TEM_ACESSORIOS, TEM_SALE } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
+import { pctPix } from "@/lib/payment/pricing";
 import { CookiePrefsLink } from "./CookiePrefsLink";
 import { GuiaLink } from "./GuiaLink";
 
@@ -33,7 +34,7 @@ export function Footer() {
         </div>
         <div className="ft-pag lj-only">
           <span>PAGAMENTO</span>
-          <em>Pix ({Math.round(CFG.pagamento.descontoPix * 100)}% off)</em>
+          <em>Pix ({pctPix(CFG)} off)</em>
           <em>Crédito em até {CFG.pagamento.maxParcelas}x sem juros</em>
           <em>Débito</em>
           <em>Mercado Pago</em>

@@ -2,13 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { CFG } from "@/lib/config";
+import { pctPix } from "@/lib/payment/pricing";
 
 const INTERVALO = 4000; // ms entre uma mensagem e outra
 
 // Barra superior: mostra uma mensagem por vez, trocando sozinha (pausa com o mouse em cima).
 // Todas ficam empilhadas no mesmo lugar, então a altura da barra não muda na troca.
 export function TopBar() {
-  const msgs = CFG.barraSuperior;
+  // {PIX} = desconto Pix valendo hoje (5%, ou o da campanha).
+  const msgs = CFG.barraSuperior.map((m) => m.replace("{PIX}", pctPix(CFG)));
   const [i, setI] = useState(0);
   const pausa = useRef(false);
 

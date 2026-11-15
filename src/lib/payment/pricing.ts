@@ -62,10 +62,18 @@ export const parcelado = (cfg: Config, preco: number, promo = false) => {
   return n < 2 ? "" : `ou ${n}x de ${brl(r2(preco / n))} sem juros`;
 };
 
-export const precoPix = (cfg: Config, preco: number) => r2(preco * (1 - cfg.pagamento.descontoPix));
+// Desconto Pix valendo hoje: o da campanha (ex.: 10% na nova coleção durante a BLACK) até a data dela,
+// depois volta sozinho para o normal. Peças em promoção continuam sem desconto Pix.
+const hojeBelem = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Belem" });
+export const campanhaPix = (cfg: Config) => {
+  const c = cfg.pagamento.pixCampanha;
+  return c && hojeBelem() <= c.ate ? c : null;
+};
+export const descontoPixAtual = (cfg: Config) => campanhaPix(cfg)?.desconto ?? cfg.pagamento.descontoPix;
+export const precoPix = (cfg: Config, preco: number) => r2(preco * (1 - descontoPixAtual(cfg)));
 
 // Textos com os números da configuração (ex.: "10%", "3x").
-export const pctPix = (cfg: Config) => `${Math.round(cfg.pagamento.descontoPix * 100)}%`;
+export const pctPix = (cfg: Config) => `${Math.round(descontoPixAtual(cfg) * 100)}%`;
 export const nomesPagamento = (cfg: Config) =>
   ({
     pix: `Pix (${pctPix(cfg)} de desconto)`,

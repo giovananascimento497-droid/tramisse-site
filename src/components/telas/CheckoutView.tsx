@@ -10,7 +10,7 @@ import { ATENDENTE, CFG } from "@/lib/config";
 import { bairrosBelem, belemAtivo, freteBelem, gratisBelem } from "@/lib/frete/belem";
 import { cepValido, faltaFreteGratis, textoPrazo } from "@/lib/frete/regras";
 import { codigoPix } from "@/lib/payment/pix";
-import { acharCupom, brl, calcularTotais, minimoLiquido, parcelaMinima, parcelasPedido } from "@/lib/payment/pricing";
+import { acharCupom, brl, calcularTotais, minimoLiquido, parcelaMinima, parcelasPedido, pctPix } from "@/lib/payment/pricing";
 import { provedorWhatsApp, resumoPedido } from "@/lib/payment/whatsapp";
 import type { DadosCliente, FormaEntrega, FormaPagamento, OpcaoFrete, Pedido } from "@/lib/types";
 import { useLoja } from "@/store/Store";
@@ -22,7 +22,7 @@ const ETAPAS = ["ENTREGA", "PAGAMENTO", "FINALIZAR"];
 const OBRIG_ID = ["e", "n", "sn", "tel"];
 const OBRIG_END = ["cep", "end", "num", "bai", "cid", "uf", "dest"];
 const PAGAMENTOS: [FormaPagamento, string, string][] = [
-  ["pix", "Pix", `${Math.round(CFG.pagamento.descontoPix * 100)}% de desconto nas peças (exceto as em promoção).`],
+  ["pix", "Pix", `${pctPix(CFG)} de desconto nas peças (exceto as em promoção).`],
   ["credito", "Cartão de crédito", ""], // texto calculado com as parcelas liberadas para a sacola
   ["debito", "Cartão de débito", "À vista."],
 ];
@@ -346,7 +346,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
       })}
       <div className="tt"><span>Subtotal</span><span>{brl(t.subtotal)}</span></div>
       {t.desconto ? <div className="tt"><span>Desconto ({t.cupom?.codigo})</span><span>-{brl(t.desconto)}</span></div> : null}
-      {t.descontoPix ? <div className="tt"><span>Desconto Pix ({Math.round(CFG.pagamento.descontoPix * 100)}%)</span><span>-{brl(t.descontoPix)}</span></div> : null}
+      {t.descontoPix ? <div className="tt"><span>Desconto Pix ({pctPix(CFG)})</span><span>-{brl(t.descontoPix)}</span></div> : null}
       <div className="tt">
         <span>{ship === "correios" ? `Frete${frete ? ` Correios ${frete.nome}` : ""}` : ship === "belem" ? "Entrega em Belém (sábado)" : "Entrega"}</span>
         <span>

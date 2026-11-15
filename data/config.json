@@ -14,7 +14,7 @@
     "ENTREGA EM BELÉM AOS SÁBADOS",
     "ENVIO PARA TODO O BRASIL",
     "ATÉ 3X SEM JUROS",
-    "5% DE DESCONTO NO PIX",
+    "{PIX} DE DESCONTO NO PIX",
     "TROCAS EM ATÉ 7 DIAS"
   ],
   "pagamento": {
@@ -28,6 +28,7 @@
     "parcelaMinimaPromo": 50,
     "centavosVitrine": 0.9,
     "descontoPix": 0.05,
+    "pixCampanha": { "desconto": 0.1, "ate": "2026-11-30", "nome": "nova coleção" },
     "maxParcelas": 3,
     "pix": {
       "_comentario": "chave: chave Pix (CNPJ só números, CPF, e-mail, telefone ou aleatória). nome/cidade: até 25/15 letras, sem acento (vão dentro do código Pix). titular/banco: só para mostrar à cliente.",
@@ -245,6 +246,14 @@
         "link": "/categoria/sale",
         "alt": "BLACK Tramisse: peças selecionadas com até 60% off",
         "fundo": "linear-gradient(#AB9486,#E8E4E1)"
+      },
+      {
+        "imagem": "/assets/inicio/banner-nova-colecao.jpg",
+        "mobile": "/assets/inicio/banner-nova-colecao-celular.jpg",
+        "mobileVertical": true,
+        "link": "/categoria/new-in",
+        "alt": "Nova coleção: 10% OFF no Pix até 30/11",
+        "fundo": "#E3DACC"
       },
       {
         "imagem": "/assets/inicio/banner-jeans-classico.jpg",

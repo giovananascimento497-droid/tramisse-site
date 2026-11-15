@@ -60,6 +60,8 @@ export type Config = {
     parcelaMinimaPromo?: number; // parcela mínima das peças em promoção (não muda o preço de vitrine)
     centavosVitrine: number | null; // vitrine arredondada para cima até terminar nesses centavos (ex.: 0.9 -> ,90)
     descontoPix: number; // desconto sobre a vitrine no Pix
+    // Campanha: desconto Pix maior até a data (AAAA-MM-DD, inclusive), nas peças fora de promoção.
+    pixCampanha?: { desconto: number; ate: string; nome?: string };
     maxParcelas: number; // crédito sem juros
     // Chave Pix da loja. Vazia = Pix combinado pelo WhatsApp. titular/banco: só para exibir à cliente.
     pix: { chave: string; nome: string; cidade: string; titular?: string; banco?: string };

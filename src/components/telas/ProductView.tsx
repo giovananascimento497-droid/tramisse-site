@@ -4,7 +4,7 @@ import { registrar } from "@/lib/estatisticas";
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { CL, cores, esgotado, estoqueDe, porId, tamanhoUnico, tamanhos, ultimaUnidade } from "@/lib/catalog";
 import { CFG } from "@/lib/config";
-import { brl, parcelado, precoPix } from "@/lib/payment/pricing";
+import { brl, parcelado, pctPix, precoPix } from "@/lib/payment/pricing";
 import { useLoja } from "@/store/Store";
 import { AviseMeForm } from "../AviseMe";
 import { AvaliacoesPeca, NotaPeca } from "../Avaliacoes";
@@ -107,7 +107,7 @@ export function ProductView({ id }: { id: number }) {
           {p.precoDe ? <><s style={{ color: "var(--mut)", fontSize: 16 }}>{brl(p.precoDe)}</s> </> : null}
           {brl(p.preco)}
         </div>
-        <small style={{ color: "var(--mut)" }}>{p.precoDe ? "Preço promocional, sem desconto no Pix" : `${brl(precoPix(CFG, p.preco))} no Pix (${Math.round(CFG.pagamento.descontoPix * 100)}% de desconto)`}{parcelado(CFG, p.preco, !!p.precoDe) ? ` · ${parcelado(CFG, p.preco, !!p.precoDe)}` : " · à vista no cartão"}</small>
+        <small style={{ color: "var(--mut)" }}>{p.precoDe ? "Preço promocional, sem desconto no Pix" : `${brl(precoPix(CFG, p.preco))} no Pix (${pctPix(CFG)} de desconto)`}{parcelado(CFG, p.preco, !!p.precoDe) ? ` · ${parcelado(CFG, p.preco, !!p.precoDe)}` : " · à vista no cartão"}</small>
         <p className="lbl" style={{ marginTop: 24 }}>COR: {CL[cor].nome.toUpperCase()}</p>
         <div className="opt">
           {cs.map((c) => (
@@ -176,7 +176,7 @@ export function ProductView({ id }: { id: number }) {
         ) : null}
         {p.emBreve || semEstoque ? null : (
           <ul className="pdp-vt" aria-label="Vantagens">
-            {!p.precoDe ? <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9zM8.5 12h7M12 8.5v7" /></svg>{Math.round(CFG.pagamento.descontoPix * 100)}% off no Pix, confirmado na hora</li> : null}
+            {!p.precoDe ? <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9zM8.5 12h7M12 8.5v7" /></svg>{pctPix(CFG)} off no Pix, confirmado na hora</li> : null}
             <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM3 10h18M7 15h4" /></svg>Até {CFG.pagamento.maxParcelas}x sem juros no cartão</li>
             <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9a8 8 0 0114-3l2 2M20 15a8 8 0 01-14 3l-2-2M18 3v5h-5M6 21v-5h5" /></svg>Trocas em até {CFG.trocas.prazoDias} dias</li>
             <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7M7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM17 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" /></svg>{gratisBelem(CFG) ? `Belém: frete grátis acima de ${brl(gratisBelem(CFG))}` : "Envio para todo o Brasil"}</li>
