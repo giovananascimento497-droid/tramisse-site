@@ -28,7 +28,11 @@
     "parcelaMinimaPromo": 50,
     "centavosVitrine": 0.9,
     "descontoPix": 0.05,
-    "pixCampanha": { "desconto": 0.1, "ate": "2026-11-30", "nome": "nova coleção" },
+    "pixCampanha": {
+      "desconto": 0.1,
+      "ate": "2026-11-30",
+      "nome": "nova coleção"
+    },
     "maxParcelas": 3,
     "pix": {
       "_comentario": "chave: chave Pix (CNPJ só números, CPF, e-mail, telefone ou aleatória). nome/cidade: até 25/15 letras, sem acento (vão dentro do código Pix). titular/banco: só para mostrar à cliente.",
@@ -178,12 +182,14 @@
     {
       "codigo": "TRAMISSE10",
       "tipo": "percentual",
-      "valor": 0.1
+      "valor": 0.1,
+      "ativo": false
     },
     {
       "codigo": "VOLTEI5",
       "tipo": "percentual",
-      "valor": 0.05
+      "valor": 0.05,
+      "somenteClientes": true
     },
     {
       "codigo": "VOLTEI10",
