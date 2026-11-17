@@ -79,6 +79,6 @@ Arquitetura inspirada em leblogstore.com.br (menu, categorias, filtros, produto,
 - Feito: home editorial, seção de vídeos em carrossel, categorias com filtros, produto com galeria/zoom, sacola com cupom (`TRAMISSE10`), checkout por etapas, conta/favoritos (localStorage), páginas institucionais.
 - Vídeos: a seção "Em movimento" da home mostra os vídeos de `videos` (editáveis no painel, aba INÍCIO), com texto embaixo e link de peça opcional.
 - Acessórios e Sale estão vazios e por isso **somem dos menus, do rodapé e do sitemap** sozinhos (`TEM_ACESSORIOS`/`TEM_SALE` em `catalog.ts`); voltam quando houver peça (acessório ou com `precoDe`).
-- 42 das 55 peças sem foto e sem descrição (as novas da planilha). Cor "Cor única" (`un`) onde a planilha não informa a cor.
+- Todas as peças têm foto e descrição (17/11/2026); só Camisa Listrada, Blusa Mármore e Blusa Tainá têm uma foto só. Cor "Cor única" (`un`) onde a planilha não informa a cor.
 - Fotos individuais por peça, TikTok/Pinterest pendentes (pôr o `url` em `redes` que o link aparece). Frete: envelope 30 × 20 cm, ~400 g por peça (conjunto 800 g).
 - Migração para Next.js feita (rotas reais). Painel `/admin` feito (peças, estoque, fotos). Pedidos no painel feitos. Próximo passo possível: cupons no painel.
