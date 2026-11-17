@@ -7,7 +7,7 @@ import type { Catalogo } from "@/lib/types";
 import { api } from "./util";
 
 type Compra = { id: string; data: string; descricao: string; valor: number };
-type VendaFora = { id: string; data: string; produtoId: number; nome: string; cor: string; tam: string; q: number; valor: number; taxa: number; forma: string; estoque: boolean; obs?: string };
+type VendaFora = { id: string; data: string; produtoId: number; nome: string; cor: string; tam: string; q: number; valor: number; taxa: number; forma: string; estoque: boolean; obs?: string; custo?: number; aberto?: number };
 type VendaSite = { id: string; data: string; pagamento: string; pecas: number; taxa: number; itens: { id: number; nome: string; q: number }[] };
 type Dados = { custos: Record<string, number>; compras: Compra[]; vendas: VendaFora[]; site: VendaSite[]; hoje: string };
 type Periodo = "mes" | "anterior" | "30" | "tudo";
@@ -62,6 +62,7 @@ export function FinanceiroView({ cat, onSair }: { cat: Catalogo; onSair: () => v
 
   const pecas = useMemo(() => [...cat.produtos].sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR")), [cat]);
   const custo = (id: number) => d?.custos[String(id)] ?? 0;
+  const custoV = (v: VendaFora) => v.custo ?? custo(v.produtoId);
 
   // Relatório do período.
   const rel = useMemo(() => {
@@ -77,19 +78,20 @@ export function FinanceiroView({ cat, onSair }: { cat: Catalogo; onSair: () => v
     const site = d.site.filter((v) => dentro(v.data));
     const fora = d.vendas.filter((v) => dentro(v.data));
     let semCusto = 0;
-    const cmv = (id: number, q: number) => { const c = custo(id); if (!c) semCusto += q; return c * q; };
+    const cmv = (id: number, q: number, fixo?: number) => { const c = fixo ?? custo(id); if (!c) semCusto += q; return c * q; };
     const sVend = site.reduce((a, v) => a + v.pecas, 0), sTaxa = site.reduce((a, v) => a + v.taxa, 0);
     const sCmv = site.reduce((a, v) => a + v.itens.reduce((b, i) => b + cmv(i.id, i.q), 0), 0);
     const sPecas = site.reduce((a, v) => a + v.itens.reduce((b, i) => b + i.q, 0), 0);
     const fVend = fora.reduce((a, v) => a + v.valor, 0), fTaxa = fora.reduce((a, v) => a + v.taxa, 0);
-    const fCmv = fora.reduce((a, v) => a + cmv(v.produtoId, v.q), 0), fPecas = fora.reduce((a, v) => a + v.q, 0);
+    const fCmv = fora.reduce((a, v) => a + cmv(v.produtoId, v.q, v.custo), 0), fPecas = fora.reduce((a, v) => a + v.q, 0);
+    const aReceber = fora.reduce((a, v) => a + (v.aberto ?? 0), 0);
     const vendido = sVend + fVend, taxas = sTaxa + fTaxa, liquido = vendido - taxas, custoVend = sCmv + fCmv, lucro = liquido - custoVend;
     // Mais vendidas no período (site + fora).
     const porPeca: Record<string, { q: number; lucro: number }> = {};
     for (const v of site) for (const i of v.itens) { const x = (porPeca[i.nome] ??= { q: 0, lucro: 0 }); x.q += i.q; x.lucro += (v.pecas - v.taxa) * (i.q / Math.max(1, v.itens.reduce((a, b) => a + b.q, 0))) - custo(i.id) * i.q; }
-    for (const v of fora) { const x = (porPeca[v.nome] ??= { q: 0, lucro: 0 }); x.q += v.q; x.lucro += v.valor - v.taxa - custo(v.produtoId) * v.q; }
+    for (const v of fora) { const x = (porPeca[v.nome] ??= { q: 0, lucro: 0 }); x.q += v.q; x.lucro += v.valor - v.taxa - custoV(v) * v.q; }
     return {
-      vendido: r2(vendido), taxas: r2(taxas), liquido: r2(liquido), custoVend: r2(custoVend), lucro: r2(lucro), semCusto,
+      vendido: r2(vendido), taxas: r2(taxas), liquido: r2(liquido - aReceber), aReceber: r2(aReceber), custoVend: r2(custoVend), lucro: r2(lucro), semCusto,
       pecas: sPecas + fPecas, site: { n: site.length, pecas: sPecas, valor: r2(sVend) }, fora: { n: fora.length, pecas: fPecas, valor: r2(fVend) },
       top: Object.entries(porPeca).sort((a, b) => b[1].q - a[1].q).slice(0, 6),
     };
@@ -99,7 +101,8 @@ export function FinanceiroView({ cat, onSair }: { cat: Catalogo; onSair: () => v
   const inv = useMemo(() => {
     if (!d) return null;
     const investido = d.compras.reduce((a, c) => a + c.valor, 0);
-    const voltou = d.site.reduce((a, v) => a + v.pecas - v.taxa, 0) + d.vendas.reduce((a, v) => a + v.valor - v.taxa, 0);
+    const voltou = d.site.reduce((a, v) => a + v.pecas - v.taxa, 0) + d.vendas.reduce((a, v) => a + v.valor - v.taxa - (v.aberto ?? 0), 0);
+    const aReceber = d.vendas.reduce((a, v) => a + (v.aberto ?? 0), 0);
     let parado = 0, venda = 0, unidades = 0, semCusto = 0;
     for (const p of cat.produtos) {
       if (p.emBreve) continue;
@@ -110,7 +113,7 @@ export function FinanceiroView({ cat, onSair }: { cat: Catalogo; onSair: () => v
       if (!custo(p.id)) semCusto += q;
       venda += precoVitrine(CFG, p.preco) * q;
     }
-    return { investido: r2(investido), voltou: r2(voltou), parado: r2(parado), venda: r2(venda), unidades, semCusto };
+    return { investido: r2(investido), voltou: r2(voltou), aReceber: r2(aReceber), parado: r2(parado), venda: r2(venda), unidades, semCusto };
   }, [d, cat]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!d || !rel || !inv) return erro ? <p className="er">{erro}</p> : <p>Carregando…</p>;
@@ -137,7 +140,7 @@ export function FinanceiroView({ cat, onSair }: { cat: Catalogo; onSair: () => v
         </div>
         <div className="adm-rv-num">
           <div><small>Vendido</small><b>{brl(rel.vendido)}</b><em>{rel.pecas} peças · site {brl(rel.site.valor)} · fora {brl(rel.fora.valor)}</em></div>
-          <div><small>Recebido</small><b>{brl(rel.liquido)}</b><em>{brl(rel.taxas)} de taxas</em></div>
+          <div><small>Recebido</small><b>{brl(rel.liquido)}</b><em>{brl(rel.taxas)} de taxas{rel.aReceber ? ` · falta receber ${brl(rel.aReceber)}` : ""}</em></div>
           <div><small>Custo das peças vendidas</small><b>{brl(rel.custoVend)}</b><em>{rel.semCusto ? `${rel.semCusto} peça(s) sem custo cadastrado` : "todas com custo"}</em></div>
           <div><small>Lucro</small><b>{brl(rel.lucro)}</b><em>{rel.vendido ? `${pct(rel.lucro / rel.vendido)} do vendido` : "—"}</em></div>
         </div>
@@ -153,11 +156,33 @@ export function FinanceiroView({ cat, onSair }: { cat: Catalogo; onSair: () => v
         <b className="fin-tt">Investimento (desde o começo)</b>
         <div className="adm-rv-num">
           <div><small>Investido em peças</small><b>{brl(inv.investido)}</b><em>{d.compras.length} compra(s) registrada(s)</em></div>
-          <div><small>Já voltou</small><b>{brl(inv.voltou)}</b><em>{inv.investido ? `${pct(inv.voltou / inv.investido)} do investido` : "registre as compras"}</em></div>
+          <div><small>Já voltou</small><b>{brl(inv.voltou)}</b><em>{inv.investido ? `${pct(inv.voltou / inv.investido)} do investido` : "registre as compras"}{inv.aReceber ? ` · + ${brl(inv.aReceber)} a receber` : ""}</em></div>
           <div><small>Estoque parado (custo)</small><b>{brl(inv.parado)}</b><em>{inv.unidades} peças{inv.semCusto ? ` · ${inv.semCusto} sem custo` : ""}</em></div>
           <div><small>Estoque a preço de venda</small><b>{brl(inv.venda)}</b><em>se tudo vender no cartão, sem desconto</em></div>
         </div>
       </section>
+
+      <h3>Importar do Caixa</h3>
+      <p className="adm-dica">
+        Arquivo de importação feito a partir do backup do programa de caixa: traz as vendas da loja, as compras (investimento) e o custo das peças.
+        Importar de novo substitui a importação anterior; o que foi lançado à mão aqui continua. Não mexe no estoque do site.
+      </p>
+      <p>
+        <label className="btn o" style={{ cursor: "pointer" }}>
+          {ocupado === "Importando…" ? ocupado : "IMPORTAR ARQUIVO DO CAIXA"}
+          <input type="file" accept=".json,application/json" hidden disabled={!!ocupado} onChange={async (e) => {
+            const f = e.target.files?.[0];
+            e.target.value = "";
+            if (!f) return;
+            let x: Record<string, unknown>;
+            try { x = JSON.parse(await f.text()); } catch { return setErro("Arquivo inválido: escolha o arquivo de importação (.json)."); }
+            if (x.tipo !== "tramisse-financeiro") return setErro("Este não é o arquivo de importação do financeiro (o backup do Caixa não serve direto).");
+            const venda = Array.isArray(x.vendas) ? x.vendas.length : 0, compra = Array.isArray(x.compras) ? x.compras.length : 0;
+            if (!confirm(`Importar ${venda} venda(s) e ${compra} compra(s)? A importação anterior será substituída.`)) return;
+            if (await acao({ ...x, acao: "importar" }, "Importando…")) setCustos(Object.fromEntries(Object.entries({ ...d.custos, ...((x.custos as Record<string, number>) ?? {}) }).map(([k, v]) => [k, String(v).replace(".", ",")])));
+          }} />
+        </label>
+      </p>
 
       <h3>Registrar venda fora do site</h3>
       <p className="adm-dica">Vendas pelo Instagram, WhatsApp ou em mãos. Se marcar &quot;Tirar do estoque do site&quot;, a peça sai do site sozinha.</p>
@@ -199,7 +224,7 @@ export function FinanceiroView({ cat, onSair }: { cat: Catalogo; onSair: () => v
             <li key={v.id} className="adm-ln">
               <span className="adm-nm">
                 <b>{dataBr(v.data)} · {v.q}x {v.nome} ({v.tam}) · {brl(v.valor)}</b>
-                <small>{FORMAS[v.forma] ?? v.forma}{v.taxa ? ` · taxa ${brl(v.taxa)}` : ""}{custo(v.produtoId) ? ` · lucro ${brl(r2(v.valor - v.taxa - custo(v.produtoId) * v.q))}` : ""}{v.estoque ? " · saiu do estoque do site" : ""}{v.obs ? ` · ${v.obs}` : ""}</small>
+                <small>{FORMAS[v.forma] ?? v.forma}{v.taxa ? ` · taxa ${brl(v.taxa)}` : ""}{v.aberto ? ` · falta receber ${brl(v.aberto)}` : ""}{custoV(v) ? ` · lucro ${brl(r2(v.valor - v.taxa - custoV(v) * v.q))}` : ""}{v.estoque ? " · saiu do estoque do site" : ""}{v.obs ? ` · ${v.obs}` : ""}</small>
               </span>
               <span className="adm-ord">
                 <button aria-label="Apagar venda" onClick={() => confirm(`Apagar esta venda?${v.estoque ? " A peça volta para o estoque do site." : ""}`) && acao({ acao: "apagarVenda", id: v.id }, "Apagando…")}>×</button>

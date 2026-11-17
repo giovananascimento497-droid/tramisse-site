@@ -19,6 +19,8 @@ export type VendaFora = {
   forma: "pix" | "dinheiro" | "cartao" | "outro";
   estoque: boolean; // baixou do estoque do site
   obs?: string;
+  custo?: number; // custo unitário na data da venda (vendas importadas do Caixa)
+  aberto?: number; // parte do valor que a cliente ainda não pagou (parcelas em aberto)
 };
 export type Financeiro = { custos: Record<string, number>; compras: Compra[]; vendas: VendaFora[] };
 

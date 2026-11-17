@@ -51,7 +51,35 @@ export async function GET(req: Request) {
   }
 }
 
-// Ações: custos | compra | apagarCompra | venda | apagarVenda.
+// Importação do programa de caixa (arquivo gerado a partir do backup): substitui o que veio da importação
+// anterior (ids "cx…") e mantém o que foi lançado à mão. Não mexe no estoque do site.
+function importar(d: Record<string, unknown>, num: (v: unknown) => number) {
+  const data = (x: unknown) => (DATA.test(String(x)) ? String(x) : hojeBelem());
+  const texto = (x: unknown, n: number) => String(x ?? "").trim().slice(0, n);
+  const custos: Record<string, number> = {};
+  for (const [k, v] of Object.entries((d.custos as Record<string, unknown>) ?? {})) {
+    const c = num(v);
+    if (porId(Number(k)) && c > 0 && c < 100000) custos[k] = c;
+  }
+  const compras = (Array.isArray(d.compras) ? d.compras : []).slice(0, 500).flatMap((c: Record<string, unknown>, i: number) => {
+    const valor = num(c?.valor);
+    return valor > 0 ? [{ id: `cxc${i}`, data: data(c.data), descricao: texto(c.descricao, 120) || "Compra", valor }] : [];
+  });
+  const vendas: VendaFora[] = (Array.isArray(d.vendas) ? d.vendas : []).slice(0, 2000).flatMap((v: Record<string, unknown>, i: number) => {
+    const valor = num(v?.valor);
+    if (!(valor > 0)) return [];
+    const custo = num(v.custo), aberto = Math.min(valor, Math.max(0, num(v.aberto) || 0));
+    return [{
+      id: `cxv${i}`, data: data(v.data), produtoId: porId(Number(v.produtoId)) ? Number(v.produtoId) : 0, nome: texto(v.nome, 80) || "Peça",
+      cor: texto(v.cor, 20), tam: texto(v.tam, 10), q: Math.max(1, Math.min(50, Math.floor(Number(v.q) || 1))), valor,
+      taxa: Math.max(0, num(v.taxa) || 0), forma: (["pix", "dinheiro", "cartao", "outro"] as const).find((x) => x === v.forma) ?? "outro",
+      estoque: false, ...(custo > 0 ? { custo } : {}), ...(aberto > 0 ? { aberto } : {}), ...(texto(v.obs, 200) ? { obs: texto(v.obs, 200) } : {}),
+    }];
+  });
+  return { custos, compras, vendas };
+}
+
+// Ações: custos | compra | apagarCompra | venda | apagarVenda | importar.
 export async function POST(req: Request) {
   const negado = await exigirLogin(req);
   if (negado) return negado;
@@ -67,6 +95,16 @@ export async function POST(req: Request) {
       }
       const f = await mudarFinanceiro((x) => { x.custos = custos; });
       return NextResponse.json({ ok: true, custos: f.custos });
+    }
+    if (d.acao === "importar") {
+      const x = importar(d, num);
+      if (!x.compras.length && !x.vendas.length && !Object.keys(x.custos).length) return NextResponse.json({ erro: "O arquivo não tem dados para importar." }, { status: 400 });
+      const f = await mudarFinanceiro((y) => {
+        y.custos = { ...y.custos, ...x.custos };
+        y.compras = [...y.compras.filter((c) => !c.id.startsWith("cx")), ...x.compras];
+        y.vendas = [...y.vendas.filter((v) => !v.id.startsWith("cx")), ...x.vendas];
+      });
+      return NextResponse.json({ ok: true, custos: f.custos, compras: f.compras, vendas: f.vendas, aviso: `${x.vendas.length} venda(s), ${x.compras.length} compra(s) e ${Object.keys(x.custos).length} custo(s) importados.` });
     }
     if (d.acao === "compra") {
       const valor = num(d.valor);
