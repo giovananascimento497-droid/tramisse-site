@@ -9,6 +9,7 @@ import { EntregaView } from "./EntregaView";
 import { EsperaView } from "./EsperaView";
 import { AvaliacoesView } from "./AvaliacoesView";
 import { CuponsView } from "./CuponsView";
+import { FinanceiroView } from "./FinanceiroView";
 import { EstatisticasView } from "./EstatisticasView";
 import { InicioView } from "./InicioView";
 import { api, prepararFoto } from "./util";
@@ -45,7 +46,7 @@ export function AdminView() {
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todas");
   const [ocupado, setOcupado] = useState("");
-  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio" | "espera" | "estat" | "entrega" | "carrinhos" | "aval" | "cupons">("pecas");
+  const [aba, setAba] = useState<"pecas" | "pedidos" | "inicio" | "espera" | "estat" | "entrega" | "carrinhos" | "aval" | "cupons" | "fin">("pecas");
 
   const carregarSessao = () => api("/api/admin/sessao").then(setSessao).catch(() => setSessao({ configurado: false, github: false, logado: false }));
   useEffect(() => { carregarSessao(); }, []);
@@ -226,6 +227,7 @@ export function AdminView() {
         <button className={aba === "pedidos" ? "on" : ""} onClick={() => { setAba("pedidos"); setSel(null); }}>PEDIDOS</button>
         <button className={aba === "carrinhos" ? "on" : ""} onClick={() => { setAba("carrinhos"); setSel(null); }}>CARRINHOS</button>
         <button className={aba === "inicio" ? "on" : ""} onClick={() => { setAba("inicio"); setSel(null); }}>INÍCIO</button>
+        <button className={aba === "fin" ? "on" : ""} onClick={() => { setAba("fin"); setSel(null); }}>FINANCEIRO</button>
         <button className={aba === "cupons" ? "on" : ""} onClick={() => { setAba("cupons"); setSel(null); }}>CUPONS</button>
         <button className={aba === "aval" ? "on" : ""} onClick={() => { setAba("aval"); setSel(null); }}>AVALIAÇÕES</button>
         <button className={aba === "espera" ? "on" : ""} onClick={() => { setAba("espera"); setSel(null); }}>AVISE-ME</button>
@@ -235,6 +237,7 @@ export function AdminView() {
       {aba === "carrinhos" ? <CarrinhosView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "entrega" ? <EntregaView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "estat" ? cat ? <EstatisticasView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
+      {aba === "fin" ? cat ? <FinanceiroView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
       {aba === "cupons" ? <CuponsView onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : null}
       {aba === "aval" ? cat ? <AvaliacoesView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
       {aba === "espera" ? cat ? <EsperaView cat={cat} onSair={() => setSessao((s) => s && { ...s, logado: false })} /> : <p>Carregando…</p> : null}
