@@ -5,6 +5,8 @@ import { belemAtivo, gratisBelem } from "@/lib/frete/belem";
 
 // Faixa de vantagens logo abaixo do banner (números vindos da configuração da loja).
 const P = CFG.pagamento;
+// Cupom que vale só no Pix (ex.: TRAMISSE10): a faixa anuncia o desconto dele.
+const CUPOM_PIX = CFG.cupons.find((c) => c.somentePix && c.ativo !== false);
 const ITENS: [string, string, React.ReactNode][] = [
   CFG.entrega.correios.freteGratisAcima
     ? [`FRETE GRÁTIS ACIMA DE R$ ${CFG.entrega.correios.freteGratisAcima}`, belemAtivo(CFG) ? "Pelos Correios. Em Belém, entrega aos sábados" : "Pelos Correios. Em Belém, também por aplicativo",
@@ -14,7 +16,9 @@ const ITENS: [string, string, React.ReactNode][] = [
       <path key="e" d="M3 7h11v9H3zM14 10h4l3 3v3h-7M7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM17 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />],
   [`ATÉ ${P.maxParcelas}X SEM JUROS`, `No cartão, parcela mínima de R$ ${P.parcelaMinima}${TEM_SALE && P.parcelaMinimaPromo && P.parcelaMinimaPromo < P.parcelaMinima ? ` (R$ ${P.parcelaMinimaPromo} na BLACK)` : ""}`,
     <path key="c" d="M3 6h18v12H3zM3 10h18M7 15h4" />],
-  [`${pctPix(CFG)} OFF NO PIX`, campanhaPix(CFG)?.nome ? `Na ${campanhaPix(CFG)!.nome}${TEM_SALE ? " · exceto BLACK" : ""}` : TEM_SALE ? "Exceto peças da BLACK" : "Desconto direto no pedido",
+  CUPOM_PIX
+    ? [`${Math.round(CUPOM_PIX.valor * 100)}% OFF NO PIX`, `Na nova coleção${TEM_SALE ? " · exceto BLACK" : ""} com o cupom ${CUPOM_PIX.codigo}`, <path key="p" d="M12 3l9 9-9 9-9-9zM8.5 12h7M12 8.5v7" />]
+    : [`${pctPix(CFG)} OFF NO PIX`, campanhaPix(CFG)?.nome ? `Na ${campanhaPix(CFG)!.nome}${TEM_SALE ? " · exceto BLACK" : ""}` : TEM_SALE ? "Exceto peças da BLACK" : "Desconto direto no pedido",
     <path key="p" d="M12 3l9 9-9 9-9-9zM8.5 12h7M12 8.5v7" />],
   [`TROCAS EM ${CFG.trocas.prazoDias} DIAS`, "Com a etiqueta fixada na peça",
     <path key="t" d="M4 9a8 8 0 0114-3l2 2M20 15a8 8 0 01-14 3l-2-2M18 3v5h-5M6 21v-5h5" />],

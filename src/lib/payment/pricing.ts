@@ -92,15 +92,20 @@ export function calcularTotais(
   codigoCupom?: string | null,
 ) {
   const cupom = acharCupom(cfg, codigoCupom);
+  // Cupom "só no Pix" (somentePix): pagando no Pix, o desconto total da peça é o do cupom (não soma com o
+  // desconto Pix normal; vale o maior); no cartão ou antes de escolher o pagamento, não vale.
+  const soPix = Boolean(cupom?.somentePix);
+  const pix = pagamento === "pix";
   let subtotal = 0, desconto = 0, descontoPix = 0, total = 0;
   const unitarios = linhas.map(({ preco, q, promo }) => {
-    const comCupom = cupom && !promo ? r2(preco * (1 - cupom.valor)) : preco;
-    const final = pagamento === "pix" && !promo ? precoPix(cfg, comCupom) : comCupom;
+    const comCupom = !cupom || promo || (soPix && !pix) ? preco : soPix ? r2(preco * (1 - Math.max(cupom.valor, descontoPixAtual(cfg)))) : r2(preco * (1 - cupom.valor));
+    const final = pix && !promo && !soPix ? precoPix(cfg, comCupom) : comCupom;
     subtotal += preco * q;
     desconto += (preco - comCupom) * q;
     descontoPix += (comCupom - final) * q;
     total += final * q;
     return final;
   });
-  return { cupom, subtotal: r2(subtotal), desconto: r2(desconto), descontoPix: r2(descontoPix), total: r2(total), unitarios };
+  // cupomSoPix: há cupom só no Pix que ainda não vale (pagamento não é Pix), para avisar a cliente.
+  return { cupom, subtotal: r2(subtotal), desconto: r2(desconto), descontoPix: r2(descontoPix), total: r2(total), unitarios, cupomSoPix: soPix && !pix };
 }

@@ -50,7 +50,7 @@ export function montarPedido(dados: {
       precoUnitario: l.p.preco,
       precoFinal: t.unitarios[i],
     })),
-    cupom,
+    cupom: t.cupomSoPix ? undefined : cupom,
     pagamento: dados.pagamento,
     entrega: dados.entrega,
     cliente: dados.cliente ?? {},

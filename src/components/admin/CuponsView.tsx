@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { brl } from "@/lib/payment/pricing";
 import { api } from "./util";
 
-type Cupom = { codigo: string; tipo: "percentual"; valor: number; somenteClientes?: boolean; parceira?: string; ativo?: boolean };
+type Cupom = { codigo: string; tipo: "percentual"; valor: number; somenteClientes?: boolean; parceira?: string; ativo?: boolean; somentePix?: boolean };
 type Vendas = { pedidos: number; pecas: number; vendido: number; desconto: number; ultimo?: string };
 // Na tela, o desconto fica em % (texto) para editar fácil.
 type CupomEd = Omit<Cupom, "valor"> & { pct: string };
@@ -78,6 +78,7 @@ export function CuponsView({ onSair }: { onSair: () => void }) {
             <div className="cup-ck">
               <label><input type="checkbox" checked={c.ativo !== false} disabled={c.codigo === recuperacao} onChange={(e) => mudar(i, { ativo: e.target.checked ? undefined : false })} /> Ativo</label>
               <label><input type="checkbox" checked={!!c.somenteClientes} onChange={(e) => mudar(i, { somenteClientes: e.target.checked || undefined })} /> Só para quem já comprou</label>
+              <label><input type="checkbox" checked={!!c.somentePix} onChange={(e) => mudar(i, { somentePix: e.target.checked || undefined })} /> Só no Pix</label>
             </div>
             <p className="cup-v">
               {v.pedidos

@@ -347,6 +347,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
       <div className="tt"><span>Subtotal</span><span>{brl(t.subtotal)}</span></div>
       {t.desconto ? <div className="tt"><span>Desconto ({t.cupom?.codigo})</span><span>-{brl(t.desconto)}</span></div> : null}
       {t.descontoPix ? <div className="tt"><span>Desconto Pix ({pctPix(CFG)})</span><span>-{brl(t.descontoPix)}</span></div> : null}
+      {t.cupomSoPix && step >= 1 ? <small style={{ color: "var(--mut)" }}>O cupom {t.cupom?.codigo} vale só pagando no Pix.</small> : null}
       <div className="tt">
         <span>{ship === "correios" ? `Frete${frete ? ` Correios ${frete.nome}` : ""}` : ship === "belem" ? "Entrega em Belém (sábado)" : "Entrega"}</span>
         <span>
@@ -503,7 +504,7 @@ export function CheckoutView({ mercadoPago, correios }: { mercadoPago: boolean; 
             {PAGAMENTOS.map(([v, tt, sub]) => (
               <label className="opc" key={v}>
                 <input type="radio" name="pay" value={v} checked={pay === v} onChange={() => setPay(v)} />
-                <span>{tt}<br /><small>{v === "credito" ? (parcelas > 1 ? `Em até ${parcelas}x sem juros (parcela mínima de ${brl(minParcela)}).` : `À vista nesta compra (parcela mínima de ${brl(minParcela)}).`) : sub}</small></span>
+                <span>{tt}<br /><small>{v === "pix" && acharCupom(CFG, cupom)?.somentePix ? `${Math.round(Math.max(acharCupom(CFG, cupom)!.valor, CFG.pagamento.descontoPix) * 100)}% de desconto nas peças com o cupom ${acharCupom(CFG, cupom)!.codigo} (exceto as em promoção).` : v === "credito" ? (parcelas > 1 ? `Em até ${parcelas}x sem juros (parcela mínima de ${brl(minParcela)}).` : `À vista nesta compra (parcela mínima de ${brl(minParcela)}).`) : sub}</small></span>
               </label>
             ))}
           </div>

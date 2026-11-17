@@ -45,7 +45,7 @@ export type Catalogo = {
 export type Atendente = { nome: string; whatsapp: string; exibicao: string };
 // somenteClientes: só vale para quem já tem pedido pago no site (mesmo e-mail ou telefone).
 // parceira: influenciadora/parceira dona do cupom (relatório de vendas no painel); ativo: false = desligado.
-export type Cupom = { codigo: string; tipo: "percentual"; valor: number; somenteClientes?: boolean; parceira?: string; ativo?: boolean };
+export type Cupom = { codigo: string; tipo: "percentual"; valor: number; somenteClientes?: boolean; parceira?: string; ativo?: boolean; somentePix?: boolean };
 
 export type Config = {
   marca: string;

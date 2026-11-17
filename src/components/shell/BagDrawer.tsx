@@ -95,7 +95,7 @@ export function BagDrawer() {
             {erro ||
               (cupom ? (
                 <span className="okk">
-                  Cupom {cupom} aplicado.{bag.some((l) => porId(l.id)?.precoDe) ? " Não vale para peças em promoção." : ""}{acharCupom(CFG, cupom)?.somenteClientes ? " Válido para quem já comprou no site: confirmamos pelo seu e-mail ou telefone no checkout." : ""}
+                  Cupom {cupom} aplicado.{bag.some((l) => porId(l.id)?.precoDe) ? " Não vale para peças em promoção." : ""}{acharCupom(CFG, cupom)?.somenteClientes ? " Válido para quem já comprou no site: confirmamos pelo seu e-mail ou telefone no checkout." : ""}{acharCupom(CFG, cupom)?.somentePix ? ` ${Math.round(acharCupom(CFG, cupom)!.valor * 100)}% de desconto pagando no Pix: o valor aparece no checkout.` : ""}
                 </span>
               ) : null)}
           </div>

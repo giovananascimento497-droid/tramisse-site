@@ -26,6 +26,7 @@ export function limparCupons(d: unknown, recuperacao: string): Cupom[] {
     return {
       codigo, tipo: "percentual" as const, valor: pct,
       ...(o.somenteClientes ? { somenteClientes: true } : {}),
+      ...(o.somentePix ? { somentePix: true } : {}),
       ...(parceira ? { parceira } : {}),
       ...(o.ativo === false ? { ativo: false } : {}),
     };
