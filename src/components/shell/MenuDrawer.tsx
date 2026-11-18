@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Fragment } from "react";
-import { slug, TEM_ACESSORIOS, TEM_SALE, TREE } from "@/lib/catalog";
+import { slug, TEM_ACESSORIOS, TEM_SALE, TREE, TEM_REVEILLON } from "@/lib/catalog";
 import { useLoja } from "@/store/Store";
 
 export function MenuDrawer() {
@@ -27,6 +27,7 @@ export function MenuDrawer() {
         <button className="b" onClick={fechar} aria-label="Fechar">✕</button>
       </div>
       <div className="ml">
+        {TEM_REVEILLON ? <Link href="/categoria/reveillon" onClick={fechar}>RÉVEILLON</Link> : null}
         <Link href="/categoria/new-in" onClick={fechar}>NEW IN</Link>
         <Link href="/categoria/coming-soon" onClick={fechar}>COMING SOON</Link>
         <Link href="/categoria/curadoria" onClick={fechar}>CURADORIA ESPECIAL</Link>

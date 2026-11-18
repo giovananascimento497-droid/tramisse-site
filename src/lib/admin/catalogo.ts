@@ -56,7 +56,7 @@ export function limparProduto(p: Produto, cat: Catalogo): { ok: Produto } | { er
       subcategoria: p.subcategoria,
       estilo: String(p.estilo || "").trim(),
       colecao: String(p.colecao || "Coleção atual").trim(),
-      flags: { novo: Boolean(p.flags?.novo), curadoria: Boolean(p.flags?.curadoria), maisVendida: Boolean(p.flags?.maisVendida), jeans: Boolean(p.flags?.jeans) },
+      flags: { novo: Boolean(p.flags?.novo), curadoria: Boolean(p.flags?.curadoria), maisVendida: Boolean(p.flags?.maisVendida), jeans: Boolean(p.flags?.jeans), ...(p.flags?.reveillon ? { reveillon: true } : {}) },
       emBreve: Boolean(p.emBreve),
       // Data em que entrou no New In (sem data = hoje).
       ...(p.flags?.novo ? { novoDesde: /^\d{4}-\d{2}-\d{2}$/.test(String(p.novoDesde)) ? String(p.novoDesde) : hojeBelem() } : {}),

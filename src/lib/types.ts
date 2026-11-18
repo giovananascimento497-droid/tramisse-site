@@ -26,7 +26,7 @@ export type Produto = {
   subcategoria: string;
   estilo: string;
   colecao: string;
-  flags: { novo: boolean; curadoria: boolean; maisVendida: boolean; jeans?: boolean };
+  flags: { novo: boolean; curadoria: boolean; maisVendida: boolean; jeans?: boolean; reveillon?: boolean };
   novoDesde?: string; // AAAA-MM-DD: data em que entrou no New In (sai sozinha depois de novoDias)
   emBreve?: boolean; // Coming soon: aparece só na vitrine Coming Soon, sem compra ("Avise-me")
   variantes: Variante[];

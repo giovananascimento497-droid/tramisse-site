@@ -7,7 +7,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
 import { Reels } from "@/components/Reels";
 import { Tile } from "@/components/Tile";
-import { desconto, ehNovo, PRODS, porId, slug, TEM_ACESSORIOS, temEstoque, ultimaUnidade } from "@/lib/catalog";
+import { desconto, ehNovo, listar, PRODS, porId, slug, TEM_ACESSORIOS, temEstoque, ultimaUnidade } from "@/lib/catalog";
 import { AvaliacoesHome } from "@/components/Avaliacoes";
 import { CFG } from "@/lib/config";
 import type { Produto } from "@/lib/types";
@@ -55,6 +55,7 @@ export default function Home() {
   const novos = PRODS.filter((p) => ehNovo(p) && temEstoque(p));
   const desejadas = PRODS.filter((p) => p.flags.maisVendida && temEstoque(p));
   const emBreve = PRODS.filter((p) => p.emBreve);
+  const reveillon = listar("reveillon").filter(temEstoque);
   // Últimas unidades (1 peça no estoque), sem as da promoção (que já têm a seção delas).
   const ultimas = PRODS.filter((p) => ok(p) && ultimaUnidade(p) && !p.precoDe);
   const nomes = Object.fromEntries(PRODS.map((p) => [p.id, p.nome]));
@@ -107,6 +108,19 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {reveillon.length ? (
+        <section className="sec" style={{ paddingTop: 0 }}>
+          <div className="w">
+            <div className="sh">
+              <div><h2>Réveillon</h2><p>Branco para a paz, amarelo para a prosperidade. Peças para a sua virada.</p></div>
+              <CarouselButtons id="c6" />
+            </div>
+            <Carrossel l={reveillon} id="c6" />
+            <p style={{ textAlign: "center", marginTop: 40 }}><Link className="btn o" href="/categoria/reveillon">VER TODAS</Link></p>
+          </div>
+        </section>
+      ) : null}
 
       {desejadas.length ? (
         <section className="sec" style={{ paddingTop: 0 }}>

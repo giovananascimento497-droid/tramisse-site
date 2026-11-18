@@ -70,6 +70,7 @@ export function listar(k: string, sub?: string): Produto[] {
   if (k === "new-in") return l.filter(ehNovo);
   if (k === "curadoria") return l.filter((p) => p.flags.curadoria);
   if (k === "jeans") return l.filter((p) => p.flags.jeans);
+  if (k === "reveillon") return l.filter((p) => p.flags.reveillon);
   if (k === "ultimas-pecas") return l.filter(ultimaUnidade);
   if (k === "sale") return l.filter((p) => p.precoDe).sort((a, b) => Number(esgotado(a)) - Number(esgotado(b)) || desconto(b) - desconto(a));
   if (k === "estilo") return l.filter((p) => slug(p.estilo) === sub);
@@ -84,6 +85,9 @@ export const desconto = (p: Produto) => (p.precoDe ? 1 - p.preco / p.precoDe : 0
 // Com Sale, a home e o menu do topo ficam voltados para a promoção (BLACK); sem Sale, voltam ao normal.
 export const TEM_ACESSORIOS = listar("acessorios").length > 0;
 export const TEM_SALE = listar("sale").length > 0;
+// Coleção de temporada (Réveillon: branco e amarelo): aparece no cabeçalho, menu, rodapé e home só com peça à venda.
+export const TEM_REVEILLON = listar("reveillon").some(temEstoque);
+export const TEM_EMBREVE = PRODS.some((p) => p.emBreve);
 
 // New In: marcada como nova e há menos de novoDias (30) desde que chegou. As páginas se
 // refazem uma vez por dia (revalidate), então a peça sai do New In sozinha.

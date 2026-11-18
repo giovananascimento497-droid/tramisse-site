@@ -422,7 +422,8 @@
         "novo": true,
         "curadoria": false,
         "maisVendida": true,
-        "jeans": false
+        "jeans": false,
+        "reveillon": true
       },
       "emBreve": false,
       "novoDesde": "2026-09-30",
@@ -566,7 +567,8 @@
         "novo": true,
         "curadoria": false,
         "maisVendida": false,
-        "jeans": false
+        "jeans": false,
+        "reveillon": true
       },
       "novoDesde": "2026-09-30",
       "emBreve": false,
@@ -803,7 +805,8 @@
         "novo": false,
         "curadoria": false,
         "maisVendida": false,
-        "jeans": false
+        "jeans": false,
+        "reveillon": true
       },
       "emBreve": false,
       "variantes": [
@@ -1538,7 +1541,8 @@
         "novo": true,
         "curadoria": false,
         "maisVendida": true,
-        "jeans": false
+        "jeans": false,
+        "reveillon": true
       },
       "emBreve": false,
       "novoDesde": "2026-11-15",
@@ -1559,6 +1563,12 @@
         "/assets/products/colete-nicole-musc23z0.jpg",
         "/assets/products/colete-nicole-musc2592.jpg",
         "/assets/products/colete-nicole-musc25ql.jpg"
+      ],
+      "combina": [
+        121,
+        2,
+        26,
+        122
       ]
     },
     {
@@ -1698,6 +1708,11 @@
         "/assets/products/blusa-estampa-ombro-a-ombro-musewqdz.jpg",
         "/assets/products/blusa-estampa-ombro-a-ombro-musewr2n.jpg",
         "/assets/products/blusa-estampa-ombro-a-ombro-musewrne.jpg"
+      ],
+      "combina": [
+        36,
+        26,
+        121
       ]
     },
     {
@@ -1736,6 +1751,11 @@
         "/assets/products/blusa-estampa-torcao-musf1w0f.jpg",
         "/assets/products/blusa-estampa-torcao-musf1v57.jpg",
         "/assets/products/blusa-estampa-torcao-musf1wx0.jpg"
+      ],
+      "combina": [
+        26,
+        36,
+        2
       ]
     },
     {
@@ -1769,6 +1789,11 @@
         "/assets/products/regata-suellen-musf7he8.jpg",
         "/assets/products/regata-suellen-musf7i4u.jpg",
         "/assets/products/regata-suellen-musf7j76.jpg"
+      ],
+      "combina": [
+        36,
+        121,
+        26
       ]
     },
     {
@@ -1787,7 +1812,8 @@
         "novo": true,
         "curadoria": false,
         "maisVendida": false,
-        "jeans": false
+        "jeans": false,
+        "reveillon": true
       },
       "emBreve": false,
       "novoDesde": "2026-11-15",
@@ -1820,6 +1846,11 @@
         "/assets/products/blusa-tabata-musfb7fy.jpg",
         "/assets/products/blusa-tabata-musfb7yg.jpg",
         "/assets/products/blusa-tabata-musfb8fh.jpg"
+      ],
+      "combina": [
+        121,
+        26,
+        36
       ]
     },
     {
@@ -1858,6 +1889,11 @@
         "/assets/products/blusa-yuri-musfdx18.jpg",
         "/assets/products/blusa-yuri-musfdwhy.jpg",
         "/assets/products/blusa-yuri-musfdxqw.jpg"
+      ],
+      "combina": [
+        26,
+        2,
+        121
       ]
     },
     {
@@ -1902,6 +1938,11 @@
         "/assets/products/blusa-francesca-musfg1j5.jpg",
         "/assets/products/blusa-francesca-mvljvcyh.jpg",
         "/assets/products/blusa-francesca-mvljvdnj.jpg"
+      ],
+      "combina": [
+        36,
+        2,
+        26
       ]
     },
     {
@@ -1920,7 +1961,8 @@
         "novo": true,
         "curadoria": false,
         "maisVendida": false,
-        "jeans": false
+        "jeans": false,
+        "reveillon": true
       },
       "emBreve": false,
       "novoDesde": "2026-11-15",
@@ -1943,6 +1985,11 @@
         "/assets/products/blusa-cassandra-musfiglc.jpg",
         "/assets/products/blusa-cassandra-musfihg3.jpg",
         "/assets/products/blusa-cassandra-musfii2y.jpg"
+      ],
+      "combina": [
+        2,
+        26,
+        36
       ]
     },
     {
@@ -1994,6 +2041,12 @@
         "/assets/products/blusa-victoria-musp6uyr.jpg",
         "/assets/products/blusa-victoria-musp6yar.jpg",
         "/assets/products/blusa-victoria-musp6z0t.jpg"
+      ],
+      "combina": [
+        2,
+        36,
+        26,
+        122
       ]
     },
     {
@@ -2013,7 +2066,8 @@
         "novo": true,
         "curadoria": true,
         "maisVendida": false,
-        "jeans": false
+        "jeans": false,
+        "reveillon": true
       },
       "emBreve": false,
       "novoDesde": "2026-10-09",
@@ -2061,7 +2115,8 @@
         "novo": true,
         "curadoria": false,
         "maisVendida": false,
-        "jeans": false
+        "jeans": false,
+        "reveillon": true
       },
       "emBreve": false,
       "novoDesde": "2026-11-15",
@@ -2091,6 +2146,12 @@
         "/assets/products/blusa-flora-muspg50x.jpg",
         "/assets/products/blusa-flora-muspg1g2.jpg",
         "/assets/products/blusa-flora-muspg3ar.jpg"
+      ],
+      "combina": [
+        26,
+        2,
+        36,
+        122
       ]
     }
   ]

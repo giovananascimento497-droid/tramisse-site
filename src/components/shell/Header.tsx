@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { slug, TEM_SALE, TREE } from "@/lib/catalog";
+import { slug, TEM_EMBREVE, TEM_REVEILLON, TEM_SALE, TREE } from "@/lib/catalog";
 import { useLoja } from "@/store/Store";
 
 // Categorias visíveis no cabeçalho (computador). "Roupas" abre o menu grande com todas as subcategorias.
@@ -14,7 +14,7 @@ const ATALHOS: [string, string][] = [
   ["VESTIDOS", "/categoria/roupas/vestidos"],
   ["CURADORIA", "/categoria/curadoria"],
   ["COMING SOON", "/categoria/coming-soon"],
-];
+].filter(([t]) => t !== "COMING SOON" || TEM_EMBREVE || !TEM_REVEILLON) as [string, string][];
 
 // Celular: menu à esquerda, logo ao centro, ícones à direita.
 // Computador (src/styles/loja.css): logo à esquerda, categorias no meio, ícones à direita.
@@ -37,6 +37,7 @@ export function Header() {
         <Link className="logo" href="/" aria-label="Tramisse, página inicial">TRAMISSE</Link>
         <nav className="pri" aria-label="Principal">
           {TEM_SALE ? <div><Link href="/categoria/sale">BLACK</Link></div> : null}
+          {TEM_REVEILLON ? <div><Link href="/categoria/reveillon">RÉVEILLON</Link></div> : null}
           <div><Link href="/categoria/new-in">NEW IN</Link></div>
           <div className="dd">
             <Link href="/categoria/roupas">ROUPAS</Link>
@@ -52,6 +53,7 @@ export function Header() {
                 <Link href="/categoria/new-in">New In</Link>
                 <Link href="/categoria/curadoria">Curadoria Especial</Link>
                 <Link href="/categoria/jeans">Jeans</Link>
+                {TEM_REVEILLON ? <Link href="/categoria/reveillon">Réveillon</Link> : null}
                 <Link href="/categoria/coming-soon">Coming Soon</Link>
                 <Link href="/categoria/todos">Ver tudo</Link>
               </div>
