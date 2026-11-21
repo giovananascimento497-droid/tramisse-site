@@ -1902,6 +1902,11 @@
       "nome": "Blusa Francesca",
       "descricao": "Polo em viscose com gola clássica, botões frontais e mangas curtas. Peça versátil, com caimento leve e confortável para o dia a dia.",
       "tecido": "",
+      "combina": [
+        36,
+        2,
+        26
+      ],
       "preco": 129.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1934,15 +1939,11 @@
         }
       ],
       "imagens": [
+        "/assets/products/blusa-francesca-mwqrc2dg.jpg",
         "/assets/products/blusa-francesca-mvljvc8u.jpg",
         "/assets/products/blusa-francesca-musfg1j5.jpg",
         "/assets/products/blusa-francesca-mvljvcyh.jpg",
         "/assets/products/blusa-francesca-mvljvdnj.jpg"
-      ],
-      "combina": [
-        36,
-        2,
-        26
       ]
     },
     {
@@ -2094,9 +2095,11 @@
         }
       ],
       "imagens": [
+        "/assets/products/blusa-napoleonica-mwqrb7k6.jpg",
         "/assets/products/blusa-napoleonica-muspadwz.jpg",
         "/assets/products/blusa-napoleonica-muspac2x.jpg",
-        "/assets/products/blusa-napoleonica-muspacxb.jpg"
+        "/assets/products/blusa-napoleonica-muspacxb.jpg",
+        "/assets/products/blusa-napoleonica-mwqrb8wu.jpg"
       ]
     },
     {
@@ -2105,6 +2108,12 @@
       "nome": "Blusa Flora",
       "descricao": "Delicada e atemporal, a peça é confeccionada em renda branca de trama fina, leve e semitransparente, com desenho floral delicado e textura artesanal.",
       "tecido": "Renda de poliamida",
+      "combina": [
+        26,
+        2,
+        36,
+        122
+      ],
       "preco": 129.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -2143,15 +2152,14 @@
         }
       ],
       "imagens": [
+        "/assets/products/blusa-flora-mwqr68gh.jpg",
+        "/assets/products/blusa-flora-mwqr634f.jpg",
         "/assets/products/blusa-flora-muspg50x.jpg",
-        "/assets/products/blusa-flora-muspg1g2.jpg",
-        "/assets/products/blusa-flora-muspg3ar.jpg"
-      ],
-      "combina": [
-        26,
-        2,
-        36,
-        122
+        "/assets/products/blusa-flora-muspg3ar.jpg",
+        "/assets/products/blusa-flora-mwqr643x.jpg",
+        "/assets/products/blusa-flora-mwqr650p.jpg",
+        "/assets/products/blusa-flora-mwqr65tf.jpg",
+        "/assets/products/blusa-flora-mwqr67iu.jpg"
       ]
     },
     {
