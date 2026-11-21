@@ -1756,7 +1756,7 @@
         {
           "cor": "un",
           "tamanho": "G",
-          "estoque": 1
+          "estoque": 0
         }
       ],
       "imagens": [
@@ -1935,7 +1935,7 @@
         {
           "cor": "ro",
           "tamanho": "P",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "ro",
@@ -2148,7 +2148,7 @@
         {
           "cor": "az",
           "tamanho": "U",
-          "estoque": 1
+          "estoque": 0
         },
         {
           "cor": "ro",
