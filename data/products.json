@@ -570,8 +570,8 @@
         "jeans": false,
         "reveillon": true
       },
-      "novoDesde": "2026-09-30",
       "emBreve": false,
+      "novoDesde": "2026-09-30",
       "variantes": [
         {
           "cor": "am",
@@ -585,9 +585,9 @@
         }
       ],
       "imagens": [
+        "/assets/products/calca-ingrid-mwqzch2l.jpg",
         "/assets/products/calca-ingrid-musbm9h6.jpg",
-        "/assets/products/calca-ingrid-musbma1y.jpg",
-        "/assets/products/calca-ingrid-2.jpg"
+        "/assets/products/calca-ingrid-musbma1y.jpg"
       ]
     },
     {
@@ -721,6 +721,7 @@
         }
       ],
       "imagens": [
+        "/assets/products/macacao-adele-mwqz59b1.jpg",
         "/assets/products/macacao-adele-1.jpg",
         "/assets/products/macacao-adele-2.jpg"
       ]
@@ -1023,6 +1024,7 @@
         }
       ],
       "imagens": [
+        "/assets/products/blusa-geovana-mwqz60cw.jpg",
         "/assets/products/blusa-geovana-1.jpg",
         "/assets/products/blusa-geovana-2.jpg"
       ]
@@ -1427,6 +1429,8 @@
         }
       ],
       "imagens": [
+        "/assets/products/bermuda-paloma-fio-mwqz7gz8.jpg",
+        "/assets/products/bermuda-paloma-fio-mwqz7i77.jpg",
         "/assets/products/bermuda-paloma-fio-musbr9iq.jpg",
         "/assets/products/bermuda-paloma-fio-musbr8uu.jpg",
         "/assets/products/bermuda-paloma-fio-musbra0k.jpg",
@@ -1478,6 +1482,7 @@
         }
       ],
       "imagens": [
+        "/assets/products/wide-leg-paloma-mwqzatof.jpg",
         "/assets/products/wide-leg-paloma-musbsjjp.jpg",
         "/assets/products/wide-leg-paloma-musbsit7.jpg",
         "/assets/products/wide-leg-paloma-musbsk86.jpg",
@@ -1518,6 +1523,7 @@
         }
       ],
       "imagens": [
+        "/assets/products/calca-barrel-estonada-mwqz8lsd.jpg",
         "/assets/products/calca-barrel-estonada-musbtx1v.jpg",
         "/assets/products/calca-barrel-estonada-musbtxil.jpg",
         "/assets/products/calca-barrel-estonada-musbty5w.jpg",
@@ -1531,6 +1537,12 @@
       "nome": "Colete Nicole",
       "descricao": "Colete confeccionado em alfaiataria, possui ganchos de segurança internos proporcionando um fechamento elegante.",
       "tecido": "Crepe de alfaiataria",
+      "combina": [
+        121,
+        2,
+        26,
+        122
+      ],
       "preco": 154.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1560,15 +1572,10 @@
       ],
       "imagens": [
         "/assets/products/colete-nicole-musc24pt.jpg",
+        "/assets/products/colete-nicole-mwr0crw9.jpg",
         "/assets/products/colete-nicole-musc23z0.jpg",
         "/assets/products/colete-nicole-musc2592.jpg",
         "/assets/products/colete-nicole-musc25ql.jpg"
-      ],
-      "combina": [
-        121,
-        2,
-        26,
-        122
       ]
     },
     {
@@ -1721,6 +1728,11 @@
       "nome": "Blusa Estampa Torção",
       "descricao": "Blusa confeccionada em malha, com modelagem ajustada ao corpo e design assimétrico que valoriza o colo e traz modernidade à produção. O modelo possui decote de um ombro só, com detalhe drapeado que envolve delicadamente o braço, criando um efeito sofisticado e feminino.",
       "tecido": "Poliéster, Poliamida, Elastano",
+      "combina": [
+        26,
+        36,
+        2
+      ],
       "preco": 106,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1748,14 +1760,10 @@
         }
       ],
       "imagens": [
+        "/assets/products/blusa-estampa-torcao-mwqz91rq.jpg",
         "/assets/products/blusa-estampa-torcao-musf1w0f.jpg",
         "/assets/products/blusa-estampa-torcao-musf1v57.jpg",
         "/assets/products/blusa-estampa-torcao-musf1wx0.jpg"
-      ],
-      "combina": [
-        26,
-        36,
-        2
       ]
     },
     {
@@ -1859,6 +1867,11 @@
       "nome": "Blusa Yuri",
       "descricao": "Blusa Assimétrica com Gola\n\nUma peça de design contemporâneo que une caimento fluido e um detalhe marcante na gola. A modelagem assimétrica cria uma silhueta leve e elegante, enquanto o tecido de textura delicada acrescenta sofisticação ao visual.",
       "tecido": "Crepe",
+      "combina": [
+        26,
+        2,
+        121
+      ],
       "preco": 109.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -1886,14 +1899,11 @@
         }
       ],
       "imagens": [
+        "/assets/products/blusa-yuri-mwqz9t3q.jpg",
+        "/assets/products/blusa-yuri-mwqz9u0e.jpg",
         "/assets/products/blusa-yuri-musfdx18.jpg",
         "/assets/products/blusa-yuri-musfdwhy.jpg",
         "/assets/products/blusa-yuri-musfdxqw.jpg"
-      ],
-      "combina": [
-        26,
-        2,
-        121
       ]
     },
     {
@@ -1999,6 +2009,12 @@
       "nome": "Blusa Victoria",
       "descricao": "Blusa Renda com Amarração Lateral\n\nDelicada e cheia de personalidade, a blusa é confeccionada em renda texturizada de trama aberta, com transparência sutil e toque artesanal.\n\nA modelagem apresenta gola alta arredondada e mangas curtas, criando uma silhueta limpa e elegante. O destaque fica para a amarração lateral na altura da cintura, finalizada por um detalhe ovalado em tom contrastante, que permite ajustar o caimento e cria um drapeado delicado na lateral.\n\nO comprimento alongado e o caimento levemente ajustado valorizam a silhueta sem perder a leveza característica da renda.",
       "tecido": "Poliamida",
+      "combina": [
+        2,
+        36,
+        26,
+        122
+      ],
       "preco": 156.9,
       "precoDe": 0,
       "categoria": "roupas",
@@ -2036,18 +2052,12 @@
         }
       ],
       "imagens": [
+        "/assets/products/blusa-victoria-mwqzbf2d.jpg",
+        "/assets/products/blusa-victoria-mwqzbg5u.jpg",
         "/assets/products/blusa-victoria-musp6x18.jpg",
         "/assets/products/blusa-victoria-musp6s4n.jpg",
         "/assets/products/blusa-victoria-musp6tq4.jpg",
-        "/assets/products/blusa-victoria-musp6uyr.jpg",
-        "/assets/products/blusa-victoria-musp6yar.jpg",
-        "/assets/products/blusa-victoria-musp6z0t.jpg"
-      ],
-      "combina": [
-        2,
-        36,
-        26,
-        122
+        "/assets/products/blusa-victoria-musp6yar.jpg"
       ]
     },
     {
