@@ -2153,6 +2153,40 @@
         36,
         122
       ]
+    },
+    {
+      "id": 141,
+      "slug": "blusa-mia",
+      "nome": "Blusa Mia",
+      "descricao": "Blusa em tricoline 100% algodão, com caimento peplum.\nDetalhe de zíper nas costas e alças removíveis.",
+      "tecido": "Algodão",
+      "modelo": "Modelo usa P",
+      "preco": 94,
+      "precoDe": 0,
+      "categoria": "roupas",
+      "subcategoria": "Blusas",
+      "estilo": "Casual",
+      "colecao": "Coleção atual",
+      "flags": {
+        "novo": true,
+        "curadoria": false,
+        "maisVendida": false,
+        "jeans": false
+      },
+      "emBreve": false,
+      "novoDesde": "2026-11-21",
+      "variantes": [
+        {
+          "cor": "ro",
+          "tamanho": "P",
+          "estoque": 1
+        }
+      ],
+      "imagens": [
+        "/assets/products/blusa-mia-mwqr4n11.jpg",
+        "/assets/products/blusa-mia-mwqr4nyv.jpg",
+        "/assets/products/blusa-mia-mwqr4owf.jpg"
+      ]
     }
   ]
 }
